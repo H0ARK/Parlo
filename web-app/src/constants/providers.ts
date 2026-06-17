@@ -1,0 +1,576 @@
+export const anthropicProviderSettings = [
+  {
+    key: 'api-key',
+    title: 'API Key',
+    description:
+      "The Anthropic API uses API keys for authentication. Visit your [API Keys](https://console.anthropic.com/settings/keys) page to retrieve the API key you'll use in your requests.",
+    controller_type: 'input',
+    controller_props: {
+      placeholder: 'Insert API Key',
+      value: '',
+      type: 'password',
+      input_actions: ['unobscure', 'copy'],
+    },
+  },
+  {
+    key: 'base-url',
+    title: 'Base URL',
+    description:
+      'The base endpoint to use. See the [Anthropic API documentation](https://docs.anthropic.com/en/api/getting-started) for more information.',
+    controller_type: 'input',
+    controller_props: {
+      placeholder: 'https://api.anthropic.com/v1',
+      value: 'https://api.anthropic.com/v1',
+    },
+  },
+]
+
+export const openAIProviderSettings = [
+  {
+    key: 'api-key',
+    title: 'API Key',
+    description:
+      "The OpenAI API uses API keys for authentication. Visit your [API Keys](https://platform.openai.com/account/api-keys) page to retrieve the API key you'll use in your requests.",
+    controller_type: 'input',
+    controller_props: {
+      placeholder: 'Insert API Key',
+      value: '',
+      type: 'password',
+      input_actions: ['unobscure', 'copy'],
+    },
+  },
+  {
+    key: 'base-url',
+    title: 'Base URL',
+    description:
+      'The base endpoint to use. See the [OpenAI API documentation](https://platform.openai.com/docs/api-reference/chat/create) for more information.',
+    controller_type: 'input',
+    controller_props: {
+      placeholder: 'https://api.openai.com/v1',
+      value: 'https://api.openai.com/v1',
+    },
+  },
+]
+export const predefinedProviders = [
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.openai.com/v1',
+    explore_models_url: 'https://platform.openai.com/docs/models',
+    provider: 'openai',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The OpenAI API uses API keys for authentication. Visit your [API Keys](https://platform.openai.com/account/api-keys) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://YOUR-RESOURCE-NAME.openai.azure.com/openai/v1',
+    explore_models_url: 'https://oai.azure.com/deployments',
+    provider: 'azure',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          'The Azure OpenAI API uses API keys for authentication. Visit your [Azure OpenAI Studio](https://oai.azure.com/) to retrieve the API key from your resource.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.anthropic.com/v1',
+    provider: 'anthropic',
+    api_type: 'anthropic',
+    explore_models_url:
+      'https://docs.anthropic.com/en/docs/about-claude/models',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The Anthropic API uses API keys for authentication. Visit your [API Keys](https://console.anthropic.com/settings/keys) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+    custom_header: [
+      {
+        header: 'anthropic-version',
+        value: '2023-06-01',
+      },
+      {
+        header: 'anthropic-dangerous-direct-browser-access',
+        value: 'true',
+      },
+    ],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://openrouter.ai/api/v1',
+    explore_models_url: 'https://openrouter.ai/models',
+    provider: 'openrouter',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The OpenRouter API uses API keys for authentication. Visit your [API Keys](https://openrouter.ai/settings/keys) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [
+      {
+        id: 'deepseek/deepseek-r1:free',
+        name: 'DeepSeek-R1 (free)',
+        version: '1.0',
+        description: '',
+        capabilities: ['completion'],
+      },
+      {
+        id: 'qwen/qwen3-30b-a3b:free',
+        name: 'Qwen3 30B A3B (free)',
+        version: '1.0',
+        description: '',
+        capabilities: ['completion'],
+      },
+    ],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.mistral.ai/v1',
+    explore_models_url:
+      'https://docs.mistral.ai/getting-started/models/models_overview/',
+    provider: 'mistral',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The Mistral API uses API keys for authentication. Visit your [API Keys](https://console.mistral.ai/api-keys/) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.groq.com/openai/v1',
+    explore_models_url: 'https://console.groq.com/docs/models',
+    provider: 'groq',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The Groq API uses API keys for authentication. Visit your [API Keys](https://console.groq.com/keys) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.x.ai/v1',
+    explore_models_url: 'https://docs.x.ai/overview',
+    provider: 'xai',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The xAI API uses API keys for authentication. Visit your [API Keys](https://console.x.ai/) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://generativelanguage.googleapis.com/v1beta/openai',
+    explore_models_url: 'https://ai.google.dev/gemini-api/docs/models/gemini',
+    provider: 'gemini',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The Google API uses API keys for authentication. Visit your [API Keys](https://aistudio.google.com/apikey) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.minimax.io/v1',
+    explore_models_url:
+      'https://platform.minimax.io/docs/api-reference/text-openai-api',
+    provider: 'minimax',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The MiniMax API uses API keys for authentication. Visit your [API Keys](https://platform.minimax.io/user-center/basic-information/interface-key) page to retrieve the API key you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [
+      {
+        id: 'MiniMax-M2.7',
+        name: 'MiniMax-M2.7',
+        version: '1.0',
+        description:
+          'Latest flagship model with enhanced reasoning and coding.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'MiniMax-M2.7-highspeed',
+        name: 'MiniMax-M2.7-highspeed',
+        version: '1.0',
+        description: 'High-speed version of M2.7 for low-latency scenarios.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'MiniMax-M2.5',
+        name: 'MiniMax-M2.5',
+        version: '1.0',
+        description:
+          'Peak Performance. Ultimate Value. Master the Complex. 204K context window.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'MiniMax-M2.5-highspeed',
+        name: 'MiniMax-M2.5-highspeed',
+        version: '1.0',
+        description:
+          'Same performance, faster and more agile. 204K context window.',
+        capabilities: ['completion', 'tools'],
+      },
+    ],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://router.huggingface.co/v1',
+    explore_models_url:
+      'https://huggingface.co/models?pipeline_tag=text-generation&inference_provider=all',
+    provider: 'huggingface',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          "The Hugging Face API uses tokens for authentication. Visit your [Access Tokens](https://huggingface.co/settings/tokens) page to retrieve the token you'll use in your requests.",
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Token',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [
+      {
+        id: 'moonshotai/Kimi-K2-Instruct:groq',
+        name: 'Kimi-K2-Instruct',
+        version: '1.0',
+        description:
+          '1T parameters Moonshot chat model tuned for tool-aware, nuanced responses.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'deepseek-ai/DeepSeek-R1-0528',
+        name: 'DeepSeek-R1-0528',
+        version: '1.0',
+        description:
+          "DeepSeek's flagship reasoning engine with open weights and advanced tool control.",
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'deepseek-ai/DeepSeek-V3-0324',
+        name: 'DeepSeek-V3-0324',
+        version: '1.0',
+        description:
+          'Streamlined DeepSeek model focused on fast, high-quality completions and tool use.',
+        capabilities: ['completion', 'tools'],
+      },
+    ],
+  },
+  {
+    active: false,
+    api_key: 'jan',
+    base_url: 'http://127.0.0.1:8000/v1',
+    provider: 'vllm',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          'Local vLLM servers usually accept any placeholder key. Use `jan` unless your server requires something else.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'jan',
+          value: 'jan',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+      {
+        key: 'base-url',
+        title: 'Base URL',
+        description:
+          'OpenAI-compatible endpoint served by vLLM. Default is `http://127.0.0.1:8000/v1`.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'http://127.0.0.1:8000/v1',
+          value: 'http://127.0.0.1:8000/v1',
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: false,
+    api_key: 'jan',
+    base_url: 'http://127.0.0.1:11434/v1',
+    provider: 'ollama',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          'Local Ollama usually accepts any placeholder key. Use `jan` unless your server requires something else.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'jan',
+          value: 'jan',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+      {
+        key: 'base-url',
+        title: 'Base URL',
+        description:
+          'OpenAI-compatible endpoint served by Ollama. Default is `http://127.0.0.1:11434/v1`.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'http://127.0.0.1:11434/v1',
+          value: 'http://127.0.0.1:11434/v1',
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://integrate.api.nvidia.com/v1',
+    explore_models_url: 'https://build.nvidia.com/models',
+    provider: 'nvidia',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          'The NVIDIA NIM API uses API keys for authentication. Visit [NVIDIA NGC API Keys](https://org.ngc.nvidia.com/setup/api-keys) to create an API key for your requests.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+    ],
+    models: [],
+  },
+  {
+    active: true,
+    api_key: '',
+    base_url: 'https://api.openai.com/v1',
+    explore_models_url: 'https://github.com/openai/codex',
+    provider: 'codex',
+    settings: [
+      {
+        key: 'api-key',
+        title: 'API Key',
+        description:
+          'API key for the provider Codex should call. This is written to the app-managed Codex environment, not to your global Codex config.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'Insert API Key',
+          value: '',
+          type: 'password',
+          input_actions: ['unobscure', 'copy'],
+        },
+      },
+      {
+        key: 'base-url',
+        title: 'Base URL',
+        description:
+          'Provider endpoint Codex should use. OpenAI-compatible providers should use a `/v1` endpoint.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'https://api.openai.com/v1',
+          value: 'https://api.openai.com/v1',
+        },
+      },
+      {
+        key: 'codex-provider',
+        title: 'Codex Provider',
+        description:
+          'Codex model provider id to write into the isolated Codex config.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'openai',
+          value: 'openai',
+        },
+      },
+      {
+        key: 'codex-binary-path',
+        title: 'Codex Binary',
+        description:
+          'Path to a Codex binary with `app-server` support. Leave as the desktop app binary on macOS unless you install a newer CLI. If unavailable, Jan will fall back to `npx @openai/codex app-server --stdio` when possible.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: IS_MACOS
+            ? '/Applications/Codex.app/Contents/Resources/codex'
+            : 'codex',
+          value: IS_MACOS
+            ? '/Applications/Codex.app/Contents/Resources/codex'
+            : 'codex',
+        },
+      },
+      {
+        key: 'codex-transport',
+        title: 'Codex Transport',
+        description:
+          '`app-server` uses the Codex app-server JSON-RPC protocol. Use `proto` only for Codex CLI builds that expose `codex proto` but not `app-server --stdio`.',
+        controller_type: 'input',
+        controller_props: {
+          placeholder: 'app-server',
+          value: 'app-server',
+        },
+      },
+    ],
+    models: [
+      {
+        id: 'gpt-5.5',
+        name: 'GPT-5.5',
+        version: '1.0',
+        description: 'Default Codex agent model through app-server.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'gpt-5.4',
+        name: 'GPT-5.4',
+        version: '1.0',
+        description: 'Strong Codex coding model through app-server.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'gpt-5.4-mini',
+        name: 'GPT-5.4 Mini',
+        version: '1.0',
+        description: 'Small, fast Codex coding model through app-server.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'gpt-5.3-codex-spark',
+        name: 'GPT-5.3 Codex Spark',
+        version: '1.0',
+        description: 'Ultra-fast Codex coding model through app-server.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'gpt-oss:20b',
+        name: 'gpt-oss:20b',
+        version: '1.0',
+        description: 'Open-source local model id for Codex OSS providers.',
+        capabilities: ['completion', 'tools'],
+      },
+      {
+        id: 'Jan-v1-4B-Q4_K_M',
+        name: 'Jan v1 4B (local)',
+        version: '1.0',
+        description:
+          'Local Jan model via llama.cpp. Point Base URL at your running Jan router `/v1` endpoint and set Codex Provider to `llamacpp`.',
+        capabilities: ['completion', 'tools'],
+      },
+    ],
+  },
+]

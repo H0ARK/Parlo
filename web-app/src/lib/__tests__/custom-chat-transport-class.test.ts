@@ -1,0 +1,312 @@
+import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { CustomChatTransport, normalizeToolInputSchema } from '../custom-chat-transport'
+
+const mockState = vi.hoisted(() => ({
+  currentAssistant: null as unknown,
+  threads: {} as Record<string, unknown>,
+  selectedProvider: '' as string,
+  selectedModel: null as Model | null,
+  provider: null as ModelProvider | null,
+}))
+
+const mockCodex = vi.hoisted(() => ({
+  sendCodexAppServerChatMessage: vi.fn(),
+  shutdownCodexAppServerChatSession: vi.fn(),
+}))
+
+// Mock all the heavy dependencies
+vi.mock('@/hooks/useServiceHub', () => ({
+  useServiceStore: { getState: () => ({ serviceHub: null }) },
+}))
+
+vi.mock('@/hooks/useToolAvailable', () => ({
+  useToolAvailable: { getState: () => ({ getDisabledToolsForThread: () => [], getDefaultDisabledTools: () => [] }) },
+}))
+
+vi.mock('@/hooks/useModelProvider', () => ({
+  useModelProvider: {
+    getState: () => ({
+      selectedModel: mockState.selectedModel,
+      selectedProvider: mockState.selectedProvider,
+      getProviderByName: () => mockState.provider,
+    }),
+  },
+}))
+
+vi.mock('@/hooks/useAssistant', () => ({
+  useAssistant: { getState: () => ({ currentAssistant: mockState.currentAssistant }) },
+}))
+
+vi.mock('@/hooks/useThreads', () => ({
+  useThreads: { getState: () => ({ threads: mockState.threads }) },
+}))
+
+vi.mock('@/hooks/useAttachments', () => ({
+  useAttachments: { getState: () => ({ enabled: false }) },
+}))
+
+vi.mock('@/hooks/useMCPServers', () => ({
+  useMCPServers: { getState: () => ({ settings: {} }) },
+}))
+
+vi.mock('@/lib/extension', () => ({
+  ExtensionManager: { getInstance: () => ({ get: () => null }) },
+}))
+
+vi.mock('@/lib/mcp-orchestrator', () => ({
+  mcpOrchestrator: { getRelevantTools: vi.fn() },
+}))
+
+vi.mock('@/lib/mcp-router-model-filter', () => ({
+  isRouterModelSelectable: () => false,
+}))
+
+vi.mock('@/lib/codex-app-server', () => ({
+  sendCodexAppServerChatMessage: mockCodex.sendCodexAppServerChatMessage,
+  shutdownCodexAppServerChatSession: mockCodex.shutdownCodexAppServerChatSession,
+}))
+
+vi.mock('./model-factory', () => ({
+  ModelFactory: { createModel: vi.fn() },
+}))
+
+describe('CustomChatTransport', () => {
+  let transport: CustomChatTransport
+
+  beforeEach(() => {
+    mockState.currentAssistant = null
+    mockState.threads = {}
+    mockState.selectedProvider = ''
+    mockState.selectedModel = null
+    mockState.provider = null
+    mockCodex.sendCodexAppServerChatMessage.mockReset()
+    mockCodex.shutdownCodexAppServerChatSession.mockReset()
+    transport = new CustomChatTransport('You are helpful', 'thread-1')
+  })
+
+  it('initializes with system message', () => {
+    expect(transport).toBeDefined()
+    expect(transport.model).toBeNull()
+  })
+
+  it('getTools returns empty object initially', () => {
+    expect(transport.getTools()).toEqual({})
+  })
+
+  it('setOnTokenUsage sets callback', () => {
+    const cb = vi.fn()
+    transport.setOnTokenUsage(cb)
+    // No error means it worked
+    expect(true).toBe(true)
+  })
+
+  it('updateSystemMessage updates the system message', () => {
+    transport.updateSystemMessage('new message')
+    // Internal state updated - no public getter, just verify no error
+    expect(true).toBe(true)
+  })
+
+  it('setContinueFromContent sets content', () => {
+    transport.setContinueFromContent('partial content')
+    expect(true).toBe(true)
+  })
+
+  it('setLastUserMessage sets the message', () => {
+    transport.setLastUserMessage('hello')
+    expect(true).toBe(true)
+  })
+
+  it('reconnectToStream returns null', async () => {
+    const result = await transport.reconnectToStream({ chatId: 'c1' } as any)
+    expect(result).toBeNull()
+  })
+
+  it('routes codex provider requests through Codex app-server backend', async () => {
+    const stream = new ReadableStream()
+    mockState.selectedProvider = 'codex'
+    mockState.selectedModel = { id: 'gpt-5.5' }
+    mockState.provider = {
+      active: true,
+      provider: 'codex',
+      api_key: 'test-key',
+      base_url: 'https://api.openai.com/v1',
+      settings: [],
+      models: [mockState.selectedModel],
+    }
+    mockCodex.sendCodexAppServerChatMessage.mockResolvedValue(stream)
+
+    const result = await transport.sendMessages({
+      chatId: 'thread-1',
+      messages: [
+        {
+          id: 'user-1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'hello codex' }],
+        },
+      ],
+      abortSignal: undefined,
+      trigger: 'submit-message',
+      messageId: 'assistant-1',
+    } as any)
+
+    expect(result).toBe(stream)
+    expect(mockCodex.sendCodexAppServerChatMessage).toHaveBeenCalledWith({
+      threadId: 'thread-1',
+      messageId: 'assistant-1',
+      messages: expect.any(Array),
+      provider: mockState.provider,
+      model: mockState.selectedModel,
+      abortSignal: undefined,
+    })
+  })
+
+  it('routes normal provider requests through Codex app-server backend', async () => {
+    const stream = new ReadableStream()
+    mockState.selectedProvider = 'ollama'
+    mockState.selectedModel = { id: 'mistral-small3.1:latest' }
+    mockState.provider = {
+      active: true,
+      provider: 'ollama',
+      api_key: 'jan',
+      base_url: 'http://127.0.0.1:11434/v1',
+      settings: [],
+      models: [mockState.selectedModel],
+    }
+    mockCodex.sendCodexAppServerChatMessage.mockResolvedValue(stream)
+
+    const result = await transport.sendMessages({
+      chatId: 'thread-1',
+      messages: [
+        {
+          id: 'user-1',
+          role: 'user',
+          parts: [{ type: 'text', text: 'hello local model' }],
+        },
+      ],
+      abortSignal: undefined,
+      trigger: 'submit-message',
+      messageId: 'assistant-1',
+    } as any)
+
+    expect(result).toBe(stream)
+    expect(mockCodex.sendCodexAppServerChatMessage).toHaveBeenCalledWith({
+      threadId: 'thread-1',
+      messageId: 'assistant-1',
+      messages: expect.any(Array),
+      provider: mockState.provider,
+      model: mockState.selectedModel,
+      abortSignal: undefined,
+    })
+  })
+
+  it('shuts down Codex backend session for its thread', async () => {
+    await transport.shutdown()
+
+    expect(mockCodex.shutdownCodexAppServerChatSession).toHaveBeenCalledWith(
+      'thread-1'
+    )
+  })
+
+  it('mapUserInlineAttachments passes through non-user messages', () => {
+    const messages = [
+      { role: 'assistant', parts: [{ type: 'text', text: 'Hi' }], metadata: {} },
+    ] as any
+    const result = transport.mapUserInlineAttachments(messages)
+    expect(result[0].parts[0].text).toBe('Hi')
+  })
+
+  it('mapUserInlineAttachments appends inline files to user text', () => {
+    const messages = [
+      {
+        role: 'user',
+        parts: [{ type: 'text', text: 'Check this' }],
+        metadata: {
+          inline_file_contents: [{ name: 'file.txt', content: 'hello world' }],
+        },
+      },
+    ] as any
+    const result = transport.mapUserInlineAttachments(messages)
+    expect(result[0].parts[0].text).toContain('file.txt')
+    expect(result[0].parts[0].text).toContain('hello world')
+  })
+
+  it('mapUserInlineAttachments ignores entries without content', () => {
+    const messages = [
+      {
+        role: 'user',
+        parts: [{ type: 'text', text: 'Check' }],
+        metadata: {
+          inline_file_contents: [{ name: 'empty.txt' }],
+        },
+      },
+    ] as any
+    const result = transport.mapUserInlineAttachments(messages)
+    expect(result[0].parts[0].text).toBe('Check')
+  })
+
+  describe('inference params follow the thread assistant', () => {
+    type Resolvable = {
+      getActiveInferenceParams: () => Record<string, unknown>
+    }
+    const resolve = (t: CustomChatTransport = transport) =>
+      (t as unknown as Resolvable).getActiveInferenceParams()
+
+    it('reads params from the thread assistant when set', () => {
+      mockState.currentAssistant = { id: 'default', parameters: { temperature: 0.1 } }
+      mockState.threads = {
+        'thread-1': { assistants: [{ id: 'agent-b', parameters: { temperature: 0.9 } }] },
+      }
+      expect(resolve()).toEqual({ temperature: 0.9 })
+    })
+
+    it('uses no params for a model-only thread, ignoring the global default', () => {
+      mockState.currentAssistant = { id: 'default', parameters: { temperature: 0.1 } }
+      mockState.threads = { 'thread-1': { assistants: [{ id: 'model-only' }] } }
+      expect(resolve()).toEqual({})
+    })
+
+    it('falls back to the global assistant only when off-thread', () => {
+      mockState.currentAssistant = { id: 'default', parameters: { temperature: 0.1 } }
+      mockState.threads = {}
+      expect(resolve(new CustomChatTransport('sys'))).toEqual({ temperature: 0.1 })
+    })
+
+    it('returns an empty object when nothing is set', () => {
+      expect(resolve(new CustomChatTransport('sys'))).toEqual({})
+    })
+  })
+})
+
+describe('normalizeToolInputSchema edge cases', () => {
+  it('handles null/undefined values', () => {
+    expect(normalizeToolInputSchema({ type: 'string', default: null })).toEqual({
+      type: 'string',
+      default: null,
+    })
+  })
+
+  it('handles primitive values', () => {
+    expect(normalizeToolInputSchema({ type: 'number' })).toEqual({ type: 'number' })
+  })
+
+  it('handles $ref without adding type', () => {
+    const schema = { $ref: '#/definitions/Foo', description: 'A foo' }
+    const result = normalizeToolInputSchema(schema)
+    expect(result.type).toBeUndefined()
+    expect(result.$ref).toBe('#/definitions/Foo')
+  })
+
+  it('handles arrays at top level', () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        tags: {
+          type: 'array',
+          items: { description: 'A tag' },
+        },
+      },
+    }
+    const result = normalizeToolInputSchema(schema)
+    expect((result.properties as any).tags.items.type).toBe('string')
+  })
+})

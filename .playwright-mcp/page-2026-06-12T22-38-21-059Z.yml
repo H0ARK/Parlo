@@ -1,0 +1,129 @@
+- generic [ref=e5]:
+  - region "Notifications alt+T"
+  - generic [ref=e7]:
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - button "Toggle Sidebar" [ref=e10] [cursor=pointer]:
+          - img
+          - generic [ref=e11]: Toggle Sidebar
+        - button [ref=e12] [cursor=pointer]:
+          - img
+      - generic [ref=e16]:
+        - list [ref=e19]:
+          - listitem [ref=e20]:
+            - link "Review" [ref=e21] [cursor=pointer]:
+              - /url: /review
+              - img [ref=e22]
+              - generic [ref=e26]: Review
+          - listitem [ref=e27]:
+            - button "New Chat ⌘ n" [ref=e28]:
+              - img [ref=e30]
+              - generic [ref=e32]: New Chat
+              - generic [ref=e33]:
+                - generic: ⌘
+                - generic: "n"
+          - listitem [ref=e34]:
+            - button "New Projects ⌘ p" [ref=e35]:
+              - img [ref=e37]
+              - generic [ref=e39]: New Projects
+              - generic [ref=e40]:
+                - generic: ⌘
+                - generic: p
+          - listitem [ref=e41]:
+            - button "Search ⌘ k" [ref=e42]:
+              - img [ref=e44]
+              - generic [ref=e47]: Search
+              - generic [ref=e48]:
+                - generic: ⌘
+                - generic: k
+          - listitem [ref=e49]:
+            - link "Hub" [ref=e50] [cursor=pointer]:
+              - /url: /hub
+              - img [ref=e52]
+              - generic [ref=e55]: Hub
+          - listitem [ref=e56]:
+            - link "Settings" [ref=e57] [cursor=pointer]:
+              - /url: /settings/general
+              - img [ref=e59]
+              - generic [ref=e62]: Settings
+        - generic [ref=e63]:
+          - generic [ref=e64]:
+            - generic [ref=e65]: Projects
+            - button "Toggle Projects" [ref=e66]:
+              - img [ref=e67]
+              - generic [ref=e69]: Toggle Projects
+            - button "Create New Project" [ref=e70]:
+              - img [ref=e71]
+              - generic [ref=e72]: Create New Project
+            - list
+          - generic [ref=e73]:
+            - generic [ref=e74]: Chats
+            - button "Toggle Chats" [ref=e75]:
+              - img [ref=e76]
+              - generic [ref=e78]: Toggle Chats
+            - button "New Chat" [ref=e79]:
+              - img [ref=e80]
+              - generic [ref=e81]: New Chat
+            - list
+    - main [ref=e82]:
+      - generic [ref=e85]:
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - img [ref=e92]
+            - generic [ref=e96]: Hub
+          - generic [ref=e97]:
+            - button "models" [ref=e98]:
+              - img [ref=e99]
+              - generic [ref=e109]: models
+            - button "plugins" [active] [ref=e110]:
+              - img [ref=e111]
+              - generic [ref=e113]: plugins
+          - generic [ref=e114]:
+            - img [ref=e823]
+            - textbox "Search plugins" [ref=e826]
+          - generic [ref=e119]:
+            - button "Refresh" [ref=e827] [cursor=pointer]:
+              - img
+              - text: Refresh
+            - generic [ref=e121]:
+              - switch [ref=e122] [cursor=pointer]
+              - generic [ref=e123]: Installed
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e127]: 285 models
+            - generic [ref=e128]: /
+            - generic [ref=e129]: 0 local
+            - generic [ref=e130]: /
+            - generic [ref=e131]: 0 plugins
+            - generic [ref=e132]: /
+            - generic [ref=e133]: marketplace idle
+          - generic [ref=e828]:
+            - generic [ref=e829]:
+              - generic [ref=e830]:
+                - generic [ref=e831]:
+                  - generic [ref=e832]: Plugins
+                  - generic [ref=e833]: "0"
+                - generic [ref=e834]:
+                  - generic [ref=e835]: Sources
+                  - generic [ref=e836]: "0"
+                - generic [ref=e837]:
+                  - generic [ref=e838]: Skills
+                  - generic [ref=e839]: "0"
+              - generic [ref=e840]:
+                - button "OpenAI plugins" [ref=e841] [cursor=pointer]:
+                  - img
+                  - text: OpenAI plugins
+                - generic [ref=e842]:
+                  - switch "Installed" [ref=e843] [cursor=pointer]
+                  - text: Installed
+                - button "Refresh" [ref=e844] [cursor=pointer]:
+                  - img
+                  - text: Refresh
+            - generic [ref=e845]:
+              - generic [ref=e846]: Marketplace unavailable
+              - generic [ref=e847]: Cannot read properties of undefined (reading 'transformCallback')
+              - generic [ref=e848]:
+                - button "Retry" [ref=e849] [cursor=pointer]
+                - button "OpenAI plugins" [ref=e850] [cursor=pointer]:
+                  - img
+                  - text: OpenAI plugins

@@ -1,0 +1,272 @@
+import { GitPullRequest, type LucideIcon } from 'lucide-react'
+import { route } from '@/constants/routes'
+
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { useTranslation } from '@/i18n/react-i18next-compat'
+
+import { Link, useLocation, useNavigate } from '@tanstack/react-router'
+import { PlatformMetaKey } from '@/containers/PlatformMetaKey'
+import React, { useRef } from 'react'
+import {
+  SearchIcon,
+  type SearchIconHandle,
+} from '@/components/animated-icon/search'
+import {
+  FolderPlusIcon,
+  type FolderPlusIconHandle,
+} from '@/components/animated-icon/folder-plus'
+import {
+  MessageCircleIcon,
+  type MessageCircleIconHandle,
+} from '@/components/animated-icon/message-circle'
+import {
+  SettingsIcon,
+  type SettingsIconHandle,
+} from '@/components/animated-icon/settings'
+import { BlocksIcon, type BlocksIconHandle } from '../animated-icon/blocks'
+import { BotIcon, type BotIconHandle } from '@/components/animated-icon/bot'
+import AddProjectDialog from '@/containers/dialogs/AddProjectDialog'
+import { SearchDialog } from '@/containers/dialogs/SearchDialog'
+import { useThreadManagement } from '@/hooks/useThreadManagement'
+import { useSearchDialog } from '@/hooks/useSearchDialog'
+import { useProjectDialog } from '@/hooks/useProjectDialog'
+import { useAgentMode } from '@/hooks/useAgentMode'
+import { TEMPORARY_CHAT_ID } from '@/constants/chat'
+import { PlatformShortcuts, ShortcutAction } from '@/lib/shortcuts'
+
+type AnimatedIconHandle =
+  | SearchIconHandle
+  | FolderPlusIconHandle
+  | MessageCircleIconHandle
+  | SettingsIconHandle
+  | BlocksIconHandle
+  | BotIconHandle
+
+type NavMainItem = {
+  title: string
+  url?: string
+  icon?: LucideIcon | React.ComponentType<{ className?: string }>
+  animatedIcon?: React.ForwardRefExoticComponent<
+    {
+      className?: string
+      size?: number
+    } & React.RefAttributes<AnimatedIconHandle>
+  >
+  isActive?: boolean
+  shortcut?: React.ReactNode
+  onClick?: () => void
+}
+
+const getNavMainItems = (
+  onNewProject: () => void,
+  onSearch: () => void,
+  onNewChat: () => void,
+  onJanClaw: () => void
+): NavMainItem[] => [
+  {
+    title: 'common:review',
+    url: route.review,
+    icon: GitPullRequest,
+  },
+  {
+    title: 'common:newChat',
+    animatedIcon: MessageCircleIcon,
+    onClick: onNewChat,
+    shortcut: (
+      <KbdGroup className="ml-auto scale-90 gap-0">
+        <Kbd className="bg-transparent size-3">
+          <PlatformMetaKey />
+        </Kbd>
+        <Kbd className="bg-transparent size-3 uppercase">
+          {PlatformShortcuts[ShortcutAction.NEW_CHAT].key}
+        </Kbd>
+      </KbdGroup>
+    ),
+  },
+  {
+    title: 'common:newAgentChat',
+    animatedIcon: BotIcon,
+    onClick: onJanClaw,
+    shortcut: (
+      <KbdGroup className="ml-auto scale-90 gap-0">
+        <Kbd className="bg-transparent size-3">
+          <PlatformMetaKey />
+        </Kbd>
+        <Kbd className="bg-transparent size-3 uppercase">
+          {PlatformShortcuts[ShortcutAction.NEW_AGENT_CHAT].key}
+        </Kbd>
+      </KbdGroup>
+    ),
+  },
+  {
+    title: 'common:projects.new',
+    animatedIcon: FolderPlusIcon,
+    onClick: onNewProject,
+    shortcut: (
+      <KbdGroup className="ml-auto scale-90 gap-0">
+        <Kbd className="bg-transparent size-3">
+          <PlatformMetaKey />
+        </Kbd>
+        <Kbd className="bg-transparent size-3 uppercase">
+          {PlatformShortcuts[ShortcutAction.NEW_PROJECT].key}
+        </Kbd>
+      </KbdGroup>
+    ),
+  },
+  {
+    title: 'common:search',
+    animatedIcon: SearchIcon,
+    onClick: onSearch,
+    shortcut: (
+      <KbdGroup className="ml-auto scale-90 gap-0">
+        <Kbd className="bg-transparent size-3">
+          <PlatformMetaKey />
+        </Kbd>
+        <Kbd className="bg-transparent size-3 uppercase">
+          {PlatformShortcuts[ShortcutAction.SEARCH].key}{' '}
+        </Kbd>
+      </KbdGroup>
+    ),
+  },
+  {
+    title: 'common:hub',
+    url: route.hub.index,
+    animatedIcon: BlocksIcon,
+  },
+  {
+    title: 'common:settings',
+    url: route.settings.general,
+    animatedIcon: SettingsIcon,
+  },
+]
+
+function NavMainItemWithAnimatedIcon({
+  item,
+  label,
+}: {
+  item: NavMainItem
+  label: string
+}) {
+  const iconRef = useRef<AnimatedIconHandle>(null)
+  const AnimatedIcon = item.animatedIcon!
+
+  const content = (
+    <>
+      <AnimatedIcon ref={iconRef} className="text-foreground/70" size={16} />
+      <span>{label}</span>
+      {item.shortcut}
+    </>
+  )
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        asChild={!!item.url}
+        isActive={item.isActive}
+        onMouseEnter={() => iconRef.current?.startAnimation()}
+        onMouseLeave={() => iconRef.current?.stopAnimation()}
+        onClick={item.onClick}
+      >
+        {item.url ? <Link to={item.url}>{content}</Link> : content}
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
+export function NavMain() {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { addFolderFromPath } = useThreadManagement()
+  const { open: searchOpen, setOpen: setSearchOpen } = useSearchDialog()
+  const { open: projectDialogOpen, setOpen: setProjectDialogOpen } =
+    useProjectDialog()
+  const navMainItems = getNavMainItems(
+    () => setProjectDialogOpen(true),
+    () => setSearchOpen(true),
+    () => {
+      useAgentMode.getState().removeThread(TEMPORARY_CHAT_ID)
+      navigate({ to: route.home })
+    },
+    () => {
+      useAgentMode.getState().setAgentMode(TEMPORARY_CHAT_ID, true)
+      navigate({ to: route.home })
+    }
+  ).filter((item) => item.title !== 'common:newAgentChat')
+    .map((item) =>
+      item.url === route.review
+        ? { ...item, isActive: location.pathname === route.review }
+        : item
+    )
+
+  const handleCreateProject = async (
+    directoryPath: string,
+    assistantId?: string
+  ) => {
+    const newProject = await addFolderFromPath(directoryPath, assistantId)
+    setProjectDialogOpen(false)
+    navigate({
+      to: '/project/$projectId',
+      params: { projectId: newProject.id },
+    })
+  }
+
+  return (
+    <>
+      <SidebarMenu>
+        {navMainItems.map((item) => {
+          const label = item.title.includes(':') ? t(item.title) : item.title
+
+          if (item.animatedIcon) {
+            return (
+              <NavMainItemWithAnimatedIcon
+                key={item.title}
+                item={item}
+                label={label}
+              />
+            )
+          }
+
+          const Icon = item.icon
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                asChild={!!item.url}
+                isActive={item.isActive}
+                onClick={item.onClick}
+              >
+                {item.url ? (
+                  <Link to={item.url}>
+                    {Icon && <Icon className="text-foreground/70" />}
+                    <span>{label}</span>
+                    {item.shortcut}
+                  </Link>
+                ) : (
+                  <>
+                    {Icon && <Icon className="text-foreground/70" />}
+                    <span>{label}</span>
+                    {item.shortcut}
+                  </>
+                )}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )
+        })}
+      </SidebarMenu>
+
+      <AddProjectDialog
+        open={projectDialogOpen}
+        onOpenChange={setProjectDialogOpen}
+        editingKey={null}
+        onSave={handleCreateProject}
+      />
+
+      <SearchDialog open={searchOpen} onOpenChange={setSearchOpen} />
+    </>
+  )
+}
