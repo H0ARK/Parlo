@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 const writtenFiles: Record<string, string> = {}
 const modelYamls: Record<string, unknown> = {}
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   fs: {
     existsSync: vi.fn(async (p: string) => p === '/p/models' || p in modelYamls),
     mkdir: vi.fn(async () => undefined),
@@ -62,7 +62,7 @@ describe('generatePreset MTP emission', () => {
       spec_draft_n_min: 0,
       spec_draft_p_min: 0.8,
     })
-    await generatePreset('/p', '/jan', CONFIG, { supportsMtp: true })
+    await generatePreset('/p', '/Parlo', CONFIG, { supportsMtp: true })
     const ini = writtenFiles['/p/router.preset.ini']
     expect(ini).toContain('spec-type = draft-mtp')
     expect(ini).toContain('spec-draft-n-max = 8')
@@ -72,7 +72,7 @@ describe('generatePreset MTP emission', () => {
 
   it('omits MTP lines when backend does not support MTP', async () => {
     setupModel('glm', { mtp: true, mtp_layers: 1, spec_draft_n_max: 8 })
-    await generatePreset('/p', '/jan', CONFIG, { supportsMtp: false })
+    await generatePreset('/p', '/Parlo', CONFIG, { supportsMtp: false })
     const ini = writtenFiles['/p/router.preset.ini']
     expect(ini).not.toContain('spec-type')
     expect(ini).not.toContain('spec-draft')
@@ -80,14 +80,14 @@ describe('generatePreset MTP emission', () => {
 
   it('omits MTP lines when model has no MTP heads (mtp_layers = 0)', async () => {
     setupModel('llama', { mtp: true, mtp_layers: 0 })
-    await generatePreset('/p', '/jan', CONFIG, { supportsMtp: true })
+    await generatePreset('/p', '/Parlo', CONFIG, { supportsMtp: true })
     const ini = writtenFiles['/p/router.preset.ini']
     expect(ini).not.toContain('spec-type')
   })
 
   it('omits MTP lines when mtp flag is off even if heads exist', async () => {
     setupModel('glm', { mtp: false, mtp_layers: 1 })
-    await generatePreset('/p', '/jan', CONFIG, { supportsMtp: true })
+    await generatePreset('/p', '/Parlo', CONFIG, { supportsMtp: true })
     const ini = writtenFiles['/p/router.preset.ini']
     expect(ini).not.toContain('spec-type')
   })
@@ -99,7 +99,7 @@ describe('generatePreset MTP emission', () => {
       spec_draft_n_max: -5,
       spec_draft_p_min: 1.5,
     })
-    await generatePreset('/p', '/jan', CONFIG, { supportsMtp: true })
+    await generatePreset('/p', '/Parlo', CONFIG, { supportsMtp: true })
     const ini = writtenFiles['/p/router.preset.ini']
     expect(ini).toContain('spec-type = draft-mtp')
     expect(ini).not.toContain('spec-draft-n-max')
@@ -110,7 +110,7 @@ describe('generatePreset MTP emission', () => {
 describe('generatePreset ctx-size default', () => {
   it('emits ctx-size = 8192 in [*] when fit is off and no ctx_size is set', async () => {
     setupModel('llama', {})
-    await generatePreset('/p', '/jan', { fit: false } as any, {
+    await generatePreset('/p', '/Parlo', { fit: false } as any, {
       supportsMtp: false,
     })
     const ini = writtenFiles['/p/router.preset.ini']
@@ -119,7 +119,7 @@ describe('generatePreset ctx-size default', () => {
 
   it('uses the user ctx_size over the default', async () => {
     setupModel('llama', {})
-    await generatePreset('/p', '/jan', { fit: false, ctx_size: 16384 } as any, {
+    await generatePreset('/p', '/Parlo', { fit: false, ctx_size: 16384 } as any, {
       supportsMtp: false,
     })
     const ini = writtenFiles['/p/router.preset.ini']
@@ -129,7 +129,7 @@ describe('generatePreset ctx-size default', () => {
 
   it('omits ctx-size when auto-fit is enabled', async () => {
     setupModel('llama', {})
-    await generatePreset('/p', '/jan', { fit: true } as any, {
+    await generatePreset('/p', '/Parlo', { fit: true } as any, {
       supportsMtp: false,
     })
     const ini = writtenFiles['/p/router.preset.ini']

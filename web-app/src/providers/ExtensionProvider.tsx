@@ -1,7 +1,7 @@
 import { ExtensionManager } from '@/lib/extension'
 import { APIs } from '@/lib/service'
 import { EventEmitter } from '@/services/events/EventEmitter'
-import { EngineManager, ModelManager } from '@janhq/core'
+import { EngineManager, ModelManager } from '@parlo-lab/core'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { emit } from '@tauri-apps/api/event'
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react'
@@ -78,7 +78,7 @@ export function ExtensionProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const caption = document.getElementById('initial-loader-caption')
     if (caption) {
-      caption.textContent = status ? t(status.key, status.vars) : t('settingUpJan')
+      caption.textContent = status ? t(status.key, status.vars) : t('settingUpParlo')
     }
   }, [status, t])
 

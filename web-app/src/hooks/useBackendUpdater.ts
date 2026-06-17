@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { events } from '@janhq/core'
+import { events } from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 import { useModelProvider } from '@/hooks/useModelProvider'
 

@@ -1,5 +1,5 @@
 /**
- * Custom Updater for Jan with HMAC request signing
+ * Custom Updater for Parlo with HMAC request signing
  *
  * This module provides a custom update checker that:
  * 1. Reads endpoints from tauri.conf.json (plugins.updater.endpoints)
@@ -7,7 +7,7 @@
  * 3. Remaining endpoints are FALLBACK - no signing needed
  *
  * Convention: The first endpoint in the list should be the signed endpoint
- * (e.g., https://apps.jan.ai/update-check)
+ * (e.g., https://apps.Parlo.ai/update-check)
  */
 use super::hmac_client::SignedRequestHeaders;
 use reqwest::Client;
@@ -16,9 +16,9 @@ use std::time::Duration;
 use thiserror::Error;
 
 /// Secret key for HMAC signature
-/// - In CI: Set JAN_SIGNING_KEY environment variable at build time
+/// - In CI: Set PARLO_SIGNING_KEY environment variable at build time
 /// - In local dev: Falls back to a test key
-const SECRET_KEY: &str = match option_env!("JAN_SIGNING_KEY") {
+const SECRET_KEY: &str = match option_env!("PARLO_SIGNING_KEY") {
     Some(key) => key,
     None => "local-dev-test-key-not-for-production",
 };
@@ -82,11 +82,11 @@ impl CustomUpdater {
         })
     }
 
-    /// Build User-Agent header: Jan/{version} ({os}; {arch})
+    /// Build User-Agent header: Parlo/{version} ({os}; {arch})
     fn build_user_agent(app_version: &str) -> String {
         let os = std::env::consts::OS;
         let arch = std::env::consts::ARCH;
-        format!("Jan/{} ({}; {})", app_version, os, arch)
+        format!("Parlo/{} ({}; {})", app_version, os, arch)
     }
 
     /// Check for updates using endpoints list

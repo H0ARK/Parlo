@@ -14,8 +14,8 @@ import { ExtensionProvider } from '@/providers/ExtensionProvider'
 import { ToasterProvider } from '@/providers/ToasterProvider'
 import { useAnalytic } from '@/hooks/useAnalytic'
 import { PromptAnalytic } from '@/containers/analytics/PromptAnalytic'
-import { useJanModelPrompt } from '@/hooks/useJanModelPrompt'
-import { PromptJanModel } from '@/containers/PromptJanModel'
+import { useParloModelPrompt } from '@/hooks/useParloModelPrompt'
+import { PromptParloModel } from '@/containers/PromptParloModel'
 import { AnalyticProvider } from '@/providers/AnalyticProvider'
 import { useLeftPanel } from '@/hooks/useLeftPanel'
 import ToolApproval from '@/containers/dialogs/ToolApproval'
@@ -26,7 +26,7 @@ import OutOfContextPromiseModal from '@/containers/dialogs/OutOfContextDialog'
 import AttachmentIngestionDialog from '@/containers/dialogs/AttachmentIngestionDialog'
 import GlobalError from '@/containers/GlobalError'
 import { GlobalEventHandler } from '@/providers/GlobalEventHandler'
-import { JanDebugBridge } from '@/providers/JanDebugBridge'
+import { ParloDebugBridge } from '@/providers/ParloDebugBridge'
 import { ServiceHubProvider } from '@/providers/ServiceHubProvider'
 import { CodexAppServerBootstrap } from '@/providers/CodexAppServerBootstrap'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
@@ -47,7 +47,7 @@ export const Route = createRootRoute({
 
 const AppLayout = () => {
   const { productAnalyticPrompt } = useAnalytic()
-  const { showJanModelPrompt } = useJanModelPrompt()
+  const { showParloModelPrompt } = useParloModelPrompt()
   const {
     open: isLeftPanelOpen,
     setLeftPanel,
@@ -97,7 +97,7 @@ const AppLayout = () => {
         </SidebarInset>
 
         {productAnalyticPrompt && <PromptAnalytic />}
-        {showJanModelPrompt && <PromptJanModel />}
+        {showParloModelPrompt && <PromptParloModel />}
       </SidebarProvider>
     </div>
   )
@@ -143,7 +143,7 @@ function RootLayout() {
           <ExtensionProvider>
             <DataProvider />
             <GlobalEventHandler />
-            <JanDebugBridge />
+            <ParloDebugBridge />
             {IS_LOGS_ROUTE ? <LogsLayout /> : <AppLayout />}
           </ExtensionProvider>
           {/* <TanStackRouterDevtools position="bottom-right" /> */}

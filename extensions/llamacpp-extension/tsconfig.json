@@ -3,7 +3,11 @@
     "target": "es2018",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ES2018", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2018",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -11,6 +15,10 @@
     "skipLibCheck": true,
     "rootDir": "./src"
   },
-  "include": ["./src"],
-  "exclude": ["**/*.test.ts"]
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "**/*.test.ts"
+  ]
 }

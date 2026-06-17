@@ -2,8 +2,8 @@
  * Models Service Types
  */
 
-import { SessionInfo, modelInfo, ThreadMessage, UnloadResult } from '@janhq/core'
-import { Model as CoreModel } from '@janhq/core'
+import { SessionInfo, modelInfo, ThreadMessage, UnloadResult } from '@parlo-lab/core'
+import { Model as CoreModel } from '@parlo-lab/core'
 
 // Types for model catalog
 export interface ModelQuant {
@@ -106,7 +106,7 @@ export interface ModelsService {
   getModel(modelId: string): Promise<modelInfo | undefined>
   fetchModels(): Promise<modelInfo[]>
   fetchModelCatalog(): Promise<ModelCatalog>
-  fetchLatestJanModel(): Promise<CatalogModel | null>
+  fetchLatestParloModel(): Promise<CatalogModel | null>
   fetchHuggingFaceRepo(
     repoId: string,
     hfToken?: string

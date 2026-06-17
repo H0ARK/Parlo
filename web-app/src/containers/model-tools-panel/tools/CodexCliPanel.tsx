@@ -17,7 +17,6 @@ import {
   runCodexCliDoctor,
   runCodexExec,
   runCodexCliExecServer,
-  runCodexCliProto,
   runCodexCliPlugin,
   runCodexCliHelp,
   runCodexCliAppServer,
@@ -36,7 +35,6 @@ import {
 } from '@/lib/codex-app-server'
 
 type CodexCliPanelProps = {
-  isCodexProtoTransport?: boolean
   cwd: string
 }
 
@@ -503,26 +501,6 @@ export function CodexCliPanel({ cwd }: CodexCliPanelProps) {
           }}
         >
           App
-        </button>
-        <button
-          type="button"
-          className="text-[9px] underline disabled:opacity-50"
-          disabled={busy}
-          onClick={() => {
-            const args = parseCodexCliArgs(rawArgs, null)
-            if (args === null) {
-              setErrorMessage('Codex CLI args must be a JSON array or command tokens.')
-              return
-            }
-            void runCodexCliAction('proto', () =>
-              runCodexCliProto({
-                args,
-                cwd,
-              })
-            )
-          }}
-        >
-          Proto
         </button>
         <button
           type="button"

@@ -16,7 +16,7 @@ import { useState, useMemo, useRef, useEffect } from 'react'
 import { useDownloadStore } from '@/hooks/useDownloadStore'
 import { useGeneralSetting } from '@/hooks/useGeneralSetting'
 import type { CatalogModel } from '@/services/models/types'
-import { JAN_CODE_HF_REPO } from '@/constants/models'
+import { PARLO_CODE_HF_REPO } from '@/constants/models'
 import { toast } from 'sonner'
 import { getModelToStart } from '@/utils/getModelToStart'
 import { invoke } from '@tauri-apps/api/core'
@@ -576,7 +576,7 @@ function JanCodeRecommendation({
   useEffect(() => {
     serviceHub
       .models()
-      .fetchHuggingFaceRepo(JAN_CODE_HF_REPO, huggingfaceToken)
+      .fetchHuggingFaceRepo(PARLO_CODE_HF_REPO, huggingfaceToken)
       .then((repo) => {
         if (repo)
           setJanCodeCatalog(

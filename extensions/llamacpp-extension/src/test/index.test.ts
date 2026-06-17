@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import llamacpp_extension from '../index'
 
-import { normalizeLlamacppConfig } from '@janhq/tauri-plugin-llamacpp-api'
+import { normalizeLlamacppConfig } from '@parlo-lab/tauri-plugin-llamacpp-api'
 
 // Mock fetch globally
 global.fetch = vi.fn()
@@ -16,10 +16,10 @@ vi.mock('../backend', () => ({
 }))
 
 // Mock tauri-plugin-llamacpp-api (partial mock)
-vi.mock('@janhq/tauri-plugin-llamacpp-api', async () => {
+vi.mock('@parlo-lab/tauri-plugin-llamacpp-api', async () => {
   const actual = await vi.importActual<
-    typeof import('@janhq/tauri-plugin-llamacpp-api')
-  >('@janhq/tauri-plugin-llamacpp-api')
+    typeof import('@parlo-lab/tauri-plugin-llamacpp-api')
+  >('@parlo-lab/tauri-plugin-llamacpp-api')
 
   return {
     ...actual,
@@ -58,23 +58,23 @@ describe('llamacpp_extension', () => {
 
   describe('getProviderPath', () => {
     it('should return correct provider path', async () => {
-      const { getJanDataFolderPath, joinPath } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath } = await import('@parlo-lab/core')
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-      vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+      vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp')
 
       const result = await extension.getProviderPath()
       
-      expect(result).toBe('/path/to/jan/llamacpp')
+      expect(result).toBe('/path/to/Parlo/llamacpp')
     })
   })
 
   describe('list', () => {
     it('should return empty array when models directory does not exist', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-      vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/models')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+      vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/models')
       vi.mocked(fs.existsSync)
         .mockResolvedValueOnce(false) // models directory doesn't exist initially
         .mockResolvedValue(false) // no model.yml files exist
@@ -87,15 +87,15 @@ describe('llamacpp_extension', () => {
     })
 
     it('should return model list when models exist', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
       
       // Set up providerPath first
-      extension['providerPath'] = '/path/to/jan/llamacpp'
+      extension['providerPath'] = '/path/to/Parlo/llamacpp'
       
-      const modelsDir = '/path/to/jan/llamacpp/models'
+      const modelsDir = '/path/to/Parlo/llamacpp/models'
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       
       // Mock joinPath to handle the directory traversal logic
       vi.mocked(joinPath).mockImplementation((paths) => {
@@ -146,10 +146,10 @@ describe('llamacpp_extension', () => {
     })
 
     it('should throw error if model already exists', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-      vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/models/test-model/model.yml')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+      vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/models/test-model/model.yml')
       vi.mocked(fs.existsSync).mockResolvedValue(true)
 
       await expect(extension.import('test-model', { modelPath: '/path/to/model' }))
@@ -157,9 +157,9 @@ describe('llamacpp_extension', () => {
     })
 
     it('should import model from URL', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
-      const apiModule = await import('@janhq/tauri-plugin-llamacpp-api')
+      const apiModule = await import('@parlo-lab/tauri-plugin-llamacpp-api')
       vi.mocked(apiModule.readGgufMetadata).mockResolvedValue({
         version: 3,
         tensor_count: 1,
@@ -172,7 +172,7 @@ describe('llamacpp_extension', () => {
       
       window.core.extensionManager.getByName = vi.fn().mockReturnValue(mockDownloadManager)
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath).mockImplementation((paths) => Promise.resolve(paths.join('/')))
       vi.mocked(fs.existsSync).mockResolvedValue(false)
       vi.mocked(fs.fileStat).mockResolvedValue({ size: 1000000 })
@@ -208,7 +208,7 @@ describe('llamacpp_extension', () => {
     })
 
     it('should load model successfully', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
 
       const backendModule = await import('../backend')
@@ -248,9 +248,9 @@ describe('llamacpp_extension', () => {
       }
       
       // Set up providerPath
-      extension['providerPath'] = '/path/to/jan/llamacpp'
+      extension['providerPath'] = '/path/to/Parlo/llamacpp'
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath).mockImplementation((paths) => Promise.resolve(paths.join('/')))
 
       const expectedSession = {
@@ -260,7 +260,7 @@ describe('llamacpp_extension', () => {
         api_key: 'test-api-key',
       }
 
-      const apiModule = await import('@janhq/tauri-plugin-llamacpp-api')
+      const apiModule = await import('@parlo-lab/tauri-plugin-llamacpp-api')
       vi.mocked(apiModule.loadLlamaModel).mockResolvedValue(expectedSession as any)
 
       vi.mocked(invoke).mockImplementation(async (cmd: string) => {
@@ -301,7 +301,7 @@ describe('llamacpp_extension', () => {
 
     it('should unload model successfully', async () => {
       const { invoke } = await import('@tauri-apps/api/core')
-      const apiModule = await import('@janhq/tauri-plugin-llamacpp-api')
+      const apiModule = await import('@parlo-lab/tauri-plugin-llamacpp-api')
 
       vi.mocked(invoke).mockImplementation(async (cmd: string) => {
         if (cmd === 'plugin:llamacpp|find_session_by_model') {
@@ -402,9 +402,9 @@ describe('llamacpp_extension', () => {
 
   describe('delete', () => {
     it('should throw error if model does not exist', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath).mockImplementation((paths) => Promise.resolve(paths.join('/')))
       vi.mocked(fs.existsSync).mockResolvedValue(false)
 
@@ -412,16 +412,16 @@ describe('llamacpp_extension', () => {
     })
 
     it('should delete model successfully', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath).mockImplementation((paths) => Promise.resolve(paths.join('/')))
       vi.mocked(fs.existsSync).mockResolvedValue(true)
       vi.mocked(fs.rm).mockResolvedValue(undefined)
 
       await extension.delete('test-model')
       
-      expect(fs.rm).toHaveBeenCalledWith('/path/to/jan/llamacpp/models/test-model')
+      expect(fs.rm).toHaveBeenCalledWith('/path/to/Parlo/llamacpp/models/test-model')
     })
   })
 
@@ -573,11 +573,11 @@ describe('llamacpp_extension', () => {
         extension['getSettings'] = vi.fn().mockResolvedValue([])
         extension['updateSettings'] = vi.fn().mockResolvedValue(undefined)
 
-        const { getJanDataFolderPath, joinPath } = await import('@janhq/core')
-        vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-        vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/backends')
+        const { getParloDataFolderPath, joinPath } = await import('@parlo-lab/core')
+        vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+        vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/backends')
 
-        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@janhq/tauri-plugin-llamacpp-api')
+        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@parlo-lab/tauri-plugin-llamacpp-api')
         vi.mocked(mapOldBackendToNew).mockResolvedValue('linux-avx2-x64')
         vi.mocked(removeOldBackendVersions).mockResolvedValue([])
 
@@ -631,11 +631,11 @@ describe('llamacpp_extension', () => {
         extension['getSettings'] = vi.fn().mockResolvedValue([])
         extension['updateSettings'] = vi.fn().mockResolvedValue(undefined)
 
-        const { getJanDataFolderPath, joinPath } = await import('@janhq/core')
-        vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-        vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/backends')
+        const { getParloDataFolderPath, joinPath } = await import('@parlo-lab/core')
+        vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+        vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/backends')
 
-        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@janhq/tauri-plugin-llamacpp-api')
+        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@parlo-lab/tauri-plugin-llamacpp-api')
         vi.mocked(mapOldBackendToNew).mockResolvedValue('linux-avx2-x64')
         vi.mocked(removeOldBackendVersions).mockResolvedValue([])
 
@@ -655,11 +655,11 @@ describe('llamacpp_extension', () => {
         extension['getSettings'] = vi.fn().mockResolvedValue([])
         extension['updateSettings'] = vi.fn().mockResolvedValue(undefined)
 
-        const { getJanDataFolderPath, joinPath } = await import('@janhq/core')
-        vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-        vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/backends')
+        const { getParloDataFolderPath, joinPath } = await import('@parlo-lab/core')
+        vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+        vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/backends')
 
-        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@janhq/tauri-plugin-llamacpp-api')
+        const { mapOldBackendToNew, removeOldBackendVersions } = await import('@parlo-lab/tauri-plugin-llamacpp-api')
         vi.mocked(mapOldBackendToNew).mockResolvedValue('linux-avx2-x64')
         vi.mocked(removeOldBackendVersions).mockResolvedValue([])
 

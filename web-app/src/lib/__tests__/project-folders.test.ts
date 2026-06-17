@@ -13,21 +13,21 @@ describe('project-folders', () => {
     id: 'p1',
     name: 'legacy-name',
     updated_at: 1,
-    directoryPath: '/Users/dev/jan',
+    directoryPath: '/Users/dev/Parlo',
   }
 
   it('normalizes windows-style paths', () => {
-    expect(normalizeProjectPath('C:\\dev\\jan\\')).toBe('C:/dev/jan')
+    expect(normalizeProjectPath('C:\\dev\\Parlo\\')).toBe('C:/dev/Parlo')
   })
 
   it('derives basename from path', () => {
-    expect(basenameFromPath('/Users/dev/jan/')).toBe('jan')
+    expect(basenameFromPath('/Users/dev/Parlo/')).toBe('Parlo')
   })
 
   it('prefers directoryPath over workspace store entry', () => {
     const directories = { 'project:p1': '/other/path' }
-    expect(getProjectDirectoryPath(folder, directories)).toBe('/Users/dev/jan')
-    expect(getProjectDisplayName(folder, directories)).toBe('jan')
+    expect(getProjectDirectoryPath(folder, directories)).toBe('/Users/dev/Parlo')
+    expect(getProjectDisplayName(folder, directories)).toBe('Parlo')
   })
 
   it('falls back to workspace store and legacy name', () => {
@@ -46,7 +46,7 @@ describe('project-folders', () => {
     const folders = [folder]
     const directories = {}
     expect(
-      findFolderByDirectoryPath(folders, directories, '/Users/dev/jan/')
+      findFolderByDirectoryPath(folders, directories, '/Users/dev/Parlo/')
     ).toBe(folder)
   })
 })

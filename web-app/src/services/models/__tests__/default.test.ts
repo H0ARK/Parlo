@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { DefaultModelsService } from '../default'
-import { EngineManager, events, DownloadEvent, ContentType } from '@janhq/core'
+import { EngineManager, events, DownloadEvent, ContentType } from '@parlo-lab/core'
 
 const { mockEvents, mockDownloadEvent, mockExtractContent, mockExtractMetadata } = vi.hoisted(() => ({
   mockEvents: { emit: vi.fn() },
@@ -12,7 +12,7 @@ const { mockEvents, mockDownloadEvent, mockExtractContent, mockExtractMetadata }
   mockExtractMetadata: vi.fn().mockReturnValue(''),
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   EngineManager: { instance: vi.fn() },
   events: mockEvents,
   DownloadEvent: mockDownloadEvent,
@@ -27,7 +27,7 @@ vi.mock('../tokenCountToolContext', () => ({
 
 global.fetch = vi.fn()
 Object.defineProperty(global, 'MODEL_CATALOG_URL', { value: 'https://example.com/models', writable: true, configurable: true })
-Object.defineProperty(global, 'LATEST_JAN_MODEL_URL', { value: 'https://example.com/latest', writable: true, configurable: true })
+Object.defineProperty(global, 'LATEST_PARLO_MODEL_URL', { value: 'https://example.com/latest', writable: true, configurable: true })
 
 describe('DefaultModelsService - additional coverage', () => {
   let svc: DefaultModelsService
@@ -69,24 +69,24 @@ describe('DefaultModelsService - additional coverage', () => {
     })
   })
 
-  describe('fetchLatestJanModel', () => {
+  describe('fetchLatestParloModel', () => {
     it.each([
-      ['object response', { model_name: 'jan-nano' }, { model_name: 'jan-nano' }],
-      ['array response', [{ model_name: 'jan-nano' }, { model_name: 'jan-micro' }], { model_name: 'jan-nano' }],
+      ['object response', { model_name: 'Parlo-nano' }, { model_name: 'Parlo-nano' }],
+      ['array response', [{ model_name: 'Parlo-nano' }, { model_name: 'Parlo-micro' }], { model_name: 'Parlo-nano' }],
       ['empty array', [], null],
     ])('handles %s', async (_label, response, expected) => {
       ;(fetch as any).mockResolvedValue({ ok: true, json: vi.fn().mockResolvedValue(response) })
-      expect(await svc.fetchLatestJanModel()).toEqual(expected)
+      expect(await svc.fetchLatestParloModel()).toEqual(expected)
     })
 
     it('returns null on non-ok response', async () => {
       ;(fetch as any).mockResolvedValue({ ok: false, status: 500, statusText: 'Error' })
-      expect(await svc.fetchLatestJanModel()).toBeNull()
+      expect(await svc.fetchLatestParloModel()).toBeNull()
     })
 
     it('returns null on network error', async () => {
       ;(fetch as any).mockRejectedValue(new Error('network'))
-      expect(await svc.fetchLatestJanModel()).toBeNull()
+      expect(await svc.fetchLatestParloModel()).toBeNull()
     })
   })
 

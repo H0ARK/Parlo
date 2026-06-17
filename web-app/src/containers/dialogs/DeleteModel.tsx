@@ -132,7 +132,7 @@ export const DialogDeleteModel = ({
           <DialogClose asChild>
             <Button variant="destructive" size="sm" onClick={removeModel} autoFocus>
               {selectedModel.imported
-                ? t('providers:deleteModel.removeFromJan')
+                ? t('providers:deleteModel.removeFromParlo')
                 : t('providers:deleteModel.delete')}
             </Button>
           </DialogClose>

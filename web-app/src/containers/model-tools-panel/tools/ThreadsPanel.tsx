@@ -288,7 +288,6 @@ type ThreadsPanelActions = {
 type ThreadsPanelProps = {
   state: ThreadsPanelState
   actions: ThreadsPanelActions
-  isCodexProtoTransport?: boolean
 }
 
 export function ThreadsPanel({ state, actions }: ThreadsPanelProps) {

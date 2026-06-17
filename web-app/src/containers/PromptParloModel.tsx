@@ -1,21 +1,21 @@
 import { Button } from '@/components/ui/button'
-import { useJanModelPromptDismissed } from '@/hooks/useJanModelPrompt'
+import { useParloModelPromptDismissed } from '@/hooks/useParloModelPrompt'
 import { useServiceHub } from '@/hooks/useServiceHub'
 import { useDownloadStore } from '@/hooks/useDownloadStore'
 import { useGeneralSetting } from '@/hooks/useGeneralSetting'
 import { useMemo } from 'react'
 import { SETUP_SCREEN_QUANTIZATIONS } from '@/constants/models'
-import { useLatestJanModel } from '@/hooks/useLatestJanModel'
+import { useLatestParloModel } from '@/hooks/useLatestParloModel'
 
-export function PromptJanModel() {
+export function PromptParloModel() {
 
-  const { setDismissedModelName } = useJanModelPromptDismissed()
+  const { setDismissedModelName } = useParloModelPromptDismissed()
   const serviceHub = useServiceHub()
   const { downloads, localDownloadingModels, addLocalDownloadingModel } =
     useDownloadStore()
   const huggingfaceToken = useGeneralSetting((state) => state.huggingfaceToken)
 
-  const { model: janNewModel, loading: isLoading } = useLatestJanModel()
+  const { model: janNewModel, loading: isLoading } = useLatestParloModel()
 
   const defaultVariant = useMemo(() => {
     if (!janNewModel) return null

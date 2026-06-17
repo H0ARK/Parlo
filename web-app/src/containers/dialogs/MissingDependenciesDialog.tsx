@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react'
 import { useTranslation } from '@/i18n/react-i18next-compat'
-import { events, AppEvent } from '@janhq/core'
+import { events, AppEvent } from '@parlo-lab/core'
 import { useEffect, useState } from 'react'
 
 type VerificationFailedPayload = {

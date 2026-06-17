@@ -1,5 +1,5 @@
 import { localStorageKey } from '@/constants/localStorage'
-import type { ModelInfo } from '@janhq/core'
+import type { ModelInfo } from '@parlo-lab/core'
 
 export const getLastUsedModel = (): {
   provider: string
@@ -28,19 +28,6 @@ export const getModelToStart = (params: {
     const provider = getProviderByName(lastUsedModel.provider)
     if (provider && provider.models.some((m) => m.id === lastUsedModel.model)) {
       return { model: lastUsedModel.model, provider }
-    } else {
-      // Last used model not found under provider, fallback to first llamacpp model
-      const llamacppProvider = getProviderByName('llamacpp')
-      if (
-        llamacppProvider &&
-        llamacppProvider.models &&
-        llamacppProvider.models.length > 0
-      ) {
-        return {
-          model: llamacppProvider.models[0].id,
-          provider: llamacppProvider,
-        }
-      }
     }
   }
 
@@ -49,19 +36,6 @@ export const getModelToStart = (params: {
     const provider = getProviderByName(selectedProvider)
     if (provider) {
       return { model: selectedModel.id, provider }
-    }
-  }
-
-  // Use first model from llamacpp provider
-  const llamacppProvider = getProviderByName('llamacpp')
-  if (
-    llamacppProvider &&
-    llamacppProvider.models &&
-    llamacppProvider.models.length > 0
-  ) {
-    return {
-      model: llamacppProvider.models[0].id,
-      provider: llamacppProvider,
     }
   }
 

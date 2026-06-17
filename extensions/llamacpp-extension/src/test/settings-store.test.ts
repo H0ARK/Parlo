@@ -11,8 +11,8 @@ const { fsMock } = vi.hoisted(() => ({
   },
 }))
 
-vi.mock('@janhq/core', () => ({
-  getJanDataFolderPath: vi.fn().mockResolvedValue('/jan'),
+vi.mock('@parlo-lab/core', () => ({
+  getParloDataFolderPath: vi.fn().mockResolvedValue('/Parlo'),
   joinPath: vi.fn(async (parts: string[]) => parts.join('/')),
   fs: fsMock,
 }))
@@ -63,14 +63,14 @@ describe('settings-store', () => {
   it('writes via tmp + mv (atomic-ish) and creates the dir if missing', async () => {
     fsMock.existsSync.mockResolvedValue(false)
     await writeSettingsFile([{ key: 'k', controllerProps: { value: 1 } }] as any)
-    expect(fsMock.mkdir).toHaveBeenCalledWith('/jan/llamacpp')
+    expect(fsMock.mkdir).toHaveBeenCalledWith('/Parlo/llamacpp')
     expect(fsMock.writeFileSync).toHaveBeenCalledWith(
-      '/jan/llamacpp/settings.json.tmp',
+      '/Parlo/llamacpp/settings.json.tmp',
       expect.any(String)
     )
     expect(fsMock.mv).toHaveBeenCalledWith(
-      '/jan/llamacpp/settings.json.tmp',
-      '/jan/llamacpp/settings.json'
+      '/Parlo/llamacpp/settings.json.tmp',
+      '/Parlo/llamacpp/settings.json'
     )
   })
 
@@ -79,7 +79,7 @@ describe('settings-store', () => {
     fsMock.mv.mockRejectedValueOnce(new Error('cross-device'))
     await writeSettingsFile([{ key: 'k', controllerProps: { value: 1 } }] as any)
     expect(fsMock.writeFileSync).toHaveBeenCalledWith(
-      '/jan/llamacpp/settings.json',
+      '/Parlo/llamacpp/settings.json',
       expect.any(String)
     )
   })

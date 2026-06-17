@@ -16,12 +16,12 @@ use tauri::{
 };
 use tauri_plugin_store::Store;
 
-use crate::core::app::commands::get_jan_data_folder_path;
+use crate::core::app::commands::get_parlo_data_folder_path;
 use crate::core::mcp::constants::DEFAULT_MCP_CONFIG;
 use crate::core::mcp::helpers::add_server_config;
 
 use super::{
-    extensions::commands::get_jan_extensions_path, mcp::helpers::run_mcp_commands, state::AppState,
+    extensions::commands::get_parlo_extensions_path, mcp::helpers::run_mcp_commands, state::AppState,
 };
 
 pub fn install_extensions<R: Runtime>(app: tauri::AppHandle<R>, force: bool) -> Result<(), String> {
@@ -32,7 +32,7 @@ pub fn install_extensions<R: Runtime>(app: tauri::AppHandle<R>, force: bool) -> 
         return Ok(());
     }
 
-    let extensions_path = get_jan_extensions_path(app.clone());
+    let extensions_path = get_parlo_extensions_path(app.clone());
     let pre_install_path = app
         .path()
         .resource_dir()
@@ -180,10 +180,10 @@ pub fn migrate_mcp_servers(
         }
     }
     if mcp_version < 2 {
-        log::info!("Migrating MCP schema version 2: Adding Jan Browser MCP");
+        log::info!("Migrating MCP schema version 2: Adding Parlo Browser MCP");
         let result = add_server_config(
             app_handle.clone(),
-            "Jan Browser MCP".to_string(),
+            "Parlo Browser MCP".to_string(),
             serde_json::json!({
                 "command": "npx",
                 "args": ["-y", "search-mcp-server@latest"],
@@ -196,7 +196,7 @@ pub fn migrate_mcp_servers(
             }),
         );
         if let Err(e) = result {
-            log::error!("Failed to add Jan Browser MCP server config: {e}");
+            log::error!("Failed to add Parlo Browser MCP server config: {e}");
         }
     }
     if mcp_version < 3 {
@@ -211,7 +211,7 @@ pub fn migrate_mcp_servers(
 }
 
 fn migrate_exa_to_http(app_handle: tauri::AppHandle) -> Result<(), String> {
-    let config_path = get_jan_data_folder_path(app_handle).join("mcp_config.json");
+    let config_path = get_parlo_data_folder_path(app_handle).join("mcp_config.json");
 
     let config_str =
         fs::read_to_string(&config_path).map_err(|e| format!("Failed to read MCP config: {e}"))?;
@@ -273,7 +273,7 @@ pub fn extract_extension_manifest<R: Read>(
     Ok(None)
 }
 
-/// Install/update the bundled `jan` CLI binary.
+/// Install/update the bundled `Parlo` CLI binary.
 ///
 /// - `version_changed`: pass `true` whenever the app version has changed (i.e. after an update).
 ///   When `true` the binary is always overwritten so the CLI stays in sync with the new app.
@@ -281,28 +281,28 @@ pub fn extract_extension_manifest<R: Read>(
 ///
 /// Runs in a background task — never blocks startup.
 /// Errors are logged as warnings and never prevent the app from starting.
-pub fn setup_jan_cli<R: Runtime>(app_handle: tauri::AppHandle<R>, version_changed: bool) {
+pub fn setup_parlo_cli<R: Runtime>(app_handle: tauri::AppHandle<R>, version_changed: bool) {
     tauri::async_runtime::spawn(async move {
         // On a normal launch where the version hasn't changed, skip reinstall if already on PATH.
         if !version_changed {
             let which_cmd = if cfg!(windows) { "where" } else { "which" };
             let mut cmd = std::process::Command::new(which_cmd);
-            cmd.arg("jan");
+            cmd.arg("Parlo");
             #[cfg(windows)]
             {
                 use std::os::windows::process::CommandExt;
                 cmd.creation_flags(0x08000000); // CREATE_NO_WINDOW
             }
             if cmd.output().map(|o| o.status.success()).unwrap_or(false) {
-                log::debug!("jan CLI already on PATH — skipping reinstall");
+                log::debug!("Parlo CLI already on PATH — skipping reinstall");
                 return;
             }
         }
 
-        match crate::core::system::commands::install_jan_cli_sync(&app_handle) {
+        match crate::core::system::commands::install_parlo_cli_sync(&app_handle) {
             Ok(status) => {
                 log::info!(
-                    "jan CLI {} to {}",
+                    "Parlo CLI {} to {}",
                     if version_changed {
                         "updated"
                     } else {
@@ -312,7 +312,7 @@ pub fn setup_jan_cli<R: Runtime>(app_handle: tauri::AppHandle<R>, version_change
                 );
             }
             Err(e) => {
-                log::warn!("jan CLI auto-install skipped: {e}");
+                log::warn!("Parlo CLI auto-install skipped: {e}");
             }
         }
     });
@@ -342,7 +342,7 @@ pub fn setup_mcp<R: Runtime>(app: &App<R>) {
         wait_for_app_ready(&app_handle, Duration::from_secs(30)).await;
 
         // Create default mcp_config.json if it doesn't exist
-        let config_path = get_jan_data_folder_path(app_handle.clone()).join("mcp_config.json");
+        let config_path = get_parlo_data_folder_path(app_handle.clone()).join("mcp_config.json");
         if !config_path.exists() {
             log::info!("mcp_config.json not found, creating default config");
             if let Err(e) = fs::write(&config_path, DEFAULT_MCP_CONFIG) {
@@ -365,7 +365,7 @@ pub fn setup_mcp<R: Runtime>(app: &App<R>) {
 
 #[cfg(feature = "desktop")]
 pub fn setup_tray(app: &App) -> tauri::Result<TrayIcon> {
-    let show_i = MenuItem::with_id(app.handle(), "open", "Open Jan", true, None::<&str>)?;
+    let show_i = MenuItem::with_id(app.handle(), "open", "Open Parlo", true, None::<&str>)?;
     let quit_i = MenuItem::with_id(app.handle(), "quit", "Quit", true, None::<&str>)?;
     let separator_i = PredefinedMenuItem::separator(app.handle())?;
     let menu = Menu::with_items(app.handle(), &[&show_i, &separator_i, &quit_i])?;

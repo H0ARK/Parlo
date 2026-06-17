@@ -1,5 +1,5 @@
 {
-  "identifier": "jan.ai.app.ios",
+  "identifier": "parlo.ai.app.ios",
   "build": {
     "devUrl": null,
     "frontendDist": "../web-app/dist",
@@ -8,7 +8,9 @@
   },
   "app": {
     "security": {
-      "capabilities": ["mobile"]
+      "capabilities": [
+        "mobile"
+      ]
     }
   },
   "plugins": {},

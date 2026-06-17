@@ -152,7 +152,7 @@ python server_benchmark.py --url http://localhost:8080/v1/chat/completions --mod
 
 ## License
 
-This project is part of Jan - an open-source desktop AI application.
+This project is part of Parlo - an open-source desktop AI application.
 
 ## Contributing
 

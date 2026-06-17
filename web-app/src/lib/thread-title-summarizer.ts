@@ -1,16 +1,15 @@
-import { generateText } from 'ai'
-import { ModelFactory } from './model-factory'
-import { useModelProvider } from '@/hooks/useModelProvider'
-
 const MAX_TITLE_WORDS = 10
 const MAX_PROMPT_LENGTH = 1500
 
-function buildSummarizePrompt(transcript: string): string {
+function buildTitleCandidate(transcript: string): string {
   const truncated =
     transcript.length > MAX_PROMPT_LENGTH
       ? transcript.slice(0, MAX_PROMPT_LENGTH) + '...'
       : transcript
-  return `Summarize the following conversation into a concise title of at most ${MAX_TITLE_WORDS} words. Capture the overall topic, not just the latest turn. Output the title only, no quotes, no explanation.\n\nConversation:\n${truncated}`
+  return truncated
+    .split(/\r?\n/)
+    .map((line) => line.replace(/^\s*(user|assistant|system)\s*:\s*/i, '').trim())
+    .find(Boolean) ?? ''
 }
 
 /**
@@ -54,58 +53,14 @@ export function cleanTitle(raw: string): string | null {
 }
 
 /**
- * Generate a summarized thread title from the user's first message.
- * Uses the currently selected model via a non-streaming generateText call.
- * Returns null on failure or if the signal is aborted.
+ * Generate a deterministic thread title from the transcript.
+ * LLM title generation is intentionally not used here; Codex app-server owns
+ * the only agent/model execution path.
  */
 export async function generateThreadTitle(
   transcript: string,
   abortSignal: AbortSignal
 ): Promise<string | null> {
-  try {
-    const { selectedModel, selectedProvider, getProviderByName } =
-      useModelProvider.getState()
-    if (!selectedModel || !selectedProvider) {
-      console.warn('[ThreadTitle] No model/provider selected')
-      return null
-    }
-
-    // MLX models often emit reasoning that can't be reliably suppressed; fall back to default title.
-    if (selectedProvider === 'mlx') return null
-
-    const provider = getProviderByName(selectedProvider)
-    if (!provider) {
-      console.warn('[ThreadTitle] Provider not found:', selectedProvider)
-      return null
-    }
-
-    console.log('[ThreadTitle] Creating model:', selectedModel.id, 'provider:', selectedProvider)
-    const params: Record<string, unknown> =
-      selectedProvider === 'llamacpp'
-        ? { chat_template_kwargs: { enable_thinking: false } }
-        : {}
-    const model = await ModelFactory.createModel(
-      selectedModel.id,
-      provider,
-      params
-    )
-
-    console.log('[ThreadTitle] Calling generateText...')
-    const { text } = await generateText({
-      model,
-      messages: [{ role: 'user', content: buildSummarizePrompt(transcript) }],
-      maxOutputTokens: 128,
-      abortSignal,
-    })
-
-    console.log('[ThreadTitle] Raw response:', JSON.stringify(text))
-    const cleaned = cleanTitle(text)
-    console.log('[ThreadTitle] Cleaned title:', cleaned)
-    return cleaned
-  } catch (error) {
-    // Silently swallow abort errors — this is expected when the user sends a new message
-    if ((error as Error).name === 'AbortError') return null
-    console.error('[ThreadTitle] Failed to generate title:', error)
-    return null
-  }
+  if (abortSignal.aborted) return null
+  return cleanTitle(buildTitleCandidate(transcript))
 }

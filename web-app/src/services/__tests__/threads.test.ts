@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { DefaultThreadsService } from '../threads/default'
 import { ExtensionManager } from '@/lib/extension'
-import { ConversationalExtension, ExtensionTypeEnum } from '@janhq/core'
+import { ConversationalExtension, ExtensionTypeEnum } from '@parlo-lab/core'
 
 // Mock ExtensionManager
 vi.mock('@/lib/extension', () => ({
@@ -440,8 +440,8 @@ describe('DefaultThreadsService', () => {
           assistants: [
             {
               model: { id: 'gpt-4', engine: 'openai' },
-              id: 'jan',
-              name: 'Jan',
+              id: 'Parlo',
+              name: 'Parlo',
             },
           ],
         })

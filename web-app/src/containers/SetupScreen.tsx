@@ -6,9 +6,9 @@ import { localStorageKey, CACHE_EXPIRY_MS } from '@/constants/localStorage'
 import { useDownloadStore } from '@/hooks/useDownloadStore'
 import { useServiceHub } from '@/hooks/useServiceHub'
 import { useEffect, useMemo, useCallback, useState, useRef } from 'react'
-import { AppEvent, events } from '@janhq/core'
+import { AppEvent, events } from '@parlo-lab/core'
 import { SETUP_SCREEN_QUANTIZATIONS } from '@/constants/models'
-import { useLatestJanModel } from '@/hooks/useLatestJanModel'
+import { useLatestParloModel } from '@/hooks/useLatestParloModel'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { IconEye, IconSquareCheck } from '@tabler/icons-react'
@@ -92,8 +92,8 @@ function SetupScreen() {
   const {
     model: janNewModel,
     error: metadataFetchFailed,
-    fetchLatestJanModel,
-  } = useLatestJanModel()
+    fetchLatestParloModel,
+  } = useLatestParloModel()
   const [supportedVariants, setSupportedVariants] = useState<
     Map<string, 'RED' | 'YELLOW' | 'GREEN' | 'GREY'>
   >(new Map())
@@ -167,8 +167,8 @@ function SetupScreen() {
   }, [janNewModel, serviceHub])
 
   useEffect(() => {
-    fetchLatestJanModel(true)
-  }, [fetchLatestJanModel])
+    fetchLatestParloModel(true)
+  }, [fetchLatestParloModel])
 
   const defaultVariant = useMemo(() => {
     if (!janNewModel) return null

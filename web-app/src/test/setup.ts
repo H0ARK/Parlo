@@ -38,8 +38,8 @@ const mockServiceHub = {
     getAppSettings: vi.fn().mockResolvedValue({}),
     updateAppSettings: vi.fn().mockResolvedValue(undefined),
     getSystemInfo: vi.fn().mockResolvedValue({}),
-    relocateJanDataFolder: vi.fn().mockResolvedValue(undefined),
-    getJanDataFolder: vi.fn().mockResolvedValue('/mock/jan/data'),
+    relocateParloDataFolder: vi.fn().mockResolvedValue(undefined),
+    getParloDataFolder: vi.fn().mockResolvedValue('/mock/Parlo/data'),
   }),
   analytic: () => ({
     track: vi.fn(),
@@ -179,16 +179,16 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
-// Mock globalThis.core.api for @janhq/core functions // cspell: disable-line
+// Mock globalThis.core.api for -lab/core functions // cspell: disable-line
 ;(globalThis as Record<string, unknown>).core = {
   api: {
-    getJanDataFolderPath: vi.fn().mockResolvedValue('/mock/jan/data'),
+    getParloDataFolderPath: vi.fn().mockResolvedValue('/mock/Parlo/data'),
     openFileExplorer: vi.fn().mockResolvedValue(undefined),
     joinPath: vi.fn((...paths: string[]) => paths.join('/')),
   },
 }
 
-// Mock globalThis.fs for @janhq/core fs functions // cspell: disable-line
+// Mock globalThis.fs for -lab/core fs functions // cspell: disable-line
 ;(globalThis as Record<string, unknown>).fs = {
   existsSync: vi.fn().mockResolvedValue(false),
   readFile: vi.fn().mockResolvedValue(''),

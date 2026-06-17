@@ -14,7 +14,7 @@ describe('xai-oauth-client', () => {
     const url = buildAuthorizeUrl(pkce, 'test-state')
     expect(url).toContain('https://auth.x.ai/oauth2/authorize')
     expect(url).toContain('plan=generic')
-    expect(url).toContain('referrer=jan')
+    expect(url).toContain('referrer=Parlo')
     expect(url).toContain('test-challenge')
     expect(url).toContain('test-state')
   })

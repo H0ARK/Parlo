@@ -129,7 +129,7 @@ export class CodexAppServerSession {
     const mapping = await this.ensureThread(params.appThreadId)
     if (!mapping.codexThreadId) {
       throw new Error(
-        `Codex thread was not created for Jan thread ${params.appThreadId}`
+        `Codex thread was not created for Parlo thread ${params.appThreadId}`
       )
     }
 
@@ -218,7 +218,7 @@ export class CodexAppServerSession {
     const mapping = await this.ensureThread(appThreadId)
     if (!mapping.codexThreadId) {
       throw new Error(
-        `Codex thread was not created for Jan thread ${appThreadId}`
+        `Codex thread was not created for Parlo thread ${appThreadId}`
       )
     }
 
@@ -253,7 +253,7 @@ export class CodexAppServerSession {
     const mapping = await this.ensureThread(appThreadId)
     if (!mapping.codexThreadId) {
       throw new Error(
-        `Codex thread was not created for Jan thread ${appThreadId}`
+        `Codex thread was not created for Parlo thread ${appThreadId}`
       )
     }
 
@@ -268,7 +268,7 @@ export class CodexAppServerSession {
     const mapping = await this.ensureThread(appThreadId)
     if (!mapping.codexThreadId) {
       throw new Error(
-        `Codex thread was not created for Jan thread ${appThreadId}`
+        `Codex thread was not created for Parlo thread ${appThreadId}`
       )
     }
 
@@ -286,7 +286,7 @@ export class CodexAppServerSession {
     const mapping = await this.ensureThread(appThreadId)
     if (!mapping.codexThreadId) {
       throw new Error(
-        `Codex thread was not created for Jan thread ${appThreadId}`
+        `Codex thread was not created for Parlo thread ${appThreadId}`
       )
     }
 

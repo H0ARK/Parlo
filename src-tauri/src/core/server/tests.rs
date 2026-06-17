@@ -69,7 +69,6 @@ mod server_tests {
             trusted_hosts: vec![vec!["localhost".to_string()]],
             host: "localhost".to_string(),
             port: 1337,
-            enable_server_tool_execution: false,
         };
         assert_eq!(config.prefix, "/v1");
         assert_eq!(config.proxy_api_key, "test-key");
@@ -86,7 +85,6 @@ mod server_tests {
             trusted_hosts: vec![],
             host: "127.0.0.1".to_string(),
             port: 8080,
-            enable_server_tool_execution: false,
         };
         assert_eq!(config.prefix, "");
         assert_eq!(config.proxy_api_key, "");
@@ -878,106 +876,6 @@ mod server_tests {
     }
 
     #[test]
-    fn parse_openai_messages_ok() {
-        let msgs = json!([
-            {"role": "user", "content": "hi"},
-            {"role": "assistant", "content": "hello"}
-        ]);
-        let out = proxy::parse_openai_messages(&msgs).unwrap();
-        assert_eq!(out.len(), 2);
-        assert_eq!(out[0]["role"], "user");
-    }
-
-    #[test]
-    fn parse_openai_messages_not_array_errors() {
-        let msgs = json!({"role": "user"});
-        assert!(proxy::parse_openai_messages(&msgs).is_err());
-    }
-
-    #[test]
-    fn parse_openai_messages_missing_role_errors() {
-        let msgs = json!([{"content": "hi"}]);
-        assert!(proxy::parse_openai_messages(&msgs).is_err());
-    }
-
-    #[test]
-    fn parse_openai_messages_non_string_content_errors() {
-        let msgs = json!([{"role": "user", "content": [{"type": "text", "text": "hi"}]}]);
-        assert!(proxy::parse_openai_messages(&msgs).is_err());
-    }
-
-    #[test]
-    fn set_system_prompt_replaces_existing_system() {
-        let mut messages = vec![
-            json!({"role": "system", "content": "old"}),
-            json!({"role": "user", "content": "hi"}),
-        ];
-        proxy::set_system_prompt(&mut messages, "new");
-        assert_eq!(messages.len(), 2);
-        assert_eq!(messages[0]["role"], "system");
-        assert_eq!(messages[0]["content"], "new");
-        assert_eq!(messages[1]["role"], "user");
-    }
-
-    #[test]
-    fn set_system_prompt_inserts_when_absent() {
-        let mut messages = vec![json!({"role": "user", "content": "hi"})];
-        proxy::set_system_prompt(&mut messages, "system!");
-        assert_eq!(messages.len(), 2);
-        assert_eq!(messages[0]["role"], "system");
-        assert_eq!(messages[0]["content"], "system!");
-    }
-
-    #[test]
-    fn extract_tool_calls_returns_empty_when_absent() {
-        let resp = json!({"choices": [{"message": {"content": "x"}}]});
-        assert!(proxy::extract_tool_calls(&resp).is_empty());
-    }
-
-    #[test]
-    fn extract_tool_calls_returns_array() {
-        let resp = json!({
-            "choices": [{
-                "message": {
-                    "tool_calls": [{"id": "c1"}, {"id": "c2"}]
-                }
-            }]
-        });
-        let calls = proxy::extract_tool_calls(&resp);
-        assert_eq!(calls.len(), 2);
-        assert_eq!(calls[0]["id"], "c1");
-    }
-
-    #[test]
-    fn extract_choice_message_returns_first_message() {
-        let resp = json!({"choices": [{"message": {"role": "assistant", "content": "x"}}]});
-        let msg = proxy::extract_choice_message(&resp).unwrap();
-        assert_eq!(msg["role"], "assistant");
-    }
-
-    #[test]
-    fn extract_choice_message_none_when_no_choices() {
-        let resp = json!({});
-        assert!(proxy::extract_choice_message(&resp).is_none());
-    }
-
-    #[test]
-    fn copy_optional_chat_params_copies_only_known_keys() {
-        let from = json!({
-            "temperature": 0.7,
-            "top_p": 0.9,
-            "max_tokens": 128,
-            "ignored_field": true
-        });
-        let mut into = serde_json::Map::new();
-        proxy::copy_optional_chat_params(&from, &mut into);
-        assert_eq!(into.get("temperature").unwrap(), &json!(0.7));
-        assert_eq!(into.get("top_p").unwrap(), &json!(0.9));
-        assert_eq!(into.get("max_tokens").unwrap(), &json!(128));
-        assert!(into.get("ignored_field").is_none());
-    }
-
-    #[test]
     fn sse_event_default_message_type() {
         let v = json!({"foo": "bar"});
         let bytes = proxy::sse_event(&v);
@@ -1151,12 +1049,10 @@ mod server_tests {
             trusted_hosts: vec![vec!["a".to_string()]],
             host: "h".to_string(),
             port: 1,
-            enable_server_tool_execution: true,
         };
         let cloned = cfg.clone();
         assert_eq!(cloned.prefix, "/p");
         assert_eq!(cloned.proxy_api_key, "k");
-        assert!(cloned.enable_server_tool_execution);
     }
 
     #[test]

@@ -69,7 +69,7 @@ export type CodexProviderConfig = {
 export type CodexSessionOptions = {
   codexBinaryPath?: string
   codexHome?: string
-  transport?: 'app-server' | 'proto'
+  transport?: 'app-server'
   configToml?: string
   mcpRefreshConfig?: {
     mcp_servers: unknown

@@ -10,7 +10,6 @@ export type LocalApiServerStartConfig = {
   isCorsEnabled: boolean
   isVerboseEnabled: boolean
   proxyTimeout: number
-  enableServerToolExecution?: boolean
 }
 
 let startInFlight: Promise<number> | null = null
@@ -43,6 +42,12 @@ export async function ensureLocalApiServerRunning(
   if (!startInFlight) {
     startInFlight = (async () => {
       try {
+        if (!window.core?.api?.startServer) {
+          throw new Error(
+            'Local API server is not running and no process bridge is available to start it'
+          )
+        }
+
         const actualPort = await window.core?.api?.startServer({
           host: config.host,
           port: config.port,
@@ -52,7 +57,6 @@ export async function ensureLocalApiServerRunning(
           isCorsEnabled: config.isCorsEnabled,
           isVerboseEnabled: config.isVerboseEnabled,
           proxyTimeout: config.proxyTimeout,
-          enableServerToolExecution: config.enableServerToolExecution,
         })
 
         if (!actualPort) {

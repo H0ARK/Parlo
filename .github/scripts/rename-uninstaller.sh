@@ -1,25 +1,25 @@
-#!/bin/bash
-
-# File path to be modified
-FILE_PATH="electron/scripts/uninstaller.nsh"
-
-# Check if the correct number of arguments is provided
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <channel>"
-    exit 1
-fi
-
-CHANNEL="$1"
-
-# Check if the file exists
-if [ ! -f "$FILE_PATH" ]; then
-    echo "File does not exist: $FILE_PATH"
-    exit 1
-fi
-
-# Perform the replacements
-sed -i -e "s#Jan#Jan-$CHANNEL#g" "$FILE_PATH"
-sed -i -e "s#jan#jan-$CHANNEL#g" "$FILE_PATH"
-
-# Notify completion
-echo "File has been updated: $FILE_PATH"
+-lab#-lab!-lab/-labb-labi-labn-lab/-labb-laba-labs-labh-lab
+-lab
+-lab#-lab -labF-labi-labl-labe-lab -labp-laba-labt-labh-lab -labt-labo-lab -labb-labe-lab -labm-labo-labd-labi-labf-labi-labe-labd-lab
+-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab=-lab"-labe-labl-labe-labc-labt-labr-labo-labn-lab/-labs-labc-labr-labi-labp-labt-labs-lab/-labu-labn-labi-labn-labs-labt-laba-labl-labl-labe-labr-lab.-labn-labs-labh-lab"-lab
+-lab
+-lab#-lab -labC-labh-labe-labc-labk-lab -labi-labf-lab -labt-labh-labe-lab -labc-labo-labr-labr-labe-labc-labt-lab -labn-labu-labm-labb-labe-labr-lab -labo-labf-lab -laba-labr-labg-labu-labm-labe-labn-labt-labs-lab -labi-labs-lab -labp-labr-labo-labv-labi-labd-labe-labd-lab
+-labi-labf-lab -lab[-lab -lab"-lab$-lab#-lab"-lab -lab--labn-labe-lab -lab1-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labU-labs-laba-labg-labe-lab:-lab -lab$-lab0-lab -lab<-labc-labh-laba-labn-labn-labe-labl-lab>-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-labC-labH-labA-labN-labN-labE-labL-lab=-lab"-lab$-lab1-lab"-lab
+-lab
+-lab#-lab -labC-labh-labe-labc-labk-lab -labi-labf-lab -labt-labh-labe-lab -labf-labi-labl-labe-lab -labe-labx-labi-labs-labt-labs-lab
+-labi-labf-lab -lab[-lab -lab!-lab -lab--labf-lab -lab"-lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labd-labo-labe-labs-lab -labn-labo-labt-lab -labe-labx-labi-labs-labt-lab:-lab -lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-lab#-lab -labP-labe-labr-labf-labo-labr-labm-lab -labt-labh-labe-lab -labr-labe-labp-labl-laba-labc-labe-labm-labe-labn-labt-labs-lab
+-labs-labe-labd-lab -lab--labi-lab -lab--labe-lab -lab"-labs-lab#-labJ-laba-labn-lab#-labJ-laba-labn-lab--lab$-labC-labH-labA-labN-labN-labE-labL-lab#-labg-lab"-lab -lab"-lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-labs-labe-labd-lab -lab--labi-lab -lab--labe-lab -lab"-labs-lab#-labj-laba-labn-lab#-labj-laba-labn-lab--lab$-labC-labH-labA-labN-labN-labE-labL-lab#-labg-lab"-lab -lab"-lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab
+-lab#-lab -labN-labo-labt-labi-labf-laby-lab -labc-labo-labm-labp-labl-labe-labt-labi-labo-labn-lab
+-labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labh-laba-labs-lab -labb-labe-labe-labn-lab -labu-labp-labd-laba-labt-labe-labd-lab:-lab -lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab

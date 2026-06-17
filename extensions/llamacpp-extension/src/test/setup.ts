@@ -31,7 +31,7 @@ Object.defineProperty(globalThis, 'window', {
   },
 })
 
-vi.mock('@janhq/tauri-plugin-hardware-api', () => ({
+vi.mock('@parlo-lab/tauri-plugin-hardware-api', () => ({
   getSystemInfo: vi.fn(),
 }));
 
@@ -61,9 +61,9 @@ vi.mock('@tauri-apps/api/path', () => ({
   resolve: vi.fn(),
 }))
 
-// Mock @janhq/core
-vi.mock('@janhq/core', () => ({
-  getJanDataFolderPath: vi.fn(),
+// Mock -lab/core
+vi.mock('@parlo-lab/core', () => ({
+  getParloDataFolderPath: vi.fn(),
   fs: {
     existsSync: vi.fn(),
     readdirSync: vi.fn(),

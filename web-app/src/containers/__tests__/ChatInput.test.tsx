@@ -207,8 +207,8 @@ vi.mock('@/hooks/useChatAttachments', () => ({
     }),
 }))
 
-vi.mock('@/hooks/useJanBrowserExtension', () => ({
-  useJanBrowserExtension: () => ({
+vi.mock('@/hooks/useParloBrowserExtension', () => ({
+  useParloBrowserExtension: () => ({
     hasConfig: false,
     isActive: false,
     isLoading: false,
@@ -263,7 +263,7 @@ vi.mock('@/lib/extension', () => ({
   },
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   ExtensionTypeEnum: { MCP: 'mcp', VectorDB: 'vectordb' },
   MCPExtension: class {},
   VectorDBExtension: class {},
@@ -305,7 +305,7 @@ vi.mock('@/containers/AvatarEmoji', () => ({
 vi.mock('@/containers/McpExtensionToolLoader', () => ({
   McpExtensionToolLoader: () => null,
 }))
-vi.mock('@/containers/dialogs/JanBrowserExtensionDialog', () => ({
+vi.mock('@/containers/dialogs/ParloBrowserExtensionDialog', () => ({
   __esModule: true,
   default: () => null,
 }))

@@ -278,9 +278,9 @@ describe('selectDefaultQuant', () => {
 
 describe('extractQuantLabel', () => {
   it('extracts standard K-quant suffixes', () => {
-    expect(extractQuantLabel('Jan-v2-VL-high-Q4_K_M')).toBe('Q4_K_M')
-    expect(extractQuantLabel('Jan-v2-VL-high-Q5_K_S')).toBe('Q5_K_S')
-    expect(extractQuantLabel('Jan-v2-VL-high-Q3_K_L')).toBe('Q3_K_L')
+    expect(extractQuantLabel('Parlo-v2-VL-high-Q4_K_M')).toBe('Q4_K_M')
+    expect(extractQuantLabel('Parlo-v2-VL-high-Q5_K_S')).toBe('Q5_K_S')
+    expect(extractQuantLabel('Parlo-v2-VL-high-Q3_K_L')).toBe('Q3_K_L')
   })
 
   it('extracts plain Q-quant suffixes', () => {
@@ -301,7 +301,7 @@ describe('extractQuantLabel', () => {
   })
 
   it('normalizes case to uppercase', () => {
-    expect(extractQuantLabel('jan-v2-vl-high-q4_k_m')).toBe('Q4_K_M')
+    expect(extractQuantLabel('Parlo-v2-vl-high-q4_k_m')).toBe('Q4_K_M')
     expect(extractQuantLabel('model-iq4_xs')).toBe('IQ4_XS')
   })
 

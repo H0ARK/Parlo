@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { ThreadMessage } from '@janhq/core'
+import { ThreadMessage } from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 import { useModelProvider } from './useModelProvider'
 
@@ -49,7 +49,7 @@ const getLatestServerUsage = (messages: ThreadMessage[]): UsageMeta => {
 const getLlamacppExtension = (): LlamacppExtensionLike | undefined => {
   const mgr = ExtensionManager.getInstance()
   const candidates = [
-    mgr.getByName('@janhq/llamacpp-extension'),
+    mgr.getByName('@parlo-lab/llamacpp-extension'),
     mgr.getByName('llamacpp-extension'),
   ]
   for (const c of candidates) {

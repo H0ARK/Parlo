@@ -8,9 +8,9 @@
  * is deferred to Phase 3.
  */
 
-import { fs, joinPath } from '@janhq/core'
+import { fs, joinPath } from '@parlo-lab/core'
 import { invoke } from '@tauri-apps/api/core'
-import type { LlamacppConfig, ModelConfig } from '@janhq/tauri-plugin-llamacpp-api'
+import type { LlamacppConfig, ModelConfig } from '@parlo-lab/tauri-plugin-llamacpp-api'
 
 // ModelConfig is intentionally widened — model.yml may carry extra fields like
 // `chat_template` that aren't yet in the strict typing.
@@ -59,7 +59,7 @@ function escapeIniValue(v: string): string {
  */
 export async function generatePreset(
   providerPath: string,
-  janDataFolderPath: string,
+  parloDataFolderPath: string,
   config: LlamacppConfig,
   opts: { supportsMtp?: boolean } = {}
 ): Promise<{ path: string; embeddingCount: number }> {
@@ -320,13 +320,13 @@ export async function generatePreset(
 
     if (!mc?.model_path) continue
 
-    const modelAbs = await joinPath([janDataFolderPath, mc.model_path])
+    const modelAbs = await joinPath([parloDataFolderPath, mc.model_path])
 
     lines.push(`[${modelId}]`)
     lines.push(`model = ${escapeIniValue(modelAbs)}`)
 
     if (mc.mmproj_path) {
-      const mmprojAbs = await joinPath([janDataFolderPath, mc.mmproj_path])
+      const mmprojAbs = await joinPath([parloDataFolderPath, mc.mmproj_path])
       lines.push(`mmproj = ${escapeIniValue(mmprojAbs)}`)
     }
 

@@ -11,13 +11,13 @@ vi.mock('@/lib/platform/utils', () => ({
   isAndroid: vi.fn().mockReturnValue(false)
 }))
 
-// Mock @jan/extensions-web to return empty extensions for testing
-vi.mock('@jan/extensions-web', () => ({
+// Mock @Parlo/extensions-web to return empty extensions for testing
+vi.mock('@Parlo/extensions-web', () => ({
   WEB_EXTENSIONS: {}
 }))
 
-// Mock @janhq/core EngineManager to prevent initialization issues
-vi.mock('@janhq/core', () => ({
+// Mock -lab/core EngineManager to prevent initialization issues
+vi.mock('@parlo-lab/core', () => ({
   EngineManager: {
     instance: vi.fn(() => ({
       engines: new Map()

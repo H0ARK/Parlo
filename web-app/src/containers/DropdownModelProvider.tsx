@@ -64,7 +64,6 @@ interface SearchableModel {
 }
 
 const DEFAULT_CONTEXT_SIZE = 8192
-const CODEX_DEFAULT_MODEL_ID = 'gpt-5.5'
 const REMOVED_CODEX_DEFAULT_MODELS = new Set([
   'gpt-5.1-codex-max',
   'gpt-5.1',
@@ -141,16 +140,6 @@ const setLastUsedModel = (provider: string, model: string) => {
   }
 }
 
-const getFirstActiveModelForProvider = (
-  providers: ModelProvider[],
-  providerName: string
-) => {
-  const provider = providers.find(
-    (p) => p.provider === providerName && p.active && p.models.length > 0
-  )
-  return provider?.models[0]
-}
-
 const DropdownModelProvider = memo(function DropdownModelProvider({
   model,
   useLastUsedModel = false,
@@ -186,7 +175,10 @@ const DropdownModelProvider = memo(function DropdownModelProvider({
   const useCursorStyleSelector = compact && showReasoning
   const selectModelProviderIfNeeded = useCallback(
     (providerName: string, modelId: string) => {
-      if (selectedProvider === providerName && selectedModel?.id === modelId) {
+      if (
+        selectedProvider === providerName &&
+        (selectedModel?.id ?? '') === modelId
+      ) {
         return
       }
       selectModelProvider(providerName, modelId)
@@ -232,11 +224,9 @@ const DropdownModelProvider = memo(function DropdownModelProvider({
     const codexProvider = providers.find(
       (provider) => provider.provider === 'codex' && provider.active
     )
-    const replacementModel =
-      codexProvider?.models.find((model) => model.id === CODEX_DEFAULT_MODEL_ID) ??
-      codexProvider?.models.find(
-        (model) => !REMOVED_CODEX_DEFAULT_MODELS.has(model.id)
-      )
+    const replacementModel = codexProvider?.models.find(
+      (model) => !REMOVED_CODEX_DEFAULT_MODELS.has(model.id)
+    )
 
     if (replacementModel) {
       selectModelProvider('codex', replacementModel.id)
@@ -320,19 +310,12 @@ const DropdownModelProvider = memo(function DropdownModelProvider({
           await checkAndUpdateModelVisionCapability(model.id as string)
         }
       } else if (useLastUsedModel) {
-        // Fresh agent chats should enter the Codex runtime when it is available.
-        // Direct local/remote models remain selectable from the dropdown.
+        // Fresh chats should restore the user's last valid model selection.
         const lastUsed = getLastUsedModel()
-        const codexModel = getFirstActiveModelForProvider(providers, 'codex')
         if (
-          lastUsed?.provider === 'codex' &&
+          lastUsed &&
           checkModelExists(lastUsed.provider, lastUsed.model)
         ) {
-          selectModelProviderIfNeeded(lastUsed.provider, lastUsed.model)
-        } else if (codexModel) {
-          selectModelProviderIfNeeded('codex', codexModel.id)
-          setLastUsedModel('codex', codexModel.id)
-        } else if (lastUsed && checkModelExists(lastUsed.provider, lastUsed.model)) {
           selectModelProviderIfNeeded(lastUsed.provider, lastUsed.model)
           if (lastUsed.provider === 'llamacpp') {
             await serviceHub
@@ -345,19 +328,18 @@ const DropdownModelProvider = memo(function DropdownModelProvider({
             // Also check vision capability
             await checkAndUpdateModelVisionCapability(lastUsed.model)
           }
-        } else {
-          // Fallback: auto-select first llamacpp model if available
-          const firstModel = getFirstActiveModelForProvider(
-            providers,
-            'llamacpp'
-          )
-          if (firstModel) {
-            selectModelProviderIfNeeded('llamacpp', firstModel.id)
-            setLastUsedModel('llamacpp', firstModel.id)
-          } else {
-            selectModelProviderIfNeeded('', '')
-          }
+          return
         }
+
+        if (
+          selectedProvider &&
+          selectedModel?.id &&
+          checkModelExists(selectedProvider, selectedModel.id)
+        ) {
+          return
+        }
+
+        selectModelProviderIfNeeded('', '')
       }
     }
 
@@ -372,6 +354,8 @@ const DropdownModelProvider = memo(function DropdownModelProvider({
     updateProvider,
     getProviderByName,
     checkAndUpdateModelVisionCapability,
+    selectedModel?.id,
+    selectedProvider,
   ])
 
   // Update display model when selection changes

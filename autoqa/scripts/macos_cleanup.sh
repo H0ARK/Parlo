@@ -1,34 +1,34 @@
 #!/bin/bash
-# macOS cleanup script for Jan app
+# macOS cleanup script for Parlo app
 
-echo "Cleaning existing Jan installations..."
+echo "Cleaning existing Parlo installations..."
 
-# Kill any running Jan processes (both regular and nightly)
-pkill -f "Jan" || true
-pkill -f "jan" || true
-pkill -f "Jan-nightly" || true
-pkill -f "jan-nightly" || true
+# Kill any running Parlo processes (both regular and nightly)
+pkill -f "Parlo" || true
+pkill -f "Parlo" || true
+pkill -f "Parlo-nightly" || true
+pkill -f "Parlo-nightly" || true
 
-# Remove Jan app directories
-rm -rf /Applications/Jan.app
-rm -rf /Applications/Jan-nightly.app
-rm -rf ~/Applications/Jan.app
-rm -rf ~/Applications/Jan-nightly.app
+# Remove Parlo app directories
+rm -rf /Applications/Parlo.app
+rm -rf /Applications/Parlo-nightly.app
+rm -rf ~/Applications/Parlo.app
+rm -rf ~/Applications/Parlo-nightly.app
 
-# Remove Jan data folders (both regular and nightly)
-rm -rf ~/Library/Application\ Support/Jan
-rm -rf ~/Library/Application\ Support/Jan-nightly
-rm -rf ~/Library/Application\ Support/jan.ai.app
-rm -rf ~/Library/Application\ Support/jan-nightly.ai.app
-rm -rf ~/Library/Preferences/jan.*
-rm -rf ~/Library/Preferences/jan-nightly.*
-rm -rf ~/Library/Caches/jan.*
-rm -rf ~/Library/Caches/jan-nightly.*
-rm -rf ~/Library/Caches/jan.ai.app
-rm -rf ~/Library/Caches/jan-nightly.ai.app
-rm -rf ~/Library/WebKit/jan.ai.app
-rm -rf ~/Library/WebKit/jan-nightly.ai.app
-rm -rf ~/Library/Saved\ Application\ State/jan.ai.app
-rm -rf ~/Library/Saved\ Application\ State/jan-nightly.ai.app
+# Remove Parlo data folders (both regular and nightly)
+rm -rf ~/Library/Application\ Support/Parlo
+rm -rf ~/Library/Application\ Support/Parlo-nightly
+rm -rf ~/Library/Application\ Support/Parlo.ai.app
+rm -rf ~/Library/Application\ Support/Parlo-nightly.ai.app
+rm -rf ~/Library/Preferences/Parlo.*
+rm -rf ~/Library/Preferences/Parlo-nightly.*
+rm -rf ~/Library/Caches/Parlo.*
+rm -rf ~/Library/Caches/Parlo-nightly.*
+rm -rf ~/Library/Caches/Parlo.ai.app
+rm -rf ~/Library/Caches/Parlo-nightly.ai.app
+rm -rf ~/Library/WebKit/Parlo.ai.app
+rm -rf ~/Library/WebKit/Parlo-nightly.ai.app
+rm -rf ~/Library/Saved\ Application\ State/Parlo.ai.app
+rm -rf ~/Library/Saved\ Application\ State/Parlo-nightly.ai.app
 
-echo "Jan cleanup completed"
+echo "Parlo cleanup completed"

@@ -1,4 +1,4 @@
-import { AIEngine, BaseExtension, ExtensionTypeEnum } from '@janhq/core'
+import { AIEngine, BaseExtension, ExtensionTypeEnum } from '@parlo-lab/core'
 
 import { getServiceHub } from '@/hooks/useServiceHub'
 

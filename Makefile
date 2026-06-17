@@ -1,10 +1,10 @@
-# Makefile for Jan Electron App - Build, Lint, Test, and Clean
+# Makefile for Parlo Electron App - Build, Lint, Test, and Clean
 
 REPORT_PORTAL_URL ?= ""
 REPORT_PORTAL_API_KEY ?= ""
 REPORT_PORTAL_PROJECT_NAME ?= ""
-REPORT_PORTAL_LAUNCH_NAME ?= "Jan App"
-REPORT_PORTAL_DESCRIPTION ?= "Jan App report"
+REPORT_PORTAL_LAUNCH_NAME ?= "Parlo App"
+REPORT_PORTAL_DESCRIPTION ?= "Parlo App report"
 
 # Detect OS
 ifeq ($(OS),Windows_NT)
@@ -195,45 +195,45 @@ else
 	@echo "Skipping MLX server build (macOS only)"
 endif
 
-# Build jan CLI (release, platform-aware) → src-tauri/resources/bin/jan[.exe]
+# Build Parlo CLI (release, platform-aware) → src-tauri/resources/bin/Parlo[.exe]
 build-cli:
 ifeq ($(DETECTED_OS),Darwin)
-	cd src-tauri && cargo build --release --features cli --bin jan-cli --target aarch64-apple-darwin
-	cd src-tauri && cargo build --release --features cli --bin jan-cli --target x86_64-apple-darwin
+	cd src-tauri && cargo build --release --features cli --bin Parlo-cli --target aarch64-apple-darwin
+	cd src-tauri && cargo build --release --features cli --bin Parlo-cli --target x86_64-apple-darwin
 	lipo -create \
-		src-tauri/target/aarch64-apple-darwin/release/jan-cli \
-		src-tauri/target/x86_64-apple-darwin/release/jan-cli \
-		-output src-tauri/resources/bin/jan-cli
-	chmod +x src-tauri/resources/bin/jan-cli
+		src-tauri/target/aarch64-apple-darwin/release/Parlo-cli \
+		src-tauri/target/x86_64-apple-darwin/release/Parlo-cli \
+		-output src-tauri/resources/bin/Parlo-cli
+	chmod +x src-tauri/resources/bin/Parlo-cli
 	$(call MKDIR,'src-tauri/target/universal-apple-darwin/release')
 
 	echo "Checking for code signing identity..."; \
 	SIGNING_IDENTITY=$$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | sed 's/.*"\(.*\)".*/\1/'); \
 	if [ -n "$$SIGNING_IDENTITY" ]; then \
-		echo "Signing jan-cli with identity: $$SIGNING_IDENTITY"; \
-		codesign --force --options runtime --timestamp --sign "$$SIGNING_IDENTITY" src-tauri/resources/bin/jan-cli; \
+		echo "Signing Parlo-cli with identity: $$SIGNING_IDENTITY"; \
+		codesign --force --options runtime --timestamp --sign "$$SIGNING_IDENTITY" src-tauri/resources/bin/Parlo-cli; \
 		echo "Code signing completed successfully"; \
 	else \
 		echo "Warning: No Developer ID Application identity found. Skipping code signing (notarization will fail)."; \
 	fi
 
-	cp src-tauri/resources/bin/jan-cli src-tauri/target/universal-apple-darwin/release/jan-cli
+	cp src-tauri/resources/bin/Parlo-cli src-tauri/target/universal-apple-darwin/release/Parlo-cli
 else ifeq ($(DETECTED_OS),Windows)
-	cd src-tauri && cargo build --release --features cli --bin jan-cli
-	cp src-tauri/target/release/jan-cli.exe src-tauri/resources/bin/jan-cli.exe
+	cd src-tauri && cargo build --release --features cli --bin Parlo-cli
+	cp src-tauri/target/release/Parlo-cli.exe src-tauri/resources/bin/Parlo-cli.exe
 else
-	cd src-tauri && cargo build --release --features cli --bin jan-cli
-	cp src-tauri/target/release/jan-cli src-tauri/resources/bin/jan-cli
+	cd src-tauri && cargo build --release --features cli --bin Parlo-cli
+	cp src-tauri/target/release/Parlo-cli src-tauri/resources/bin/Parlo-cli
 endif
 
 # Debug build for local dev (faster, native arch only)
 build-cli-dev:
 	$(call MKDIR,'src-tauri/resources/bin')	
-	cd src-tauri && cargo build --features cli --bin jan-cli
+	cd src-tauri && cargo build --features cli --bin Parlo-cli
 ifeq ($(DETECTED_OS),Windows)
-	copy src-tauri\target\debug\jan-cli.exe src-tauri\resources\bin\jan-cli.exe
+	copy src-tauri\target\debug\Parlo-cli.exe src-tauri\resources\bin\Parlo-cli.exe
 else
-	install -m755 src-tauri/target/debug/jan-cli src-tauri/resources/bin/jan-cli
+	install -m755 src-tauri/target/debug/Parlo-cli src-tauri/resources/bin/Parlo-cli
 endif
 
 # Build
@@ -249,7 +249,7 @@ ifeq ($(DETECTED_OS),Windows)
 	-powershell -Command "Remove-Item -Recurse -Force ./electron/pre-install/*.tgz"
 	-powershell -Command "Remove-Item -Recurse -Force ./src-tauri/resources"
 	-powershell -Command "Remove-Item -Recurse -Force ./src-tauri/target"
-	-powershell -Command "if (Test-Path \"$($env:USERPROFILE)\jan\extensions\") { Remove-Item -Path \"$($env:USERPROFILE)\jan\extensions\" -Recurse -Force }"
+	-powershell -Command "if (Test-Path \"$($env:USERPROFILE)\Parlo\extensions\") { Remove-Item -Path \"$($env:USERPROFILE)\Parlo\extensions\" -Recurse -Force }"
 else ifeq ($(DETECTED_OS),Linux)
 	find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
 	find . -name ".next" -type d -exec rm -rf '{}' +
@@ -265,8 +265,8 @@ else ifeq ($(DETECTED_OS),Linux)
 	rm -rf ./electron/pre-install/*.tgz
 	rm -rf ./src-tauri/resources
 	rm -rf ./src-tauri/target
-	rm -rf "~/jan/extensions"
-	rm -rf "~/.cache/jan*"
+	rm -rf "~/Parlo/extensions"
+	rm -rf "~/.cache/Parlo*"
 	rm -rf "./.cache"
 else
 	find . -name "node_modules" -type d -prune -exec rm -rfv '{}' +
@@ -282,6 +282,6 @@ else
 	rm -rfv ./electron/pre-install/*.tgz
 	rm -rfv ./src-tauri/resources
 	rm -rfv ./src-tauri/target
-	rm -rfv ~/jan/extensions
-	rm -rfv ~/Library/Caches/jan*
+	rm -rfv ~/Parlo/extensions
+	rm -rfv ~/Library/Caches/Parlo*
 endif

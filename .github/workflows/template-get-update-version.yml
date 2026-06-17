@@ -1,62 +1,63 @@
-name: get-update-version
-on:
-  workflow_call:
-    outputs:
-      new_version:
-        description: 'The new version of the app'
-        value: ${{ jobs.get-update-version.outputs.new_version }}
-
-jobs:
-  get-update-version:
-    runs-on: ubuntu-latest
-    outputs:
-      new_version: ${{ steps.version_update.outputs.new_version }}
-    steps:
-      - name: Install jq
-        uses: dcarbone/install-jq-action@b7ef57d46ece78760b4019dbc4080a1ba2a40b45 # v3.2.0
-
-      - name: Get tag
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-        id: tag
-        uses: dawidd6/action-get-tag@727a6f0a561be04e09013531e73a3983a65e3479 # v1
-
-      - name: Update app version based on latest release tag with build number
-        id: version_update
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Function to get the latest release tag
-          get_latest_tag() {
-            local retries=0
-            local max_retries=3
-            local tag
-            while [ $retries -lt $max_retries ]; do
-              tag=$(curl -H "Authorization: token ${GITHUB_TOKEN}" -s https://api.github.com/repos/janhq/jan/releases/latest | jq -r .tag_name)
-              if [ -n "$tag" ] && [ "$tag" != "null" ]; then
-                echo $tag
-                return
-              else
-                let retries++
-                echo "Retrying... ($retries/$max_retries)"
-                sleep 2
-              fi
-            done
-            echo "Failed to fetch latest tag after $max_retries attempts."
-            exit 1
-          }
-
-            if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}; then
-            echo "Tag detected, set output follow tag"
-            sanitized_tag="${{ steps.tag.outputs.tag }}"
-            # Remove the 'v' prefix if it exists
-            sanitized_tag="${sanitized_tag#v}"
-            echo "::set-output name=new_version::$sanitized_tag"
-          else
-            # Get the latest release tag from GitHub API
-            LATEST_TAG=$(get_latest_tag)
-            
-            # Remove the 'v' and append the build number to the version
-            new_version="${LATEST_TAG#v}-${GITHUB_RUN_NUMBER}"
-            echo "New version: $new_version"
-            echo "::set-output name=new_version::$new_version"
-          fi
+-labn-laba-labm-labe-lab:-lab -labg-labe-labt-lab--labu-labp-labd-laba-labt-labe-lab--labv-labe-labr-labs-labi-labo-labn-lab
+-labo-labn-lab:-lab
+-lab -lab -labw-labo-labr-labk-labf-labl-labo-labw-lab_-labc-laba-labl-labl-lab:-lab
+-lab -lab -lab -lab -labo-labu-labt-labp-labu-labt-labs-lab:-lab
+-lab -lab -lab -lab -lab -lab -labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labs-labc-labr-labi-labp-labt-labi-labo-labn-lab:-lab -lab'-labT-labh-labe-lab -labn-labe-labw-lab -labv-labe-labr-labs-labi-labo-labn-lab -labo-labf-lab -labt-labh-labe-lab -laba-labp-labp-lab'-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labv-laba-labl-labu-labe-lab:-lab -lab$-lab{-lab{-lab -labj-labo-labb-labs-lab.-labg-labe-labt-lab--labu-labp-labd-laba-labt-labe-lab--labv-labe-labr-labs-labi-labo-labn-lab.-labo-labu-labt-labp-labu-labt-labs-lab.-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab -lab}-lab}-lab
+-lab
+-labj-labo-labb-labs-lab:-lab
+-lab -lab -labg-labe-labt-lab--labu-labp-labd-laba-labt-labe-lab--labv-labe-labr-labs-labi-labo-labn-lab:-lab
+-lab -lab -lab -lab -labr-labu-labn-labs-lab--labo-labn-lab:-lab -labu-labb-labu-labn-labt-labu-lab--labl-laba-labt-labe-labs-labt-lab
+-lab -lab -lab -lab -labo-labu-labt-labp-labu-labt-labs-lab:-lab
+-lab -lab -lab -lab -lab -lab -labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab:-lab -lab$-lab{-lab{-lab -labs-labt-labe-labp-labs-lab.-labv-labe-labr-labs-labi-labo-labn-lab_-labu-labp-labd-laba-labt-labe-lab.-labo-labu-labt-labp-labu-labt-labs-lab.-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab -lab}-lab}-lab
+-lab -lab -lab -lab -labs-labt-labe-labp-labs-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab--lab -labn-laba-labm-labe-lab:-lab -labI-labn-labs-labt-laba-labl-labl-lab -labj-labq-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labu-labs-labe-labs-lab:-lab -labd-labc-laba-labr-labb-labo-labn-labe-lab/-labi-labn-labs-labt-laba-labl-labl-lab--labj-labq-lab--laba-labc-labt-labi-labo-labn-lab@-labb-lab7-labe-labf-lab5-lab7-labd-lab4-lab6-labe-labc-labe-lab7-lab8-lab7-lab6-lab0-labb-lab4-lab0-lab1-lab9-labd-labb-labc-lab4-lab0-lab8-lab0-laba-lab1-labb-laba-lab2-laba-lab4-lab0-labb-lab4-lab5-lab -lab#-lab -labv-lab3-lab.-lab2-lab.-lab0-lab
+-lab
+-lab -lab -lab -lab -lab -lab -lab--lab -labn-laba-labm-labe-lab:-lab -labG-labe-labt-lab -labt-laba-labg-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labi-labf-lab:-lab -labg-labi-labt-labh-labu-labb-lab.-labe-labv-labe-labn-labt-lab_-labn-laba-labm-labe-lab -lab=-lab=-lab -lab'-labp-labu-labs-labh-lab'-lab -lab&-lab&-lab -labs-labt-laba-labr-labt-labs-labW-labi-labt-labh-lab(-labg-labi-labt-labh-labu-labb-lab.-labr-labe-labf-lab,-lab -lab'-labr-labe-labf-labs-lab/-labt-laba-labg-labs-lab/-lab'-lab)-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labi-labd-lab:-lab -labt-laba-labg-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labu-labs-labe-labs-lab:-lab -labd-laba-labw-labi-labd-labd-lab6-lab/-laba-labc-labt-labi-labo-labn-lab--labg-labe-labt-lab--labt-laba-labg-lab@-lab7-lab2-lab7-laba-lab6-labf-lab0-laba-lab5-lab6-lab1-labb-labe-lab0-lab4-labe-lab0-lab9-lab0-lab1-lab3-lab5-lab3-lab1-labe-lab7-lab3-laba-lab3-lab9-lab8-lab3-laba-lab6-lab5-labe-lab3-lab4-lab7-lab9-lab -lab#-lab -labv-lab1-lab
+-lab
+-lab -lab -lab -lab -lab -lab -lab--lab -labn-laba-labm-labe-lab:-lab -labU-labp-labd-laba-labt-labe-lab -laba-labp-labp-lab -labv-labe-labr-labs-labi-labo-labn-lab -labb-laba-labs-labe-labd-lab -labo-labn-lab -labl-laba-labt-labe-labs-labt-lab -labr-labe-labl-labe-laba-labs-labe-lab -labt-laba-labg-lab -labw-labi-labt-labh-lab -labb-labu-labi-labl-labd-lab -labn-labu-labm-labb-labe-labr-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labi-labd-lab:-lab -labv-labe-labr-labs-labi-labo-labn-lab_-labu-labp-labd-laba-labt-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labe-labn-labv-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labG-labI-labT-labH-labU-labB-lab_-labT-labO-labK-labE-labN-lab:-lab -lab$-lab{-lab{-lab -labs-labe-labc-labr-labe-labt-labs-lab.-labG-labI-labT-labH-labU-labB-lab_-labT-labO-labK-labE-labN-lab -lab}-lab}-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labr-labu-labn-lab:-lab -lab|-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab#-lab -labF-labu-labn-labc-labt-labi-labo-labn-lab -labt-labo-lab -labg-labe-labt-lab -labt-labh-labe-lab -labl-laba-labt-labe-labs-labt-lab -labr-labe-labl-labe-laba-labs-labe-lab -labt-laba-labg-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labg-labe-labt-lab_-labl-laba-labt-labe-labs-labt-lab_-labt-laba-labg-lab(-lab)-lab -lab{-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labl-labo-labc-laba-labl-lab -labr-labe-labt-labr-labi-labe-labs-lab=-lab0-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labl-labo-labc-laba-labl-lab -labm-laba-labx-lab_-labr-labe-labt-labr-labi-labe-labs-lab=-lab3-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labl-labo-labc-laba-labl-lab -labt-laba-labg-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labw-labh-labi-labl-labe-lab -lab[-lab -lab$-labr-labe-labt-labr-labi-labe-labs-lab -lab--labl-labt-lab -lab$-labm-laba-labx-lab_-labr-labe-labt-labr-labi-labe-labs-lab -lab]-lab;-lab -labd-labo-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labt-laba-labg-lab=-lab$-lab(-labc-labu-labr-labl-lab -lab--labH-lab -lab"-labA-labu-labt-labh-labo-labr-labi-labz-laba-labt-labi-labo-labn-lab:-lab -labt-labo-labk-labe-labn-lab -lab$-lab{-labG-labI-labT-labH-labU-labB-lab_-labT-labO-labK-labE-labN-lab}-lab"-lab -lab--labs-lab -labh-labt-labt-labp-labs-lab:-lab/-lab/-laba-labp-labi-lab.-labg-labi-labt-labh-labu-labb-lab.-labc-labo-labm-lab/-labr-labe-labp-labo-labs-lab/-labj-laba-labn-labh-labq-lab/-labj-laba-labn-lab/-labr-labe-labl-labe-laba-labs-labe-labs-lab/-labl-laba-labt-labe-labs-labt-lab -lab|-lab -labj-labq-lab -lab--labr-lab -lab.-labt-laba-labg-lab_-labn-laba-labm-labe-lab)-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labi-labf-lab -lab[-lab -lab--labn-lab -lab"-lab$-labt-laba-labg-lab"-lab -lab]-lab -lab&-lab&-lab -lab[-lab -lab"-lab$-labt-laba-labg-lab"-lab -lab!-lab=-lab -lab"-labn-labu-labl-labl-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab$-labt-laba-labg-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labr-labe-labt-labu-labr-labn-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labl-labs-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labl-labe-labt-lab -labr-labe-labt-labr-labi-labe-labs-lab+-lab+-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labR-labe-labt-labr-laby-labi-labn-labg-lab.-lab.-lab.-lab -lab(-lab$-labr-labe-labt-labr-labi-labe-labs-lab/-lab$-labm-laba-labx-lab_-labr-labe-labt-labr-labi-labe-labs-lab)-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labs-labl-labe-labe-labp-lab -lab2-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labf-labi-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labd-labo-labn-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labF-laba-labi-labl-labe-labd-lab -labt-labo-lab -labf-labe-labt-labc-labh-lab -labl-laba-labt-labe-labs-labt-lab -labt-laba-labg-lab -laba-labf-labt-labe-labr-lab -lab$-labm-laba-labx-lab_-labr-labe-labt-labr-labi-labe-labs-lab -laba-labt-labt-labe-labm-labp-labt-labs-lab.-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab}-lab
+-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labi-labf-lab -lab$-lab{-lab{-lab -labg-labi-labt-labh-labu-labb-lab.-labe-labv-labe-labn-labt-lab_-labn-laba-labm-labe-lab -lab=-lab=-lab -lab'-labp-labu-labs-labh-lab'-lab -lab&-lab&-lab -labs-labt-laba-labr-labt-labs-labW-labi-labt-labh-lab(-labg-labi-labt-labh-labu-labb-lab.-labr-labe-labf-lab,-lab -lab'-labr-labe-labf-labs-lab/-labt-laba-labg-labs-lab/-lab'-lab)-lab -lab}-lab}-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labT-laba-labg-lab -labd-labe-labt-labe-labc-labt-labe-labd-lab,-lab -labs-labe-labt-lab -labo-labu-labt-labp-labu-labt-lab -labf-labo-labl-labl-labo-labw-lab -labt-laba-labg-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labs-laba-labn-labi-labt-labi-labz-labe-labd-lab_-labt-laba-labg-lab=-lab"-lab$-lab{-lab{-lab -labs-labt-labe-labp-labs-lab.-labt-laba-labg-lab.-labo-labu-labt-labp-labu-labt-labs-lab.-labt-laba-labg-lab -lab}-lab}-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab#-lab -labR-labe-labm-labo-labv-labe-lab -labt-labh-labe-lab -lab'-labv-lab'-lab -labp-labr-labe-labf-labi-labx-lab -labi-labf-lab -labi-labt-lab -labe-labx-labi-labs-labt-labs-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labs-laba-labn-labi-labt-labi-labz-labe-labd-lab_-labt-laba-labg-lab=-lab"-lab$-lab{-labs-laba-labn-labi-labt-labi-labz-labe-labd-lab_-labt-laba-labg-lab#-labv-lab}-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-lab:-lab:-labs-labe-labt-lab--labo-labu-labt-labp-labu-labt-lab -labn-laba-labm-labe-lab=-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab:-lab:-lab$-labs-laba-labn-labi-labt-labi-labz-labe-labd-lab_-labt-laba-labg-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labl-labs-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab#-lab -labG-labe-labt-lab -labt-labh-labe-lab -labl-laba-labt-labe-labs-labt-lab -labr-labe-labl-labe-laba-labs-labe-lab -labt-laba-labg-lab -labf-labr-labo-labm-lab -labG-labi-labt-labH-labu-labb-lab -labA-labP-labI-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labL-labA-labT-labE-labS-labT-lab_-labT-labA-labG-lab=-lab$-lab(-labg-labe-labt-lab_-labl-laba-labt-labe-labs-labt-lab_-labt-laba-labg-lab)-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab#-lab -labR-labe-labm-labo-labv-labe-lab -labt-labh-labe-lab -lab'-labv-lab'-lab -laba-labn-labd-lab -laba-labp-labp-labe-labn-labd-lab -labt-labh-labe-lab -labb-labu-labi-labl-labd-lab -labn-labu-labm-labb-labe-labr-lab -labt-labo-lab -labt-labh-labe-lab -labv-labe-labr-labs-labi-labo-labn-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab=-lab"-lab$-lab{-labL-labA-labT-labE-labS-labT-lab_-labT-labA-labG-lab#-labv-lab}-lab--lab$-lab{-labG-labI-labT-labH-labU-labB-lab_-labR-labU-labN-lab_-labN-labU-labM-labB-labE-labR-lab}-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labN-labe-labw-lab -labv-labe-labr-labs-labi-labo-labn-lab:-lab -lab$-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-lab:-lab:-labs-labe-labt-lab--labo-labu-labt-labp-labu-labt-lab -labn-laba-labm-labe-lab=-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab:-lab:-lab$-labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -lab -lab -labf-labi-lab
+-lab

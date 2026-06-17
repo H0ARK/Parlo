@@ -14,7 +14,6 @@ type ModelsProvidersFeaturesPanelState = {
   codexEnvironmentId: string
   codexEnvironmentExecUrl: string
   codexModelSnapshot: unknown
-  isCodexProtoTransport?: boolean
 }
 
 type ModelsProvidersFeaturesPanelActions = {
@@ -46,7 +45,6 @@ export function ModelsProvidersFeaturesPanel({
     codexEnvironmentId,
     codexEnvironmentExecUrl,
     codexModelSnapshot,
-    isCodexProtoTransport,
   } = state
   const {
     onSetCodexFeatureEnablementJson,
@@ -102,7 +100,7 @@ export function ModelsProvidersFeaturesPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || modelAdminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || modelAdminBusy}
           onClick={() => void onRefreshCodexModelSnapshot()}
         >
           {modelAdminBusy ? 'Loading' : 'Refresh'}
@@ -117,7 +115,7 @@ export function ModelsProvidersFeaturesPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={modelAdminBusy || !!isCodexProtoTransport}
+          disabled={modelAdminBusy}
           onClick={() =>
             setShowAdvancedFeatureJson((previous) => !previous)
           }
@@ -180,7 +178,7 @@ export function ModelsProvidersFeaturesPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || modelAdminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || modelAdminBusy}
           onClick={() => {
             const features = parsedFeaturePayload.features
             const nextFeatures =
@@ -209,8 +207,7 @@ export function ModelsProvidersFeaturesPanel({
             !currentThreadIdForCaps ||
             modelAdminBusy ||
             !codexEnvironmentId.trim() ||
-            !codexEnvironmentExecUrl.trim() ||
-            !!isCodexProtoTransport
+            !codexEnvironmentExecUrl.trim()
           }
           onClick={() => {
             void onRunCodexModelAction(

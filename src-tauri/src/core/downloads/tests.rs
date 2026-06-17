@@ -1,6 +1,6 @@
 use super::helpers::*;
 use super::models::*;
-use crate::core::filesystem::helpers::resolve_path_within_jan_data_folder;
+use crate::core::filesystem::helpers::resolve_path_within_parlo_data_folder;
 use reqwest::header::HeaderMap;
 use std::collections::HashMap;
 
@@ -283,20 +283,20 @@ fn test_download_scope_accepts_absolute_path_inside_canonical_root() {
         .duration_since(UNIX_EPOCH)
         .unwrap()
         .as_nanos();
-    let base_dir = std::env::temp_dir().join(format!("jan-download-scope-{unique}"));
-    let configured_root = base_dir.join("home").join("user").join("jan-data");
+    let base_dir = std::env::temp_dir().join(format!("Parlo-download-scope-{unique}"));
+    let configured_root = base_dir.join("home").join("user").join("Parlo-data");
     let canonical_root = base_dir
         .join("var")
         .join("home")
         .join("user")
-        .join("jan-data");
+        .join("Parlo-data");
     fs::create_dir_all(&canonical_root).unwrap();
     fs::create_dir_all(configured_root.parent().unwrap()).unwrap();
     symlink(&canonical_root, &configured_root).unwrap();
 
     let candidate = canonical_root.join("llamacpp/backends/v1/backend.tar.gz");
     let (_, resolved_path) =
-        resolve_path_within_jan_data_folder(&configured_root, candidate.to_string_lossy().as_ref())
+        resolve_path_within_parlo_data_folder(&configured_root, candidate.to_string_lossy().as_ref())
             .unwrap();
 
     let expected_path = canonical_root
@@ -393,7 +393,7 @@ fn test_download_item_deserialization() {
 fn test_convert_to_mirror_url_huggingface() {
     let url = "https://huggingface.co/some/repo/resolve/main/model.gguf";
     let mirror = convert_to_mirror_url(url).expect("should produce a mirror url");
-    assert!(mirror.starts_with("https://apps") && mirror.contains(".jan.ai/"));
+    assert!(mirror.starts_with("https://apps") && mirror.contains(".Parlo.ai/"));
     assert!(mirror.ends_with("huggingface.co/some/repo/resolve/main/model.gguf"));
 }
 

@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useTokensCount } from '@/hooks/useTokensCount'
-import { ThreadMessage } from '@janhq/core'
+import { ThreadMessage } from '@parlo-lab/core'
 import {
   IconBrain,
   IconArrowUp,

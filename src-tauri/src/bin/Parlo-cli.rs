@@ -1,7 +1,7 @@
-//! jan — headless CLI for Jan.
+//! Parlo — headless CLI for Parlo.
 //!
-//! Shares all core logic with the Jan desktop app.
-//! Build with: cargo build --features cli --bin jan
+//! Shares all core logic with the Parlo desktop app.
+//! Build with: cargo build --features cli --bin Parlo
 
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -30,21 +30,21 @@ use tauri_plugin_llamacpp::state::LlamacppState;
 
 #[derive(Parser)]
 #[command(
-    name = "jan",
+    name = "Parlo",
     about = "Serve local AI models and wire them to agents — no cloud required",
-    long_about = "Jan runs local AI models (LlamaCPP / MLX) and exposes them via an\n\
+    long_about = "Parlo runs local AI models (LlamaCPP / MLX) and exposes them via an\n\
 OpenAI-compatible API, then wires AI coding agents like Claude Code, Codex, and OpenClaw\n\
 directly to your own hardware — no cloud account, no usage fees, full privacy.\n\n\
-Models downloaded in the Jan desktop app are automatically available here.",
+Models downloaded in the Parlo desktop app are automatically available here.",
     after_help = "Examples:\n  \
-  jan launch claude                                      # pick a model, then run Claude Code against it\n  \
-  jan launch claude --model janhq/Jan-code-4b-gguf       # use a specific model\n  \
-  jan launch codex --model janhq/Jan-code-4b-gguf        # wire Codex CLI to a local model\n  \
-  jan launch openclaw --model janhq/Jan-code-4b-gguf     # wire openclaw to a local model\n  \
-  jan serve janhq/Jan-code-4b-gguf                       # expose a model at localhost:6767/v1\n  \
-  jan serve janhq/Jan-code-4b-gguf --fit                 # auto-fit context to available VRAM\n  \
-  jan serve janhq/Jan-code-4b-gguf --detach              # run in the background\n  \
-  jan models list                                        # show all installed models",
+  Parlo launch claude                                      # pick a model, then run Claude Code against it\n  \
+  Parlo launch claude --model parlo-lab/Parlo-code-4b-gguf       # use a specific model\n  \
+  Parlo launch codex --model parlo-lab/Parlo-code-4b-gguf        # wire Codex CLI to a local model\n  \
+  Parlo launch openclaw --model parlo-lab/Parlo-code-4b-gguf     # wire openclaw to a local model\n  \
+  Parlo serve parlo-lab/Parlo-code-4b-gguf                       # expose a model at localhost:6767/v1\n  \
+  Parlo serve parlo-lab/Parlo-code-4b-gguf --fit                 # auto-fit context to available VRAM\n  \
+  Parlo serve parlo-lab/Parlo-code-4b-gguf --detach              # run in the background\n  \
+  Parlo models list                                        # show all installed models",
     version
 )]
 struct Cli {
@@ -72,14 +72,14 @@ enum Commands {
         /// Model ID to load (omit to pick interactively)
         #[arg(long)]
         model: Option<String>,
-        /// Path to the inference binary (auto-discovered from Jan data folder when omitted)
+        /// Path to the inference binary (auto-discovered from Parlo data folder when omitted)
         #[arg(long)]
         bin: Option<String>,
         /// Port the model server listens on
         #[arg(long, default_value_t = 6767)]
         port: u16,
         /// API key for the model server (exported as OPENAI_API_KEY)
-        #[arg(long, default_value = "jan")]
+        #[arg(long, default_value = "Parlo")]
         api_key: String,
         /// GPU layers to offload (-1 = all layers, 0 = CPU only)
         #[arg(long, default_value_t = -1)]
@@ -97,13 +97,13 @@ enum Commands {
         #[arg(long, default_value_t = false)]
         select: bool,
     },
-    /// List and inspect conversation threads saved by the Jan app
+    /// List and inspect conversation threads saved by the Parlo app
     #[command(display_order = 10)]
     Threads {
         #[command(subcommand)]
         cmd: ThreadsCommands,
     },
-    /// List and load models installed in the Jan data folder
+    /// List and load models installed in the Parlo data folder
     #[command(display_order = 11)]
     Models {
         #[command(subcommand)]
@@ -143,7 +143,7 @@ struct ServeArgs {
     /// Path to the GGUF file (auto-resolved from model.yml when omitted)
     #[arg(long)]
     model_path: Option<String>,
-    /// Path to the inference binary (auto-discovered from Jan data folder when omitted)
+    /// Path to the inference binary (auto-discovered from Parlo data folder when omitted)
     #[arg(long)]
     bin: Option<String>,
     /// Port the model server listens on (0 = pick a random free port)
@@ -191,7 +191,7 @@ struct ServeArgs {
 
 #[derive(Subcommand)]
 enum ModelsCommands {
-    /// Print all installed models as JSON (from the Jan data folder)
+    /// Print all installed models as JSON (from the Parlo data folder)
     List {
         /// Filter by engine: llamacpp, mlx, or all
         #[arg(long, default_value = "all")]
@@ -205,13 +205,13 @@ enum ModelsCommands {
     /// Load an MLX model directly (macOS / Apple Silicon only)
     #[cfg(target_os = "macos")]
     LoadMlx {
-        /// Model ID as shown by `jan models list --engine mlx`
+        /// Model ID as shown by `Parlo models list --engine mlx`
         #[arg(long)]
         model_id: String,
         /// Path to the MLX model directory (auto-resolved from model.yml when omitted)
         #[arg(long)]
         model_path: Option<String>,
-        /// Path to the mlx-server binary (auto-discovered from Jan.app when omitted)
+        /// Path to the mlx-server binary (auto-discovered from Parlo.app when omitted)
         #[arg(long)]
         bin: Option<String>,
         /// Port the model server listens on (0 = pick a random free port)
@@ -236,7 +236,7 @@ enum ModelsCommands {
 
 /// Build a left-aligned, bright-yellow ASCII logo for the help header.
 fn make_logo() -> String {
-    // "JAN" in ANSI Shadow block letters
+    // "PARLO" in ANSI Shadow block letters
     let lines = [
         r"     ██╗ █████╗ ███╗  ██╗",
         r"     ██║██╔══██╗████╗ ██║",
@@ -427,7 +427,7 @@ async fn handle_models(cmd: ModelsCommands) {
                     None => {
                         eprintln!(
                             "Error: mlx-server binary not found. \
-                            Install Jan from https://jan.ai or pass --bin <path>."
+                            Install Parlo from https://Parlo.ai or pass --bin <path>."
                         );
                         std::process::exit(1);
                     }
@@ -601,7 +601,7 @@ async fn auto_download_hf_model(repo_id: &str, select_quantization: bool) -> Str
     });
 
     dl_pb.finish_and_clear();
-    eprintln!("  ✓ Saved to Jan data folder\n");
+    eprintln!("  ✓ Saved to Parlo data folder\n");
 
     model_id
 }
@@ -691,7 +691,7 @@ async fn select_model_interactively(select_quantization: bool) -> String {
     }
 
     if all.is_empty() {
-        let default_model = "janhq/Jan-v3-4B-base-instruct-gguf";
+        let default_model = "parlo-lab/Parlo-v3-4B-base-instruct-gguf";
         println!();
         let msg = Style::new()
             .yellow()
@@ -963,7 +963,7 @@ async fn handle_serve(args: ServeArgs) {
                     Some(p) => p.to_string_lossy().into_owned(),
                     None => {
                         finish_progress(pb, "✗ mlx-server binary not found");
-                        eprintln!("Install Jan from https://jan.ai or pass --bin <path>.");
+                        eprintln!("Install Parlo from https://Parlo.ai or pass --bin <path>.");
                         std::process::exit(1);
                     }
                 },
@@ -1015,7 +1015,7 @@ async fn handle_serve(args: ServeArgs) {
                 Some(p) => p.to_string_lossy().into_owned(),
                 None => {
                     finish_progress(pb, "✗ llama-server binary not found");
-                    eprintln!("Install a backend from Jan's settings or pass --bin <path>.");
+                    eprintln!("Install a backend from Parlo's settings or pass --bin <path>.");
                     std::process::exit(1);
                 }
             },
@@ -1276,7 +1276,7 @@ async fn handle_launch(
     let v1_url = format!("{base_url}/v1");
 
     // OpenClaw is configured via ~/.openclaw/openclaw.json, not env vars.
-    // Write the jan provider entry and set the default model, then launch `openclaw tui`.
+    // Write the Parlo provider entry and set the default model, then launch `openclaw tui`.
     let mut program_args = program_args;
     if is_openclaw {
         configure_openclaw(&v1_url, &api_key, &model_id);
@@ -1285,10 +1285,10 @@ async fn handle_launch(
             program_args.insert(0, "tui".to_string());
         }
         eprintln!();
-        eprintln!("  ~/.openclaw/openclaw.json → jan provider configured");
-        eprintln!("  agents.defaults.model.primary = jan/{model_id}");
+        eprintln!("  ~/.openclaw/openclaw.json → Parlo provider configured");
+        eprintln!("  agents.defaults.model.primary = Parlo/{model_id}");
     } else if is_codex {
-        let codex_home = PathBuf::from("./.jan/codex-home");
+        let codex_home = PathBuf::from("./.Parlo/codex-home");
         if let Err(error) = std::fs::create_dir_all(&codex_home) {
             eprintln!(
                 "  WARN: failed to create CODEX_HOME at '{}': {error}",
@@ -1375,7 +1375,7 @@ async fn handle_launch(
         cmd.env("OPENAI_BASE_URL", &v1_url)
             .env("OPENAI_API_KEY", &api_key)
             .env("OPENAI_MODEL", &model_id)
-            .env("CODEX_HOME", "./.jan/codex-home");
+            .env("CODEX_HOME", "./.Parlo/codex-home");
     } else {
         let anthropic_key_var = if is_claude {
             "ANTHROPIC_AUTH_TOKEN"
@@ -1408,9 +1408,9 @@ async fn handle_launch(
 // ── openclaw config writer ─────────────────────────────────────────────────
 
 /// Write (or merge into) `~/.openclaw/openclaw.json` so that openclaw uses
-/// the local Jan server as its provider and selects `model_id` by default.
+/// the local Parlo server as its provider and selects `model_id` by default.
 ///
-/// The "jan" provider entry is always overwritten with the current server
+/// The "Parlo" provider entry is always overwritten with the current server
 /// address and key. All other config values are preserved.
 /// Also clears the session model override so the new default takes effect.
 fn configure_openclaw(v1_url: &str, api_key: &str, model_id: &str) {
@@ -1425,8 +1425,8 @@ fn configure_openclaw(v1_url: &str, api_key: &str, model_id: &str) {
         .and_then(|s| serde_json::from_str(&s).ok())
         .unwrap_or(serde_json::json!({}));
 
-    // Inject (or overwrite) the jan provider.
-    config["models"]["providers"]["jan"] = serde_json::json!({
+    // Inject (or overwrite) the Parlo provider.
+    config["models"]["providers"]["Parlo"] = serde_json::json!({
         "baseUrl": v1_url,
         "apiKey":  api_key,
         "api":     "openai-completions",
@@ -1441,8 +1441,8 @@ fn configure_openclaw(v1_url: &str, api_key: &str, model_id: &str) {
         }]
     });
 
-    // Set jan/<model_id> as the primary default model.
-    config["agents"]["defaults"]["model"]["primary"] = serde_json::json!(format!("jan/{model_id}"));
+    // Set Parlo/<model_id> as the primary default model.
+    config["agents"]["defaults"]["model"]["primary"] = serde_json::json!(format!("Parlo/{model_id}"));
 
     if let Some(parent) = config_path.parent() {
         let _ = std::fs::create_dir_all(parent);
@@ -1515,7 +1515,7 @@ async fn start_model_server(
                 Some(p) => p,
                 None => {
                     finish_progress(pb, "✗ mlx-server binary not found");
-                    eprintln!("Install Jan from https://jan.ai or pass --bin <path>.");
+                    eprintln!("Install Parlo from https://Parlo.ai or pass --bin <path>.");
                     std::process::exit(1);
                 }
             };
@@ -1561,7 +1561,7 @@ async fn start_model_server(
             Some(p) => p,
             None => {
                 finish_progress(pb, "✗ llama-server binary not found");
-                eprintln!("Install a backend from Jan's settings or pass --bin <path>.");
+                eprintln!("Install a backend from Parlo's settings or pass --bin <path>.");
                 std::process::exit(1);
             }
         };

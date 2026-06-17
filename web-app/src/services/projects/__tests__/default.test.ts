@@ -105,15 +105,15 @@ describe('DefaultProjectsService', () => {
 
   it('addProjectFromDirectory derives name from folder basename', async () => {
     const svc = new DefaultProjectsService()
-    const p = await svc.addProjectFromDirectory('/Users/dev/jan/')
-    expect(p.name).toBe('jan')
-    expect(p.directoryPath).toBe('/Users/dev/jan')
+    const p = await svc.addProjectFromDirectory('/Users/dev/Parlo/')
+    expect(p.name).toBe('Parlo')
+    expect(p.directoryPath).toBe('/Users/dev/Parlo')
   })
 
   it('addProjectFromDirectory reuses an existing folder project', async () => {
     const svc = new DefaultProjectsService()
-    const first = await svc.addProjectFromDirectory('/Users/dev/jan')
-    const second = await svc.addProjectFromDirectory('/Users/dev/jan/')
+    const first = await svc.addProjectFromDirectory('/Users/dev/Parlo')
+    const second = await svc.addProjectFromDirectory('/Users/dev/Parlo/')
     expect(second.id).toBe(first.id)
     expect(await svc.getProjects()).toHaveLength(1)
   })

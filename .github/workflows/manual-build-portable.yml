@@ -1,28 +1,29 @@
-name: Manual build portable (windows)
-
-on:
-  workflow_dispatch:
-    inputs:
-      build_ref:
-        description: "Code ref to build (e.g. refs/tags/v0.7.5 or refs/heads/release/v0.7.5)"
-        required: true
-        default: "refs/tags/v0.7.5"
-      version:
-        description: "Version to stamp into the app"
-        required: true
-        default: "0.7.5"
-      channel:
-        description: "stable/beta/nightly"
-        required: true
-        default: "stable"
-
-jobs:
-  build-windows-portable:
-    uses: janhq/jan/.github/workflows/template-tauri-build-windows-x64.yml@main
-    secrets: inherit
-    with:
-      ref: ${{ inputs.build_ref }}
-      public_provider: "none"
-      channel: ${{ inputs.channel }}
-      new_version: ${{ inputs.version }}
-      upload_url: ""
+-labn-laba-labm-labe-lab:-lab -labM-laba-labn-labu-laba-labl-lab -labb-labu-labi-labl-labd-lab -labp-labo-labr-labt-laba-labb-labl-labe-lab -lab(-labw-labi-labn-labd-labo-labw-labs-lab)-lab
+-lab
+-labo-labn-lab:-lab
+-lab -lab -labw-labo-labr-labk-labf-labl-labo-labw-lab_-labd-labi-labs-labp-laba-labt-labc-labh-lab:-lab
+-lab -lab -lab -lab -labi-labn-labp-labu-labt-labs-lab:-lab
+-lab -lab -lab -lab -lab -lab -labb-labu-labi-labl-labd-lab_-labr-labe-labf-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labs-labc-labr-labi-labp-labt-labi-labo-labn-lab:-lab -lab"-labC-labo-labd-labe-lab -labr-labe-labf-lab -labt-labo-lab -labb-labu-labi-labl-labd-lab -lab(-labe-lab.-labg-lab.-lab -labr-labe-labf-labs-lab/-labt-laba-labg-labs-lab/-labv-lab0-lab.-lab7-lab.-lab5-lab -labo-labr-lab -labr-labe-labf-labs-lab/-labh-labe-laba-labd-labs-lab/-labr-labe-labl-labe-laba-labs-labe-lab/-labv-lab0-lab.-lab7-lab.-lab5-lab)-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labr-labe-labq-labu-labi-labr-labe-labd-lab:-lab -labt-labr-labu-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labf-laba-labu-labl-labt-lab:-lab -lab"-labr-labe-labf-labs-lab/-labt-laba-labg-labs-lab/-labv-lab0-lab.-lab7-lab.-lab5-lab"-lab
+-lab -lab -lab -lab -lab -lab -labv-labe-labr-labs-labi-labo-labn-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labs-labc-labr-labi-labp-labt-labi-labo-labn-lab:-lab -lab"-labV-labe-labr-labs-labi-labo-labn-lab -labt-labo-lab -labs-labt-laba-labm-labp-lab -labi-labn-labt-labo-lab -labt-labh-labe-lab -laba-labp-labp-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labr-labe-labq-labu-labi-labr-labe-labd-lab:-lab -labt-labr-labu-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labf-laba-labu-labl-labt-lab:-lab -lab"-lab0-lab.-lab7-lab.-lab5-lab"-lab
+-lab -lab -lab -lab -lab -lab -labc-labh-laba-labn-labn-labe-labl-lab:-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labs-labc-labr-labi-labp-labt-labi-labo-labn-lab:-lab -lab"-labs-labt-laba-labb-labl-labe-lab/-labb-labe-labt-laba-lab/-labn-labi-labg-labh-labt-labl-laby-lab"-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labr-labe-labq-labu-labi-labr-labe-labd-lab:-lab -labt-labr-labu-labe-lab
+-lab -lab -lab -lab -lab -lab -lab -lab -labd-labe-labf-laba-labu-labl-labt-lab:-lab -lab"-labs-labt-laba-labb-labl-labe-lab"-lab
+-lab
+-labj-labo-labb-labs-lab:-lab
+-lab -lab -labb-labu-labi-labl-labd-lab--labw-labi-labn-labd-labo-labw-labs-lab--labp-labo-labr-labt-laba-labb-labl-labe-lab:-lab
+-lab -lab -lab -lab -labu-labs-labe-labs-lab:-lab -labj-laba-labn-labh-labq-lab/-labj-laba-labn-lab/-lab.-labg-labi-labt-labh-labu-labb-lab/-labw-labo-labr-labk-labf-labl-labo-labw-labs-lab/-labt-labe-labm-labp-labl-laba-labt-labe-lab--labt-laba-labu-labr-labi-lab--labb-labu-labi-labl-labd-lab--labw-labi-labn-labd-labo-labw-labs-lab--labx-lab6-lab4-lab.-laby-labm-labl-lab@-labm-laba-labi-labn-lab
+-lab -lab -lab -lab -labs-labe-labc-labr-labe-labt-labs-lab:-lab -labi-labn-labh-labe-labr-labi-labt-lab
+-lab -lab -lab -lab -labw-labi-labt-labh-lab:-lab
+-lab -lab -lab -lab -lab -lab -labr-labe-labf-lab:-lab -lab$-lab{-lab{-lab -labi-labn-labp-labu-labt-labs-lab.-labb-labu-labi-labl-labd-lab_-labr-labe-labf-lab -lab}-lab}-lab
+-lab -lab -lab -lab -lab -lab -labp-labu-labb-labl-labi-labc-lab_-labp-labr-labo-labv-labi-labd-labe-labr-lab:-lab -lab"-labn-labo-labn-labe-lab"-lab
+-lab -lab -lab -lab -lab -lab -labc-labh-laba-labn-labn-labe-labl-lab:-lab -lab$-lab{-lab{-lab -labi-labn-labp-labu-labt-labs-lab.-labc-labh-laba-labn-labn-labe-labl-lab -lab}-lab}-lab
+-lab -lab -lab -lab -lab -lab -labn-labe-labw-lab_-labv-labe-labr-labs-labi-labo-labn-lab:-lab -lab$-lab{-lab{-lab -labi-labn-labp-labu-labt-labs-lab.-labv-labe-labr-labs-labi-labo-labn-lab -lab}-lab}-lab
+-lab -lab -lab -lab -lab -lab -labu-labp-labl-labo-laba-labd-lab_-labu-labr-labl-lab:-lab -lab"-lab"-lab
+-lab

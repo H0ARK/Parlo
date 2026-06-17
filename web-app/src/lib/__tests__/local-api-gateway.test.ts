@@ -63,10 +63,10 @@ describe('local-api-gateway', () => {
     expect(
       buildGatewayCurlExample({
         baseUrl,
-        apiKey: 'jan-key',
+        apiKey: 'Parlo-key',
         modelId: 'gpt-4o',
       })
-    ).toContain('Authorization: Bearer jan-key')
+    ).toContain('Authorization: Bearer Parlo-key')
     expect(
       buildGatewayCurlExample({
         baseUrl,

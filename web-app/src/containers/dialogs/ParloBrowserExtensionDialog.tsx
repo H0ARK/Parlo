@@ -16,24 +16,24 @@ import { isPlatformTauri } from '@/lib/platform/utils'
 
 const CHROME_STORE_URL = 'https://chromewebstore.google.com/detail/jan-browser-mcp/mkciifcjehgnpaigoiaakdgabbpfppal'
 
-export type JanBrowserExtensionDialogState =
+export type ParloBrowserExtensionDialogState =
   | 'closed'
   | 'checking'
   | 'not_installed'
 
-interface JanBrowserExtensionDialogProps {
+interface ParloBrowserExtensionDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  state: JanBrowserExtensionDialogState
+  state: ParloBrowserExtensionDialogState
   onCancel?: () => void
 }
 
-export default function JanBrowserExtensionDialog({
+export default function ParloBrowserExtensionDialog({
   open,
   onOpenChange,
   state,
   onCancel,
-}: JanBrowserExtensionDialogProps) {
+}: ParloBrowserExtensionDialogProps) {
   const { t } = useTranslation()
 
   const handleOpenChromeStore = useCallback(async () => {

@@ -37,7 +37,7 @@ import { Link } from '@tanstack/react-router'
 import { RenameThreadDialog, DeleteThreadDialog } from '@/containers/dialogs'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { ThreadMessage } from '@janhq/core'
+import { ThreadMessage } from '@parlo-lab/core'
 
 const ThreadItem = memo(
   ({

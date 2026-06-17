@@ -1,5 +1,5 @@
 {
-  "name": "@janhq/tauri-plugin-llamacpp-api",
+  "name": "@parlo-lab/tauri-plugin-llamacpp-api",
   "version": "0.8.2",
   "private": true,
   "description": "",

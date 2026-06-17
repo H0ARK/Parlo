@@ -1,17 +1,18 @@
-prompt = """
-You are going to test the Jan application by downloading and chatting with a model (bitcpm4).
-
-Step-by-step instructions:
-1. Given the Jan application is already opened.
-2. In the **bottom-left corner**, click the **Hub** menu item.
-3. Scroll through the model list or use the search bar to find **qwen3-0.6B**.
-4. Click **Use** on the qwen3-0.6B model.
-5. Wait for the model to finish downloading and become ready.
-6. Once redirected to the chat screen, type any message into the input box (e.g. `Hello World`).
-7. Press **Enter** to send the message.
-8. Wait for the modelâ€™s response.
-
-If the model responds correctly, return: {"result": True}, otherwise return: {"result": False}.
-
-In all your responses, use only plain ASCII characters. Do NOT use Unicode symbols
-"""
+-labp-labr-labo-labm-labp-labt-lab -lab=-lab -lab"-lab"-lab"-lab
+-labY-labo-labu-lab -laba-labr-labe-lab -labg-labo-labi-labn-labg-lab -labt-labo-lab -labt-labe-labs-labt-lab -labt-labh-labe-lab -labJ-laba-labn-lab -laba-labp-labp-labl-labi-labc-laba-labt-labi-labo-labn-lab -labb-laby-lab -labd-labo-labw-labn-labl-labo-laba-labd-labi-labn-labg-lab -laba-labn-labd-lab -labc-labh-laba-labt-labt-labi-labn-labg-lab -labw-labi-labt-labh-lab -laba-lab -labm-labo-labd-labe-labl-lab -lab(-labb-labi-labt-labc-labp-labm-lab4-lab)-lab.-lab
+-lab
+-labS-labt-labe-labp-lab--labb-laby-lab--labs-labt-labe-labp-lab -labi-labn-labs-labt-labr-labu-labc-labt-labi-labo-labn-labs-lab:-lab
+-lab1-lab.-lab -labG-labi-labv-labe-labn-lab -labt-labh-labe-lab -labJ-laba-labn-lab -laba-labp-labp-labl-labi-labc-laba-labt-labi-labo-labn-lab -labi-labs-lab -laba-labl-labr-labe-laba-labd-laby-lab -labo-labp-labe-labn-labe-labd-lab.-lab
+-lab2-lab.-lab -labI-labn-lab -labt-labh-labe-lab -lab*-lab*-labb-labo-labt-labt-labo-labm-lab--labl-labe-labf-labt-lab -labc-labo-labr-labn-labe-labr-lab*-lab*-lab,-lab -labc-labl-labi-labc-labk-lab -labt-labh-labe-lab -lab*-lab*-labH-labu-labb-lab*-lab*-lab -labm-labe-labn-labu-lab -labi-labt-labe-labm-lab.-lab
+-lab3-lab.-lab -labS-labc-labr-labo-labl-labl-lab -labt-labh-labr-labo-labu-labg-labh-lab -labt-labh-labe-lab -labm-labo-labd-labe-labl-lab -labl-labi-labs-labt-lab -labo-labr-lab -labu-labs-labe-lab -labt-labh-labe-lab -labs-labe-laba-labr-labc-labh-lab -labb-laba-labr-lab -labt-labo-lab -labf-labi-labn-labd-lab -lab*-lab*-labq-labw-labe-labn-lab3-lab--lab0-lab.-lab6-labB-lab*-lab*-lab.-lab
+-lab4-lab.-lab -labC-labl-labi-labc-labk-lab -lab*-lab*-labU-labs-labe-lab*-lab*-lab -labo-labn-lab -labt-labh-labe-lab -labq-labw-labe-labn-lab3-lab--lab0-lab.-lab6-labB-lab -labm-labo-labd-labe-labl-lab.-lab
+-lab5-lab.-lab -labW-laba-labi-labt-lab -labf-labo-labr-lab -labt-labh-labe-lab -labm-labo-labd-labe-labl-lab -labt-labo-lab -labf-labi-labn-labi-labs-labh-lab -labd-labo-labw-labn-labl-labo-laba-labd-labi-labn-labg-lab -laba-labn-labd-lab -labb-labe-labc-labo-labm-labe-lab -labr-labe-laba-labd-laby-lab.-lab
+-lab6-lab.-lab -labO-labn-labc-labe-lab -labr-labe-labd-labi-labr-labe-labc-labt-labe-labd-lab -labt-labo-lab -labt-labh-labe-lab -labc-labh-laba-labt-lab -labs-labc-labr-labe-labe-labn-lab,-lab -labt-laby-labp-labe-lab -laba-labn-laby-lab -labm-labe-labs-labs-laba-labg-labe-lab -labi-labn-labt-labo-lab -labt-labh-labe-lab -labi-labn-labp-labu-labt-lab -labb-labo-labx-lab -lab(-labe-lab.-labg-lab.-lab -lab`-labH-labe-labl-labl-labo-lab -labW-labo-labr-labl-labd-lab`-lab)-lab.-lab
+-lab7-lab.-lab -labP-labr-labe-labs-labs-lab -lab*-lab*-labE-labn-labt-labe-labr-lab*-lab*-lab -labt-labo-lab -labs-labe-labn-labd-lab -labt-labh-labe-lab -labm-labe-labs-labs-laba-labg-labe-lab.-lab
+-lab8-lab.-lab -labW-laba-labi-labt-lab -labf-labo-labr-lab -labt-labh-labe-lab -labm-labo-labd-labe-labl-labâ-lab€-lab™-labs-lab -labr-labe-labs-labp-labo-labn-labs-labe-lab.-lab
+-lab
+-labI-labf-lab -labt-labh-labe-lab -labm-labo-labd-labe-labl-lab -labr-labe-labs-labp-labo-labn-labd-labs-lab -labc-labo-labr-labr-labe-labc-labt-labl-laby-lab,-lab -labr-labe-labt-labu-labr-labn-lab:-lab -lab{-lab"-labr-labe-labs-labu-labl-labt-lab"-lab:-lab -labT-labr-labu-labe-lab}-lab,-lab -labo-labt-labh-labe-labr-labw-labi-labs-labe-lab -labr-labe-labt-labu-labr-labn-lab:-lab -lab{-lab"-labr-labe-labs-labu-labl-labt-lab"-lab:-lab -labF-laba-labl-labs-labe-lab}-lab.-lab
+-lab
+-labI-labn-lab -laba-labl-labl-lab -laby-labo-labu-labr-lab -labr-labe-labs-labp-labo-labn-labs-labe-labs-lab,-lab -labu-labs-labe-lab -labo-labn-labl-laby-lab -labp-labl-laba-labi-labn-lab -labA-labS-labC-labI-labI-lab -labc-labh-laba-labr-laba-labc-labt-labe-labr-labs-lab.-lab -labD-labo-lab -labN-labO-labT-lab -labu-labs-labe-lab -labU-labn-labi-labc-labo-labd-labe-lab -labs-laby-labm-labb-labo-labl-labs-lab
+-lab"-lab"-lab"-lab
+-lab

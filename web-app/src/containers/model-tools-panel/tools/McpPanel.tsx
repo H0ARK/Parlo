@@ -29,7 +29,6 @@ type McpPanelState = {
   filteredCodexMcpToolDescriptors: CodexMcpToolDescriptor[]
   selectedCodexMcpToolDescriptor?: CodexMcpToolDescriptor
   codexMcpToolArgumentValidation: string[]
-  isCodexProtoTransport?: boolean
 }
 
 type McpPanelActions = {
@@ -214,7 +213,6 @@ export function McpPanel({
     filteredCodexMcpToolDescriptors,
     selectedCodexMcpToolDescriptor,
     codexMcpToolArgumentValidation,
-    isCodexProtoTransport,
   } = state
   const {
     onSetCodexMcpServerName,
@@ -478,7 +476,7 @@ export function McpPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || mcpBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || mcpBusy}
           onClick={handleReloadConfig}
         >
           Reload config

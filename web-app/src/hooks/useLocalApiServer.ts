@@ -41,9 +41,6 @@ type LocalApiServerState = {
   // Server request timeout (default 600 sec)
   proxyTimeout: number
   setProxyTimeout: (value: number) => void
-  // Execute tools on the Local API server for chat endpoints
-  enableServerToolExecution: boolean
-  setEnableServerToolExecution: (value: boolean) => void
 }
 
 export const useLocalApiServer = create<LocalApiServerState>()(
@@ -79,9 +76,6 @@ export const useLocalApiServer = create<LocalApiServerState>()(
       setTrustedHosts: (hosts) => set({ trustedHosts: hosts }),
       proxyTimeout: 600,
       setProxyTimeout: (value) => set({ proxyTimeout: value }),
-      enableServerToolExecution: false,
-      setEnableServerToolExecution: (value) =>
-        set({ enableServerToolExecution: value }),
       apiKey: DEFAULT_LOCAL_API_SERVER_API_KEY,
       setApiKey: (value) => set({ apiKey: value }),
     }),
@@ -101,7 +95,7 @@ export const useLocalApiServer = create<LocalApiServerState>()(
         }
         if (version < 3) {
           // v2 -> v3: add server-side tool execution toggle
-          state.enableServerToolExecution = false
+          // removed in this cycle
         }
         if (version < 4) {
           if (!state.apiKey?.trim()) {

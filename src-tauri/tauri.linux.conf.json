@@ -3,7 +3,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Jan",
+        "title": "Parlo",
         "width": 1200,
         "minWidth": 1024,
         "height": 800,
@@ -19,13 +19,18 @@
     ]
   },
   "bundle": {
-    "targets": ["deb", "appimage"],
+    "targets": [
+      "deb",
+      "appimage"
+    ],
     "resources": [
       "resources/pre-install/**/*",
       "resources/LICENSE",
-      "resources/bin/jan-cli"
+      "resources/bin/parlo-cli"
     ],
-    "externalBin": ["resources/bin/uv"],
+    "externalBin": [
+      "resources/bin/uv"
+    ],
     "linux": {
       "appimage": {
         "bundleMediaFramework": false,

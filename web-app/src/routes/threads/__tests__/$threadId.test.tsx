@@ -395,7 +395,7 @@ vi.mock('@/hooks/useAutoScroll', () => ({
   }),
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   MessageStatus: { Ready: 'ready' },
   ChatCompletionRole: { Assistant: 'assistant', User: 'user' },
   ContentType: { Text: 'text' },

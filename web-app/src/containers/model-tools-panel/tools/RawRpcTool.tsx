@@ -41,7 +41,6 @@ type RawRpcToolActions = {
 type RawRpcToolProps = {
   state: RawRpcToolState
   actions: RawRpcToolActions
-  isCodexProtoTransport?: boolean
 }
 
 function normalizeTargets(value: string[]) {
@@ -53,7 +52,6 @@ function normalizeTargets(value: string[]) {
 export function RawRpcTool({
   state,
   actions,
-  isCodexProtoTransport,
 }: RawRpcToolProps) {
   const {
     codexMcpServerName,
@@ -75,7 +73,6 @@ export function RawRpcTool({
     setCodexRawRpcParams,
   } = actions
 
-  const isProto = !!isCodexProtoTransport
 
   const catalogMethods = useMemo(
     () =>
@@ -127,7 +124,6 @@ export function RawRpcTool({
     !rawRpcBusy &&
     Boolean(methodText) &&
     !hasRawRpcParamsError &&
-    !isProto &&
     (isKnownRawRpcMethod || allowUnknownRawRpcMethod)
 
   const setMethodWithPreset = (method: string) => {

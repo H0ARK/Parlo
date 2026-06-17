@@ -1,9 +1,9 @@
 /**
- * Gets Jan's data folder path.
+ * Gets Parlo's data folder path.
  *
- * @returns {Promise<string>} A Promise that resolves with Jan's data folder path.
+ * @returns {Promise<string>} A Promise that resolves with Parlo's data folder path.
  */
-const getJanDataFolderPath = (): Promise<string> => globalThis.core.api?.getJanDataFolderPath()
+const getParloDataFolderPath = (): Promise<string> => globalThis.core.api?.getParloDataFolderPath()
 
 /**
  * Opens the file explorer at a specific path.
@@ -99,7 +99,7 @@ export type RegisterExtensionPoint = (
  * Functions exports
  */
 export {
-  getJanDataFolderPath,
+  getParloDataFolderPath,
   openFileExplorer,
   getResourcePath,
   joinPath,

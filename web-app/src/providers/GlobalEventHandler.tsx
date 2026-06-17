@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { events } from '@janhq/core'
+import { events } from '@parlo-lab/core'
 import { useModelProvider } from '@/hooks/useModelProvider'
 import { useServiceHub } from '@/hooks/useServiceHub'
 import { useHardware } from '@/hooks/useHardware'

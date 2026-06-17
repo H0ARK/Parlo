@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ContentType } from '@janhq/core'
+import { ContentType } from '@parlo-lab/core'
 import {
   stringifyToolOutputForTokenCount,
   MAX_STRINGIFY_DEPTH_FOR_COUNT,
@@ -7,7 +7,7 @@ import {
   extractToolContextFromMetadata,
   extractToolContextFromContent,
 } from '../tokenCountToolContext'
-import type { ThreadMessage } from '@janhq/core'
+import type { ThreadMessage } from '@parlo-lab/core'
 
 describe('stringifyToolOutputForTokenCount', () => {
   it('returns empty string for null and undefined', () => {

@@ -1,5 +1,5 @@
 import { getServiceHub } from '@/hooks/useServiceHub'
-import { Assistant as CoreAssistant } from '@janhq/core'
+import { Assistant as CoreAssistant } from '@parlo-lab/core'
 import { create } from 'zustand'
 import { localStorageKey } from '@/constants/localStorage'
 

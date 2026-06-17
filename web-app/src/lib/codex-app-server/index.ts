@@ -13,14 +13,12 @@ export { buildGlobalCodexSpawnOptions } from './chat-backend'
 export {
   buildCodexMcpServersConfig,
   buildCodexMcpServersToml,
-  getActiveJanMcpServers,
-  janMcpServerToCodexEntry,
+  getActiveParloMcpServers,
+  parloMcpServerToCodexEntry,
 } from './mcp-config-bridge'
 export { CodexAppServerClient, startCodexSession } from './api'
 export { CodexAppServerSession } from './client'
 export { CodexJsonRpcClient } from './json-rpc'
-export { CodexProtoEventMapper } from './proto-adapter'
-export { CodexProtoSession } from './proto-session'
 export { CodexAppServerProcessManager } from './process-manager'
 export { TauriCodexProcess, TauriCodexProcessSpawner } from './tauri-process'
 export { codexEventsToUIMessageStream } from './ui-stream'
@@ -61,7 +59,6 @@ export {
   runCodexCliRemoteControl,
   runCodexCliNamedCommand,
   runCodexCliReview,
-  runCodexCliProto,
   runCodexExec,
   runCodexCliFeatures,
   runCodexLogin,
@@ -203,10 +200,6 @@ export type {
   StartCodexSessionParams,
 } from './api'
 export type { CodexProcessSpawner, CodexSpawnOptions } from './process-manager'
-export type {
-  CodexProtoEvent,
-  CodexProtoEventMapperOptions,
-} from './proto-adapter'
 export type {
   CodexAppServerEvent,
   CodexInitializeResult,

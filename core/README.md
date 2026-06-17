@@ -1,4 +1,4 @@
-## @janhq/core
+## @parlo-lab/core
 
 > This module includes functions for communicating with core APIs, registering app extensions, and exporting type definitions.
 
@@ -8,7 +8,7 @@
 
 ```js
 // Web / extension runtime
-import * as core from '@janhq/core'
+import * as core from '@parlo-lab/core'
 ```
 
 ## Build an Extension
@@ -21,13 +21,13 @@ import * as core from '@janhq/core'
    2. Rename the extension class from `SampleExtension` to your preferred extension name.
    3. Import modules from the core package.
       ```ts
-      import * as core from '@janhq/core'
+      import * as core from '@parlo-lab/core'
       ```
    4. In the `onLoad()` method, add your code:
 
       ```ts
       // Example of listening to app events and providing customized inference logic:
-      import * as core from '@janhq/core'
+      import * as core from '@parlo-lab/core'
 
       export default class MyExtension extends BaseExtension {
         // On extension load

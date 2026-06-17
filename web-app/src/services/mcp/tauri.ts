@@ -126,8 +126,8 @@ export class TauriMCPService extends DefaultMCPService {
     return await invoke('deactivate_mcp_server', { name })
   }
 
-  async checkJanBrowserExtensionConnected(): Promise<boolean> {
-    return await invoke('check_jan_browser_extension_connected')
+  async checkParloBrowserExtensionConnected(): Promise<boolean> {
+    return await invoke('check_parlo_browser_extension_connected')
   }
 }
 

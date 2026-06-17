@@ -13,7 +13,7 @@ import {
 import { toast } from 'sonner'
 import { cn, sanitizeModelId } from '@/lib/utils'
 import { CatalogModel } from '@/services/models/types'
-import { DownloadEvent, DownloadState, events } from '@janhq/core'
+import { DownloadEvent, DownloadState, events } from '@parlo-lab/core'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { DEFAULT_MODEL_QUANTIZATIONS } from '@/constants/models'

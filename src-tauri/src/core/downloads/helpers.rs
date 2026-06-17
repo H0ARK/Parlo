@@ -1,6 +1,6 @@
 use super::models::{DownloadEvent, DownloadItem, ProgressTracker, ProxyConfig};
-use crate::core::app::commands::get_jan_data_folder_path;
-use crate::core::filesystem::helpers::resolve_path_within_jan_data_folder;
+use crate::core::app::commands::get_parlo_data_folder_path;
+use crate::core::filesystem::helpers::resolve_path_within_parlo_data_folder;
 use crate::core::updater::hmac_client::SignedRequestHeaders;
 use crate::core::updater::session::get_session_id;
 use futures_util::StreamExt;
@@ -16,11 +16,11 @@ use url::Url;
 
 // ===== CONSTANTS =====
 
-/// Jan mirror prefix for HuggingFace downloads
-/// - Stable builds: https://apps.jan.ai/
-/// - Nightly builds: https://apps-nightly.jan.ai/
-const JAN_MIRROR_PREFIX_STABLE: &str = "https://apps.jan.ai/";
-const JAN_MIRROR_PREFIX_NIGHTLY: &str = "https://apps-nightly.jan.ai/";
+/// Parlo mirror prefix for HuggingFace downloads
+/// - Stable builds: https://apps.Parlo.ai/
+/// - Nightly builds: https://apps-nightly.Parlo.ai/
+const PARLO_MIRROR_PREFIX_STABLE: &str = "https://apps.Parlo.ai/";
+const PARLO_MIRROR_PREFIX_NIGHTLY: &str = "https://apps-nightly.Parlo.ai/";
 
 /// Domains that should use mirror download with fallback
 const MIRROR_DOMAINS: &[&str] = &["huggingface.co"];
@@ -34,16 +34,16 @@ fn is_nightly_build() -> bool {
 /// Get the appropriate mirror prefix based on build type
 fn get_mirror_prefix() -> &'static str {
     if is_nightly_build() {
-        JAN_MIRROR_PREFIX_NIGHTLY
+        PARLO_MIRROR_PREFIX_NIGHTLY
     } else {
-        JAN_MIRROR_PREFIX_STABLE
+        PARLO_MIRROR_PREFIX_STABLE
     }
 }
 
 /// Secret key for HMAC request authentication
-/// - In CI: Set JAN_SIGNING_KEY environment variable at build time
+/// - In CI: Set PARLO_SIGNING_KEY environment variable at build time
 /// - In local dev: Falls back to a test key
-const SECRET_KEY: &str = match option_env!("JAN_SIGNING_KEY") {
+const SECRET_KEY: &str = match option_env!("PARLO_SIGNING_KEY") {
     Some(key) => key,
     None => "local-dev-test-key-not-for-production",
 };
@@ -54,9 +54,9 @@ pub fn err_to_string<E: std::fmt::Display>(e: E) -> String {
     format!("Error: {e}")
 }
 
-/// Converts a URL to Jan mirror URL if applicable
-/// e.g., https://huggingface.co/... -> https://apps.jan.ai/huggingface.co/...
-/// or for nightly: https://huggingface.co/... -> https://apps-nightly.jan.ai/huggingface.co/...
+/// Converts a URL to Parlo mirror URL if applicable
+/// e.g., https://huggingface.co/... -> https://apps.Parlo.ai/huggingface.co/...
+/// or for nightly: https://huggingface.co/... -> https://apps-nightly.Parlo.ai/huggingface.co/...
 pub fn convert_to_mirror_url(url: &str) -> Option<String> {
     let parsed = Url::parse(url).ok()?;
     let host = parsed.host_str()?;
@@ -175,7 +175,7 @@ async fn validate_downloaded_file(
     if let Some(expected_sha256) = &item.sha256 {
         log::info!("Starting Hash verification for {}", item.url);
 
-        match jan_utils::crypto::compute_file_sha256_with_cancellation(save_path, cancel_token)
+        match parlo_utils::crypto::compute_file_sha256_with_cancellation(save_path, cancel_token)
             .await
         {
             Ok(computed_sha256) => {
@@ -418,15 +418,15 @@ pub async fn _download_files_internal(
     // Create progress tracker
     let progress_tracker = ProgressTracker::new(items, file_sizes.clone());
 
-    // save file under Jan data folder
-    let jan_data_folder = get_jan_data_folder_path(app.clone());
+    // save file under Parlo data folder
+    let parlo_data_folder = get_parlo_data_folder_path(app.clone());
 
     // Collect download tasks for parallel execution
     let mut download_tasks = Vec::new();
 
     for (index, item) in items.iter().enumerate() {
         let (canonical_data, save_path) =
-            resolve_path_within_jan_data_folder(&jan_data_folder, &item.save_path)?;
+            resolve_path_within_parlo_data_folder(&parlo_data_folder, &item.save_path)?;
 
         // Spawn download task for each file
         let item_clone = item.clone();
@@ -444,7 +444,7 @@ pub async fn _download_files_internal(
 
         let task = tokio::spawn(async move {
             log::debug!(
-                "Downloading {} into Jan data folder {}",
+                "Downloading {} into Parlo data folder {}",
                 item_clone.url,
                 canonical_data.display()
             );
@@ -640,7 +640,7 @@ async fn download_single_file(
 
     // Log which URL is being used for download
     if actual_url != item.url {
-        log::info!("Downloading via Jan mirror: {}", actual_url);
+        log::info!("Downloading via Parlo mirror: {}", actual_url);
     }
 
     // If HEAD gave us no size, refine the running total from the GET response
@@ -749,15 +749,15 @@ pub async fn _get_maybe_resume_with_fallback(
 ) -> Result<(reqwest::Response, String), String> {
     // Try mirror URL first if applicable
     if let Some(mirror_url) = convert_to_mirror_url(url) {
-        log::info!("Attempting download from Jan mirror: {}", mirror_url);
+        log::info!("Attempting download from Parlo mirror: {}", mirror_url);
         match _get_maybe_resume_with_hmac(client, &mirror_url, start_bytes).await {
             Ok(resp) => {
-                log::info!("Successfully connected to Jan mirror");
+                log::info!("Successfully connected to Parlo mirror");
                 return Ok((resp, mirror_url));
             }
             Err(e) => {
                 log::warn!(
-                    "Jan mirror download failed: {}. Falling back to original URL...",
+                    "Parlo mirror download failed: {}. Falling back to original URL...",
                     e
                 );
             }
@@ -770,7 +770,7 @@ pub async fn _get_maybe_resume_with_fallback(
     Ok((resp, url.to_string()))
 }
 
-/// Download from URL with HMAC headers for Jan mirror authentication
+/// Download from URL with HMAC headers for Parlo mirror authentication
 async fn _get_maybe_resume_with_hmac(
     client: &reqwest::Client,
     url: &str,

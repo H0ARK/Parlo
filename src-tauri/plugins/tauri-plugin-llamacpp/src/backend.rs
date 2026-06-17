@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 pub fn map_old_backend_to_new(old_backend: String) -> String {
     let is_windows = old_backend.starts_with("win-");
     // Official llama.cpp Linux assets use the `ubuntu-` prefix (e.g.
-    // `ubuntu-rocm-7.2-x64`); normalize them onto Jan's `linux-` scheme.
+    // `ubuntu-rocm-7.2-x64`); normalize them onto Parlo's `linux-` scheme.
     let is_linux = old_backend.starts_with("linux-") || old_backend.starts_with("ubuntu-");
     let os_prefix = if is_windows {
         "win-"
@@ -53,7 +53,7 @@ pub fn map_old_backend_to_new(old_backend: String) -> String {
             if is_x64 { "x64" } else { arch_suffix }
         );
     } else if old_backend.contains("hip") || old_backend.contains("rocm") {
-        // Canonicalize every HIP variant — Jan's own `*-hip-common_cpus-x64`
+        // Canonicalize every HIP variant — Parlo's own `*-hip-common_cpus-x64`
         // and the official `ubuntu-rocm-*` / `win-hip-*` names — onto one id so
         // listing, update checks and migration treat them as a single backend.
         return format!(
@@ -424,7 +424,7 @@ pub async fn is_cuda_installed(
     backend_dir: String,
     version: String,
     os_type: String,
-    jan_data_folder_path: String,
+    parlo_data_folder_path: String,
 ) -> Result<bool, String> {
     // Define library name lookup table
     let mut libname_lookup: HashMap<String, &str> = HashMap::new();
@@ -453,8 +453,8 @@ pub async fn is_cuda_installed(
         return Ok(true);
     }
 
-    // Old location (used by older builds): jan_data_folder_path/llamacpp/lib/libname
-    let old_path = std::path::PathBuf::from(&jan_data_folder_path)
+    // Old location (used by older builds): parlo_data_folder_path/llamacpp/lib/libname
+    let old_path = std::path::PathBuf::from(&parlo_data_folder_path)
         .join("llamacpp")
         .join("lib")
         .join(libname);
@@ -619,7 +619,7 @@ fn get_backend_category(backend_string: &str) -> Option<String> {
     if backend_string.contains("cuda-11-common_cpus") || backend_string.contains("cu11.7") {
         return Some("cuda-cu11.7".to_string());
     }
-    // HIP must precede the common_cpus/x64 checks: both Jan's own
+    // HIP must precede the common_cpus/x64 checks: both Parlo's own
     // `*-hip-common_cpus-x64` and the official `ubuntu-rocm-*`/`win-hip-*` names
     // would otherwise fall through to a CPU category.
     if backend_string.contains("hip") || backend_string.contains("rocm") {
@@ -846,8 +846,8 @@ pub fn should_migrate_backend(
 // ============================================================================
 
 #[tauri::command]
-pub fn get_backend_dir(backend: String, version: String, jan_data_folder: String) -> String {
-    PathBuf::from(&jan_data_folder)
+pub fn get_backend_dir(backend: String, version: String, parlo_data_folder: String) -> String {
+    PathBuf::from(&parlo_data_folder)
         .join("llamacpp")
         .join("backends")
         .join(&version)
@@ -860,10 +860,10 @@ pub fn get_backend_dir(backend: String, version: String, jan_data_folder: String
 pub fn get_backend_exe_path(
     backend: String,
     version: String,
-    jan_data_folder: String,
+    parlo_data_folder: String,
     is_windows: bool,
 ) -> String {
-    let backend_dir = PathBuf::from(get_backend_dir(backend, version, jan_data_folder));
+    let backend_dir = PathBuf::from(get_backend_dir(backend, version, parlo_data_folder));
     let exe_name = if is_windows {
         "llama-server.exe"
     } else {
@@ -882,11 +882,11 @@ pub fn get_backend_exe_path(
 pub fn check_backend_installed(
     backend: String,
     version: String,
-    jan_data_folder: String,
+    parlo_data_folder: String,
     is_windows: bool,
 ) -> bool {
     let exe_path =
-        PathBuf::from(get_backend_exe_path(backend, version, jan_data_folder, is_windows));
+        PathBuf::from(get_backend_exe_path(backend, version, parlo_data_folder, is_windows));
     exe_path.exists()
 }
 
@@ -1005,11 +1005,11 @@ fn verify_backend_dependencies(
 pub async fn verify_backend_installation(
     backend: String,
     version: String,
-    jan_data_folder: String,
+    parlo_data_folder: String,
     is_windows: bool,
 ) -> Result<BackendVerificationResult, crate::error::LlamacppError> {
     let exe_path =
-        PathBuf::from(get_backend_exe_path(backend.clone(), version.clone(), jan_data_folder.clone(), is_windows));
+        PathBuf::from(get_backend_exe_path(backend.clone(), version.clone(), parlo_data_folder.clone(), is_windows));
     if !exe_path.exists() {
         return Err(crate::error::LlamacppError::new(
             crate::error::ErrorCode::BinaryNotFound,
@@ -1019,7 +1019,7 @@ pub async fn verify_backend_installation(
     }
 
     #[cfg(target_os = "linux")]
-    if jan_utils::system::is_flatpak() {
+    if parlo_utils::system::is_flatpak() {
         return Ok(BackendVerificationResult {
             verified: true,
             missing_libraries: Vec::new(),
@@ -1030,7 +1030,7 @@ pub async fn verify_backend_installation(
     let bin_dir = exe_path
         .parent()
         .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from(get_backend_dir(backend.clone(), version, jan_data_folder)));
+        .unwrap_or_else(|| PathBuf::from(get_backend_dir(backend.clone(), version, parlo_data_folder)));
     tokio::task::spawn_blocking(move || verify_backend_dependencies(&bin_dir, &exe_path, &backend))
         .await
         .map_err(|e| crate::error::LlamacppError::new(
@@ -1067,7 +1067,7 @@ pub struct ProxyConfig {
 }
 
 fn build_http_client(proxy: Option<&ProxyConfig>) -> Result<reqwest::Client, String> {
-    let mut builder = reqwest::Client::builder().user_agent("jan-app");
+    let mut builder = reqwest::Client::builder().user_agent("Parlo-app");
 
     if let Some(cfg) = proxy {
         if !cfg.url.trim().is_empty() {
@@ -1099,7 +1099,7 @@ pub async fn fetch_remote_supported_backends(
 
     let releases: Vec<GithubRelease> = {
         let primary = client
-            .get("https://api.github.com/repos/janhq/llama.cpp/releases")
+            .get("https://api.github.com/repos/parlo-lab/llama.cpp/releases")
             .send()
             .await;
 
@@ -1111,7 +1111,7 @@ pub async fn fetch_remote_supported_backends(
             _ => {
                 // Fallback to catalog mirror
                 let fallback = client
-                    .get("https://catalog.jan.ai/llama.cpp/releases/releases.json")
+                    .get("https://catalog.Parlo.ai/llama.cpp/releases/releases.json")
                     .send()
                     .await
                     .map_err(|e| format!("Both GitHub and fallback requests failed: {}", e))?;
@@ -1188,15 +1188,15 @@ pub fn build_backend_download_items(
     backend: String,
     version: String,
     source: String,
-    jan_data_folder: String,
+    parlo_data_folder: String,
     os_type: String,
 ) -> Result<Vec<BackendDownloadItem>, String> {
-    let backend_dir = get_backend_dir(backend.clone(), version.clone(), jan_data_folder.clone());
+    let backend_dir = get_backend_dir(backend.clone(), version.clone(), parlo_data_folder.clone());
     let task_id = format!("llamacpp-{}-{}", version, backend).replace('.', "-");
     let platform_name = if os_type == "windows" { "win" } else { "linux" };
 
     // Official Windows HIP assets ship as .zip (e.g. win-hip-radeon-x64.zip);
-    // Jan's own win-hip-common_cpus-x64 and all other backends are .tar.gz.
+    // Parlo's own win-hip-common_cpus-x64 and all other backends are .tar.gz.
     let archive_ext = if os_type == "windows"
         && backend.contains("hip")
         && !backend.contains("common_cpus")
@@ -1209,11 +1209,11 @@ pub fn build_backend_download_items(
     // Base URL for the main backend archive
     let backend_url = match source.as_str() {
         "github" => format!(
-            "https://github.com/janhq/llama.cpp/releases/download/{}/llama-{}-bin-{}.{}",
+            "https://github.com/parlo-lab/llama.cpp/releases/download/{}/llama-{}-bin-{}.{}",
             version, version, backend, archive_ext
         ),
         _ => format!(
-            "https://catalog.jan.ai/llama.cpp/releases/{}/llama-{}-bin-{}.{}",
+            "https://catalog.Parlo.ai/llama.cpp/releases/{}/llama-{}-bin-{}.{}",
             version, version, backend, archive_ext
         ),
     };
@@ -1233,11 +1233,11 @@ pub fn build_backend_download_items(
         if !already_installed {
             let cuda_url = match source.as_str() {
                 "github" => format!(
-                    "https://github.com/janhq/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu11.7-x64.tar.gz",
+                    "https://github.com/parlo-lab/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu11.7-x64.tar.gz",
                     version, platform_name
                 ),
                 _ => format!(
-                    "https://catalog.jan.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu11.7-x64.tar.gz",
+                    "https://catalog.Parlo.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu11.7-x64.tar.gz",
                     version, platform_name
                 ),
             };
@@ -1253,11 +1253,11 @@ pub fn build_backend_download_items(
         if !already_installed {
             let cuda_url = match source.as_str() {
                 "github" => format!(
-                    "https://github.com/janhq/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu12.0-x64.tar.gz",
+                    "https://github.com/parlo-lab/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu12.0-x64.tar.gz",
                     version, platform_name
                 ),
                 _ => format!(
-                    "https://catalog.jan.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu12.0-x64.tar.gz",
+                    "https://catalog.Parlo.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu12.0-x64.tar.gz",
                     version, platform_name
                 ),
             };
@@ -1273,11 +1273,11 @@ pub fn build_backend_download_items(
         if !already_installed {
             let cuda_url = match source.as_str() {
                 "github" => format!(
-                    "https://github.com/janhq/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu13.0-x64.tar.gz",
+                    "https://github.com/parlo-lab/llama.cpp/releases/download/{}/cudart-llama-bin-{}-cu13.0-x64.tar.gz",
                     version, platform_name
                 ),
                 _ => format!(
-                    "https://catalog.jan.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu13.0-x64.tar.gz",
+                    "https://catalog.Parlo.ai/llama.cpp/releases/{}/cudart-llama-bin-{}-cu13.0-x64.tar.gz",
                     version, platform_name
                 ),
             };
@@ -1414,17 +1414,17 @@ mod tests {
 
     #[test]
     fn test_map_old_backend_to_new_hip() {
-        // Official Linux ROCm asset → canonical Jan id
+        // Official Linux ROCm asset → canonical Parlo id
         assert_eq!(
             map_old_backend_to_new("ubuntu-rocm-7.2-x64".to_string()),
             "linux-hip-common_cpus-x64"
         );
-        // Official Windows HIP asset → canonical Jan id
+        // Official Windows HIP asset → canonical Parlo id
         assert_eq!(
             map_old_backend_to_new("win-hip-radeon-x64".to_string()),
             "win-hip-common_cpus-x64"
         );
-        // Jan's own format is already canonical (idempotent)
+        // Parlo's own format is already canonical (idempotent)
         assert_eq!(
             map_old_backend_to_new("linux-hip-common_cpus-x64".to_string()),
             "linux-hip-common_cpus-x64"
@@ -1689,13 +1689,13 @@ mod tests {
     #[tokio::test]
     async fn test_is_cuda_installed_migration() {
         let backend_dir = tempfile::tempdir().unwrap();
-        let jan_data_dir = tempfile::tempdir().unwrap();
+        let parlo_data_dir = tempfile::tempdir().unwrap();
 
         let version = "12.0";
         let os_type = "linux"; // Maps to libcudart.so.12
 
-        // Setup Old Path: jan_data/llamacpp/lib/libcudart.so.12
-        let old_lib_dir = jan_data_dir.path().join("llamacpp").join("lib");
+        // Setup Old Path: parlo_data/llamacpp/lib/libcudart.so.12
+        let old_lib_dir = parlo_data_dir.path().join("llamacpp").join("lib");
         fs::create_dir_all(&old_lib_dir).unwrap();
         let lib_name = "libcudart.so.12";
         let old_file_path = old_lib_dir.join(lib_name);
@@ -1709,7 +1709,7 @@ mod tests {
             backend_dir.path().to_string_lossy().to_string(),
             version.to_string(),
             os_type.to_string(),
-            jan_data_dir.path().to_string_lossy().to_string(),
+            parlo_data_dir.path().to_string_lossy().to_string(),
         )
         .await
         .unwrap();
@@ -1728,7 +1728,7 @@ mod tests {
     #[tokio::test]
     async fn test_is_cuda_installed_already_exists() {
         let backend_dir = tempfile::tempdir().unwrap();
-        let jan_data_dir = tempfile::tempdir().unwrap(); // Empty
+        let parlo_data_dir = tempfile::tempdir().unwrap(); // Empty
 
         let version = "11.7";
         let os_type = "windows"; // Maps to cudart64_110.dll
@@ -1743,7 +1743,7 @@ mod tests {
             backend_dir.path().to_string_lossy().to_string(),
             version.to_string(),
             os_type.to_string(),
-            jan_data_dir.path().to_string_lossy().to_string(),
+            parlo_data_dir.path().to_string_lossy().to_string(),
         )
         .await
         .unwrap();
@@ -1889,7 +1889,7 @@ mod tests {
         let result = get_backend_dir(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            "/home/user/.jan".to_string(),
+            "/home/user/.Parlo".to_string(),
         );
         assert!(result.contains("llamacpp"));
         assert!(result.contains("backends"));
@@ -1918,12 +1918,12 @@ mod tests {
     #[test]
     fn test_get_backend_exe_path_no_build_dir_linux() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let result = get_backend_exe_path(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data.clone(),
+            parlo_data.clone(),
             false,
         );
         // Should fall back to root dir (build dir doesn't exist)
@@ -1934,12 +1934,12 @@ mod tests {
     #[test]
     fn test_get_backend_exe_path_no_build_dir_windows() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let result = get_backend_exe_path(
             "win-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             true,
         );
         assert!(result.ends_with("llama-server.exe"));
@@ -1948,10 +1948,10 @@ mod tests {
     #[test]
     fn test_get_backend_exe_path_with_build_dir() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         // Create the build/bin directory and place the exe there
-        let backend_dir = PathBuf::from(&jan_data)
+        let backend_dir = PathBuf::from(&parlo_data)
             .join("llamacpp")
             .join("backends")
             .join("b7523")
@@ -1963,7 +1963,7 @@ mod tests {
         let result = get_backend_exe_path(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             false,
         );
         assert!(result.contains("build"));
@@ -1978,9 +1978,9 @@ mod tests {
     #[test]
     fn test_check_backend_installed_true() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
-        let backend_dir = PathBuf::from(&jan_data)
+        let backend_dir = PathBuf::from(&parlo_data)
             .join("llamacpp")
             .join("backends")
             .join("b7523")
@@ -1991,7 +1991,7 @@ mod tests {
         let result = check_backend_installed(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             false,
         );
         assert!(result);
@@ -2000,12 +2000,12 @@ mod tests {
     #[test]
     fn test_check_backend_installed_false_when_missing() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let result = check_backend_installed(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             false,
         );
         assert!(!result);
@@ -2018,12 +2018,12 @@ mod tests {
     #[tokio::test]
     async fn test_verify_backend_installation_returns_err_when_exe_missing() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let result = verify_backend_installation(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             false,
         )
         .await;
@@ -2067,10 +2067,10 @@ mod tests {
     #[tokio::test]
     async fn test_verify_backend_installation_scans_whole_backend_dir() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         // Create the backend dir with a stub exe and a stub DLL beside it.
-        let backend_dir = PathBuf::from(&jan_data)
+        let backend_dir = PathBuf::from(&parlo_data)
             .join("llamacpp")
             .join("backends")
             .join("b7523")
@@ -2085,7 +2085,7 @@ mod tests {
         let result = verify_backend_installation(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
-            jan_data,
+            parlo_data,
             false,
         )
         .await;
@@ -2111,13 +2111,13 @@ mod tests {
     #[test]
     fn test_build_backend_download_items_non_cuda_returns_one_item() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let items = build_backend_download_items(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
             "github".to_string(),
-            jan_data,
+            parlo_data,
             "linux".to_string(),
         )
         .unwrap();
@@ -2130,13 +2130,13 @@ mod tests {
     #[test]
     fn test_build_backend_download_items_cuda12_returns_two_items() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let items = build_backend_download_items(
             "linux-cuda-12-common_cpus-x64".to_string(),
             "b7523".to_string(),
             "github".to_string(),
-            jan_data,
+            parlo_data,
             "linux".to_string(),
         )
         .unwrap();
@@ -2151,13 +2151,13 @@ mod tests {
     #[test]
     fn test_build_backend_download_items_cu11_returns_two_items() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let items = build_backend_download_items(
             "linux-cu11.7-common_cpus-x64".to_string(),
             "b7523".to_string(),
             "cdn".to_string(),
-            jan_data,
+            parlo_data,
             "linux".to_string(),
         )
         .unwrap();
@@ -2172,13 +2172,13 @@ mod tests {
     #[test]
     fn test_build_backend_download_items_github_vs_cdn_urls() {
         let temp_dir = tempfile::tempdir().unwrap();
-        let jan_data = temp_dir.path().to_string_lossy().to_string();
+        let parlo_data = temp_dir.path().to_string_lossy().to_string();
 
         let github_items = build_backend_download_items(
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
             "github".to_string(),
-            jan_data.clone(),
+            parlo_data.clone(),
             "linux".to_string(),
         )
         .unwrap();
@@ -2187,13 +2187,13 @@ mod tests {
             "linux-common_cpus-x64".to_string(),
             "b7523".to_string(),
             "cdn".to_string(),
-            jan_data,
+            parlo_data,
             "linux".to_string(),
         )
         .unwrap();
 
         assert!(github_items[0].url.contains("github.com"));
-        assert!(cdn_items[0].url.contains("catalog.jan.ai"));
+        assert!(cdn_items[0].url.contains("catalog.Parlo.ai"));
         assert_ne!(github_items[0].url, cdn_items[0].url);
     }
 }

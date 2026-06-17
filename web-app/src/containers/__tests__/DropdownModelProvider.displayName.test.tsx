@@ -290,14 +290,14 @@ describe('DropdownModelProvider - Display Name Integration', () => {
     render(<DropdownModelProvider />)
 
     // Check trigger shows Short Name
-    expect(screen.getByRole('button')).toHaveTextContent('Short Name')
+    expect(screen.getByTestId('popover-trigger')).toHaveTextContent('Short Name')
     // Short Name appears in dropdown (at least 1 occurrence)
     expect(screen.getAllByText('Short Name').length).toBeGreaterThanOrEqual(1)
     // Custom Model 1 is also in the dropdown
     expect(screen.getAllByText('Custom Model 1').length).toBeGreaterThanOrEqual(1)
   })
 
-  it('prefers Codex runtime for new agent chats even when last used model was direct local', async () => {
+  it('prefers the last used model for new agent chats', async () => {
     const selectModelProvider = vi.fn()
     const providers: ModelProvider[] = [
       {
@@ -310,7 +310,7 @@ describe('DropdownModelProvider - Display Name Integration', () => {
         provider: 'codex',
         active: true,
         models: [
-          { id: 'gpt-5.5', capabilities: ['completion', 'tools'] },
+          { id: 'codex-model', capabilities: ['completion', 'tools'] },
         ],
         settings: [],
       },
@@ -339,8 +339,8 @@ describe('DropdownModelProvider - Display Name Integration', () => {
 
     await waitFor(() => {
       expect(selectModelProvider).toHaveBeenCalledWith(
-        'codex',
-        'gpt-5.5'
+        'llamacpp',
+        'local-a.gguf'
       )
     })
   })

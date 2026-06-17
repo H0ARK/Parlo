@@ -9,7 +9,7 @@ export type CodexProviderProfile = {
   model: string
   apiKeyEnv?: string
   codexHome: string
-  transport?: 'app-server' | 'proto'
+  transport?: 'app-server'
   providerType: 'openai-compatible' | 'ollama' | 'llama-cpp' | 'custom'
   approvalPolicy?: 'untrusted' | 'on-failure' | 'on-request' | 'never'
   sandbox?: 'read-only' | 'workspace-write' | 'danger-full-access'
@@ -72,7 +72,7 @@ export const useCodexProviderProfiles = create<CodexProviderProfileState>()(
           model: profile.model,
           apiKeyEnv: profile.apiKeyEnv,
           codexHome: profile.codexHome,
-          transport: profile.transport ?? 'app-server',
+          transport: 'app-server',
           providerType: profile.providerType,
           approvalPolicy: profile.approvalPolicy,
           sandbox: profile.sandbox,

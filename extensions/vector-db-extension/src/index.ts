@@ -1,6 +1,6 @@
-import { VectorDBExtension, type SearchMode, type VectorDBStatus, type VectorChunkInput, type VectorSearchResult, type AttachmentFileInfo, type VectorDBFileInput, type VectorDBIngestOptions, AIEngine } from '@janhq/core'
-import * as vecdb from '@janhq/tauri-plugin-vector-db-api'
-import * as ragApi from '@janhq/tauri-plugin-rag-api'
+import { VectorDBExtension, type SearchMode, type VectorDBStatus, type VectorChunkInput, type VectorSearchResult, type AttachmentFileInfo, type VectorDBFileInput, type VectorDBIngestOptions, AIEngine } from '@parlo-lab/core'
+import * as vecdb from '@parlo-lab/tauri-plugin-vector-db-api'
+import * as ragApi from '@parlo-lab/tauri-plugin-rag-api'
 
 export default class VectorDBExt extends VectorDBExtension {
   async onLoad(): Promise<void> {
@@ -148,7 +148,7 @@ export default class VectorDBExt extends VectorDBExtension {
   }
 
   private async embedTexts(texts: string[]): Promise<number[][]> {
-    const llm = window.core?.extensionManager.getByName('@janhq/llamacpp-extension') as AIEngine & {
+    const llm = window.core?.extensionManager.getByName('@parlo-lab/llamacpp-extension') as AIEngine & {
       embed?: (texts: string[]) => Promise<{ data: Array<{ embedding: number[]; index: number }> }>
     }
     if (!llm?.embed) throw new Error('llamacpp extension not available')

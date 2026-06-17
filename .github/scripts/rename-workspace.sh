@@ -1,18 +1,18 @@
-#!/bin/bash
-
-# File path to be modified
-FILE_PATH="$1"
-
-CHANNEL="$2"
-
-# Check if the file exists
-if [ ! -f "$FILE_PATH" ]; then
-    echo "File does not exist: $FILE_PATH"
-    exit 1
-fi
-
-# Perform the replacements
-sed -i -e "s/yarn workspace jan/yarn workspace jan-$CHANNEL/g" "$FILE_PATH"
-
-# Notify completion
-echo "File has been updated: $FILE_PATH"
+-lab#-lab!-lab/-labb-labi-labn-lab/-labb-laba-labs-labh-lab
+-lab
+-lab#-lab -labF-labi-labl-labe-lab -labp-laba-labt-labh-lab -labt-labo-lab -labb-labe-lab -labm-labo-labd-labi-labf-labi-labe-labd-lab
+-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab=-lab"-lab$-lab1-lab"-lab
+-lab
+-labC-labH-labA-labN-labN-labE-labL-lab=-lab"-lab$-lab2-lab"-lab
+-lab
+-lab#-lab -labC-labh-labe-labc-labk-lab -labi-labf-lab -labt-labh-labe-lab -labf-labi-labl-labe-lab -labe-labx-labi-labs-labt-labs-lab
+-labi-labf-lab -lab[-lab -lab!-lab -lab--labf-lab -lab"-lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labd-labo-labe-labs-lab -labn-labo-labt-lab -labe-labx-labi-labs-labt-lab:-lab -lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-lab#-lab -labP-labe-labr-labf-labo-labr-labm-lab -labt-labh-labe-lab -labr-labe-labp-labl-laba-labc-labe-labm-labe-labn-labt-labs-lab
+-labs-labe-labd-lab -lab--labi-lab -lab--labe-lab -lab"-labs-lab/-laby-laba-labr-labn-lab -labw-labo-labr-labk-labs-labp-laba-labc-labe-lab -labj-laba-labn-lab/-laby-laba-labr-labn-lab -labw-labo-labr-labk-labs-labp-laba-labc-labe-lab -labj-laba-labn-lab--lab$-labC-labH-labA-labN-labN-labE-labL-lab/-labg-lab"-lab -lab"-lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab
+-lab#-lab -labN-labo-labt-labi-labf-laby-lab -labc-labo-labm-labp-labl-labe-labt-labi-labo-labn-lab
+-labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labh-laba-labs-lab -labb-labe-labe-labn-lab -labu-labp-labd-laba-labt-labe-labd-lab:-lab -lab$-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab

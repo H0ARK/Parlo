@@ -1,4 +1,4 @@
-use crate::core::app::commands::get_jan_data_folder_path;
+use crate::core::app::commands::get_parlo_data_folder_path;
 use crate::core::xai_oauth::oauth::{
     poll_device_code_token, request_device_code, resolve_access_token, DeviceCodeResponse,
     XaiOAuthRuntime,
@@ -62,7 +62,7 @@ pub struct XaiOAuthLoginResult {
 }
 
 fn data_folder(app: &AppHandle) -> Result<std::path::PathBuf, String> {
-    Ok(get_jan_data_folder_path(app.clone()))
+    Ok(get_parlo_data_folder_path(app.clone()))
 }
 
 #[tauri::command]

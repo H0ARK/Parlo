@@ -14,8 +14,8 @@ import {
   events,
   DownloadEvent,
   UnloadResult,
-} from '@janhq/core'
-import { Model as CoreModel } from '@janhq/core'
+} from '@parlo-lab/core'
+import { Model as CoreModel } from '@parlo-lab/core'
 import type {
   ModelsService,
   ModelCatalog,
@@ -64,13 +64,13 @@ export class DefaultModelsService implements ModelsService {
     }
   }
 
-  async fetchLatestJanModel(): Promise<CatalogModel | null> {
+  async fetchLatestParloModel(): Promise<CatalogModel | null> {
     try {
-      const response = await fetch(LATEST_JAN_MODEL_URL)
+      const response = await fetch(LATEST_PARLO_MODEL_URL)
 
       if (!response.ok) {
         console.error(
-          `Failed to fetch latest Jan model: ${response.status} ${response.statusText}`
+          `Failed to fetch latest Parlo model: ${response.status} ${response.statusText}`
         )
         return null
       }
@@ -80,7 +80,7 @@ export class DefaultModelsService implements ModelsService {
       const model: CatalogModel = Array.isArray(data) ? data[0] : data
       return model ?? null
     } catch (error) {
-      console.error('Error fetching latest Jan model:', error)
+      console.error('Error fetching latest Parlo model:', error)
       return null
     }
   }
@@ -717,7 +717,7 @@ export class DefaultModelsService implements ModelsService {
       }
 
       if (engine && typeof engine.getTokensCount === 'function') {
-        // Transform Jan's ThreadMessage format to OpenAI chat completion format
+        // Transform Parlo's ThreadMessage format to OpenAI chat completion format
         const transformedMessages = messages
           .map((message) => {
             // Handle different content types

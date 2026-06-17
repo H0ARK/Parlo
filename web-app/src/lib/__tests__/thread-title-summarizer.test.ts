@@ -1,31 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { cleanTitle, generateThreadTitle } from '../thread-title-summarizer'
-
-// Mock AI SDK generateText
-const mockGenerateText = vi.fn()
-vi.mock('ai', () => ({
-  generateText: (...args: unknown[]) => mockGenerateText(...args),
-}))
-
-// Mock ModelFactory
-const mockCreateModel = vi.fn()
-vi.mock('../model-factory', () => ({
-  ModelFactory: {
-    createModel: (...args: unknown[]) => mockCreateModel(...args),
-  },
-}))
-
-// Mock useModelProvider
-const mockGetProviderByName = vi.fn()
-vi.mock('@/hooks/useModelProvider', () => ({
-  useModelProvider: {
-    getState: () => ({
-      selectedModel: { id: 'test-model' },
-      selectedProvider: 'test-provider',
-      getProviderByName: mockGetProviderByName,
-    }),
-  },
-}))
 
 describe('cleanTitle', () => {
   it('returns a clean title from normal text', () => {
@@ -57,8 +31,9 @@ describe('cleanTitle', () => {
   it('enforces word limit of 10', () => {
     const longTitle =
       'One Two Three Four Five Six Seven Eight Nine Ten Eleven Twelve'
-    const result = cleanTitle(longTitle)
-    expect(result).toBe('One Two Three Four Five Six Seven Eight Nine Ten')
+    expect(cleanTitle(longTitle)).toBe(
+      'One Two Three Four Five Six Seven Eight Nine Ten'
+    )
   })
 
   it('keeps unicode characters', () => {
@@ -99,96 +74,32 @@ describe('cleanTitle', () => {
 })
 
 describe('generateThreadTitle', () => {
-  const mockModel = { id: 'test-model' }
-  const mockProvider = { provider: 'test-provider', models: [] }
-
-  beforeEach(() => {
-    vi.clearAllMocks()
-    mockGetProviderByName.mockReturnValue(mockProvider)
-    mockCreateModel.mockResolvedValue(mockModel)
-  })
-
-  it('returns a cleaned title on success', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Python List Sorting' })
-
+  it('derives a deterministic title from the first transcript line', async () => {
     const controller = new AbortController()
     const result = await generateThreadTitle(
-      'Can you help me write a function to sort a list in Python?',
+      'user: Can you help me write a function to sort a list in Python?\nassistant: Sure.',
       controller.signal
     )
 
-    expect(result).toBe('Python List Sorting')
-    expect(mockCreateModel).toHaveBeenCalledWith('test-model', mockProvider, {})
-    expect(mockGenerateText).toHaveBeenCalledWith(
-      expect.objectContaining({
-        model: mockModel,
-        abortSignal: controller.signal,
-      })
-    )
+    expect(result).toBe('Can you help me write a function to sort a')
   })
 
   it('returns null when aborted', async () => {
-    const abortError = new Error('Aborted')
-    abortError.name = 'AbortError'
-    mockGenerateText.mockRejectedValue(abortError)
-
     const controller = new AbortController()
-    const result = await generateThreadTitle('test message', controller.signal)
+    controller.abort()
 
-    expect(result).toBeNull()
+    await expect(generateThreadTitle('test message', controller.signal)).resolves.toBeNull()
   })
 
-  it('returns null when provider lookup fails', async () => {
-    mockGetProviderByName.mockReturnValueOnce(undefined)
-
+  it('returns null when the deterministic title cleans to nothing', async () => {
     const controller = new AbortController()
-    const result = await generateThreadTitle('test message', controller.signal)
-
-    expect(result).toBeNull()
-    expect(mockCreateModel).not.toHaveBeenCalled()
+    await expect(generateThreadTitle('!!!', controller.signal)).resolves.toBeNull()
   })
 
-  it('returns null when model generation fails', async () => {
-    mockGenerateText.mockRejectedValue(new Error('Network error'))
-
+  it('truncates long transcripts before cleaning', async () => {
     const controller = new AbortController()
-    const result = await generateThreadTitle('test message', controller.signal)
+    const result = await generateThreadTitle('x'.repeat(2000), controller.signal)
 
-    expect(result).toBeNull()
-  })
-
-  it('returns null when generated text cleans to nothing', async () => {
-    mockGenerateText.mockResolvedValue({ text: '!!!' })
-
-    const controller = new AbortController()
-    const result = await generateThreadTitle('test message', controller.signal)
-
-    expect(result).toBeNull()
-  })
-
-  it('truncates long messages before sending to model', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Summary Title' })
-    const longMessage = 'x'.repeat(2000)
-
-    const controller = new AbortController()
-    await generateThreadTitle(longMessage, controller.signal)
-
-    const callArgs = mockGenerateText.mock.calls[0][0]
-    const prompt = callArgs.messages[0].content
-    expect(prompt).toContain('...')
-    expect(prompt.length).toBeLessThan(2000)
-  })
-
-  it('passes the abort signal to generateText', async () => {
-    mockGenerateText.mockResolvedValue({ text: 'Title' })
-
-    const controller = new AbortController()
-    await generateThreadTitle('test message', controller.signal)
-
-    expect(mockGenerateText).toHaveBeenCalledWith(
-      expect.objectContaining({
-        abortSignal: controller.signal,
-      })
-    )
+    expect(result).toBe('x'.repeat(1500))
   })
 })

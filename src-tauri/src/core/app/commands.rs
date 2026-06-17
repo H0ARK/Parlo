@@ -11,17 +11,17 @@ use super::{
 };
 use crate::core::state::AppState;
 
-/// Canonical Jan app support directory (`%APPDATA%/Jan` on Windows).
+/// Canonical Parlo app support directory (`%APPDATA%/Parlo` on Windows).
 fn resolve_human_readable_app_data_dir() -> Option<PathBuf> {
     dirs::data_dir().map(|d| d.join(env!("CARGO_PKG_NAME")))
 }
 
-/// Tauri bundle-id app support directory (e.g. `%APPDATA%/jan.ai.app` on Windows).
+/// Tauri bundle-id app support directory (e.g. `%APPDATA%/Parlo.ai.app` on Windows).
 fn resolve_bundle_app_data_dir() -> Option<PathBuf> {
     dirs::data_dir().map(|d| d.join(TAURI_BUNDLE_IDENTIFIER))
 }
 
-/// Keep `%APPDATA%/Jan/settings.json` as canonical, but recover from legacy or
+/// Keep `%APPDATA%/Parlo/settings.json` as canonical, but recover from legacy or
 /// alternate locations if users removed one directory (#7898).
 fn migrate_legacy_app_configuration(app_data_dir: &Path) -> std::io::Result<()> {
     fs::create_dir_all(app_data_dir)?;
@@ -93,8 +93,8 @@ fn app_data_dir_with_fallback<R: Runtime>(app_handle: &tauri::AppHandle<R>) -> P
         .join(package_name)
 }
 
-/// Resolve the Jan config file path without an AppHandle (for CLI use).
-/// Canonical location is `%APPDATA%/Jan/settings.json` (or OS equivalent),
+/// Resolve the Parlo config file path without an AppHandle (for CLI use).
+/// Canonical location is `%APPDATA%/Parlo/settings.json` (or OS equivalent),
 /// with fallback recovery from bundle-id location when needed.
 pub fn resolve_config_file_path() -> PathBuf {
     let app_data = resolve_human_readable_app_data_dir().unwrap_or_else(|| {
@@ -112,9 +112,9 @@ pub fn resolve_config_file_path() -> PathBuf {
     app_data.join(CONFIGURATION_FILE_NAME)
 }
 
-/// Resolve the Jan data folder path without an AppHandle (for CLI use).
+/// Resolve the Parlo data folder path without an AppHandle (for CLI use).
 /// Reads AppConfiguration from the config file; falls back to the default location.
-pub fn resolve_jan_data_folder() -> PathBuf {
+pub fn resolve_parlo_data_folder() -> PathBuf {
     let config_file = resolve_config_file_path();
 
     if config_file.exists() {
@@ -125,8 +125,8 @@ pub fn resolve_jan_data_folder() -> PathBuf {
         }
     }
 
-    // Default: data_dir/Jan/data  (mirrors default_data_folder_path)
-    let app_name = std::env::var("APP_NAME").unwrap_or_else(|_| "Jan".to_string());
+    // Default: data_dir/Parlo/data  (mirrors default_data_folder_path)
+    let app_name = std::env::var("APP_NAME").unwrap_or_else(|_| "Parlo".to_string());
     if let Some(data_dir) = dirs::data_dir() {
         return data_dir.join(&app_name).join("data");
     }
@@ -207,7 +207,7 @@ pub fn update_app_configuration<R: Runtime>(
 }
 
 #[tauri::command]
-pub fn get_jan_data_folder_path<R: Runtime>(app_handle: tauri::AppHandle<R>) -> PathBuf {
+pub fn get_parlo_data_folder_path<R: Runtime>(app_handle: tauri::AppHandle<R>) -> PathBuf {
     if cfg!(test) {
         use std::cell::RefCell;
         thread_local! {
@@ -283,7 +283,7 @@ pub fn change_app_data_folder<R: Runtime>(
     new_data_folder: String,
 ) -> Result<(), String> {
     // Get current data folder path
-    let current_data_folder = get_jan_data_folder_path(app_handle.clone());
+    let current_data_folder = get_parlo_data_folder_path(app_handle.clone());
     let new_data_folder_path = PathBuf::from(&new_data_folder);
 
     // Create the new data folder if it doesn't exist
@@ -334,26 +334,26 @@ mod tests {
     #[test]
     fn migration_copies_legacy_when_canonical_missing() {
         let tmp = tempdir().expect("temp dir");
-        let canonical_dir = tmp.path().join("Jan");
+        let canonical_dir = tmp.path().join("Parlo");
         let canonical = canonical_dir.join(CONFIGURATION_FILE_NAME);
-        let legacy = tmp.path().join("jan.ai.app").join(CONFIGURATION_FILE_NAME);
+        let legacy = tmp.path().join("Parlo.ai.app").join(CONFIGURATION_FILE_NAME);
 
         fs::create_dir_all(legacy.parent().unwrap()).expect("create legacy dir");
-        fs::write(&legacy, r#"{"data_folder":"D:\\jan.ai"}"#).expect("write legacy config");
+        fs::write(&legacy, r#"{"data_folder":"D:\\Parlo.ai"}"#).expect("write legacy config");
 
         migrate_from_candidates(&canonical, vec![legacy.clone()]).expect("migration succeeds");
 
         let recovered = fs::read_to_string(&canonical).expect("read canonical");
-        assert!(recovered.contains(r#""data_folder":"D:\\jan.ai""#));
+        assert!(recovered.contains(r#""data_folder":"D:\\Parlo.ai""#));
         assert!(legacy.exists(), "migration should be copy-only");
     }
 
     #[test]
     fn migration_skips_when_canonical_exists() {
         let tmp = tempdir().expect("temp dir");
-        let canonical_dir = tmp.path().join("Jan");
+        let canonical_dir = tmp.path().join("Parlo");
         let canonical = canonical_dir.join(CONFIGURATION_FILE_NAME);
-        let legacy = tmp.path().join("jan.ai.app").join(CONFIGURATION_FILE_NAME);
+        let legacy = tmp.path().join("Parlo.ai.app").join(CONFIGURATION_FILE_NAME);
 
         fs::create_dir_all(canonical.parent().unwrap()).expect("create canonical dir");
         fs::create_dir_all(legacy.parent().unwrap()).expect("create legacy dir");
@@ -369,7 +369,7 @@ mod tests {
     #[test]
     fn migration_handles_missing_legacy_files() {
         let tmp = tempdir().expect("temp dir");
-        let canonical = tmp.path().join("Jan").join(CONFIGURATION_FILE_NAME);
+        let canonical = tmp.path().join("Parlo").join(CONFIGURATION_FILE_NAME);
         let missing = tmp.path().join("missing").join(CONFIGURATION_FILE_NAME);
 
         migrate_from_candidates(&canonical, vec![missing]).expect("migration succeeds");

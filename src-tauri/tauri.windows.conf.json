@@ -3,7 +3,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Jan",
+        "title": "Parlo",
         "width": 1200,
         "minWidth": 1024,
         "height": 800,
@@ -21,7 +21,13 @@
         "decorations": false,
         "titleBarStyle": "Overlay",
         "windowEffects": {
-          "effects": ["fullScreenUI", "mica", "tabbed", "blur", "acrylic"],
+          "effects": [
+            "fullScreenUI",
+            "mica",
+            "tabbed",
+            "blur",
+            "acrylic"
+          ],
           "state": "active"
         },
         "dragDropEnabled": false
@@ -29,13 +35,19 @@
     ]
   },
   "bundle": {
-    "targets": ["nsis", "msi"],
+    "targets": [
+      "nsis",
+      "msi"
+    ],
     "resources": [
       "resources/pre-install/**/*",
       "resources/LICENSE",
-      "resources/bin/jan-cli.exe"
+      "resources/bin/parlo-cli.exe"
     ],
-    "externalBin": ["resources/bin/bun", "resources/bin/uv"],
+    "externalBin": [
+      "resources/bin/bun",
+      "resources/bin/uv"
+    ],
     "windows": {
       "webviewInstallMode": {
         "silent": true,

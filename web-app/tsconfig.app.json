@@ -25,8 +25,8 @@
     /* Url */
     "paths": {
       "@/*": ["./src/*"],
-      "@janhq/core": ["../core/src/index.ts"],
-      "@janhq/conversational-extension": ["../extensions/conversational-extension/src/index.ts"]
+      "@parlo-lab/core": ["../core/src/index.ts"],
+      "@parlo-lab/conversational-extension": ["../extensions/conversational-extension/src/index.ts"]
     }
   },
   "include": ["src"],

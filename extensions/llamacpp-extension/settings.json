@@ -38,21 +38,27 @@
     "title": "Check for updates",
     "description": "Fetch the remote llama.cpp release list. Required for the version dropdown to show releases beyond what's installed locally, and for update notifications.",
     "controllerType": "checkbox",
-    "controllerProps": { "value": true }
+    "controllerProps": {
+      "value": true
+    }
   },
   {
     "key": "auto_update_engine",
     "title": "Auto update engine",
     "description": "Automatically download and switch to the latest llamacpp engine when available. Requires \"Check for updates\" to be on.",
     "controllerType": "checkbox",
-    "controllerProps": { "value": true }
+    "controllerProps": {
+      "value": true
+    }
   },
   {
     "key": "verify_backend_deps",
     "title": "Verify backend dependencies",
     "description": "Check that GPU backend shared libraries (CUDA, Vulkan, etc.) resolve on startup and warn if any are missing.",
     "controllerType": "checkbox",
-    "controllerProps": { "value": true }
+    "controllerProps": {
+      "value": true
+    }
   },
   {
     "key": "models_max",
@@ -187,9 +193,18 @@
     "controllerProps": {
       "value": "layer",
       "options": [
-        { "value": "none", "name": "None" },
-        { "value": "layer", "name": "Layer" },
-        { "value": "row", "name": "Row" }
+        {
+          "value": "none",
+          "name": "None"
+        },
+        {
+          "value": "layer",
+          "name": "Layer"
+        },
+        {
+          "value": "row",
+          "name": "Row"
+        }
       ]
     }
   },
@@ -213,9 +228,18 @@
     "controllerProps": {
       "value": "auto",
       "options": [
-        { "value": "auto", "name": "Auto" },
-        { "value": "on", "name": "On" },
-        { "value": "off", "name": "Off" }
+        {
+          "value": "auto",
+          "name": "Auto"
+        },
+        {
+          "value": "on",
+          "name": "On"
+        },
+        {
+          "value": "off",
+          "name": "Off"
+        }
       ]
     }
   },
@@ -267,15 +291,42 @@
     "controllerProps": {
       "value": "f16",
       "options": [
-        { "value": "f32", "name": "f32" },
-        { "value": "f16", "name": "f16" },
-        { "value": "bf16", "name": "bf16" },
-        { "value": "q8_0", "name": "q8_0" },
-        { "value": "q4_0", "name": "q4_0" },
-        { "value": "q4_1", "name": "q4_1" },
-        { "value": "iq4_nl", "name": "iq4_nl" },
-        { "value": "q5_0", "name": "q5_0" },
-        { "value": "q5_1", "name": "q5_1" }
+        {
+          "value": "f32",
+          "name": "f32"
+        },
+        {
+          "value": "f16",
+          "name": "f16"
+        },
+        {
+          "value": "bf16",
+          "name": "bf16"
+        },
+        {
+          "value": "q8_0",
+          "name": "q8_0"
+        },
+        {
+          "value": "q4_0",
+          "name": "q4_0"
+        },
+        {
+          "value": "q4_1",
+          "name": "q4_1"
+        },
+        {
+          "value": "iq4_nl",
+          "name": "iq4_nl"
+        },
+        {
+          "value": "q5_0",
+          "name": "q5_0"
+        },
+        {
+          "value": "q5_1",
+          "name": "q5_1"
+        }
       ]
     }
   },
@@ -287,15 +338,42 @@
     "controllerProps": {
       "value": "f16",
       "options": [
-        { "value": "f32", "name": "f32" },
-        { "value": "f16", "name": "f16" },
-        { "value": "bf16", "name": "bf16" },
-        { "value": "q8_0", "name": "q8_0" },
-        { "value": "q4_0", "name": "q4_0" },
-        { "value": "q4_1", "name": "q4_1" },
-        { "value": "iq4_nl", "name": "iq4_nl" },
-        { "value": "q5_0", "name": "q5_0" },
-        { "value": "q5_1", "name": "q5_1" }
+        {
+          "value": "f32",
+          "name": "f32"
+        },
+        {
+          "value": "f16",
+          "name": "f16"
+        },
+        {
+          "value": "bf16",
+          "name": "bf16"
+        },
+        {
+          "value": "q8_0",
+          "name": "q8_0"
+        },
+        {
+          "value": "q4_0",
+          "name": "q4_0"
+        },
+        {
+          "value": "q4_1",
+          "name": "q4_1"
+        },
+        {
+          "value": "iq4_nl",
+          "name": "iq4_nl"
+        },
+        {
+          "value": "q5_0",
+          "name": "q5_0"
+        },
+        {
+          "value": "q5_1",
+          "name": "q5_1"
+        }
       ]
     }
   },
@@ -307,9 +385,18 @@
     "controllerProps": {
       "value": "none",
       "options": [
-        { "value": "none", "name": "None" },
-        { "value": "linear", "name": "Linear" },
-        { "value": "yarn", "name": "YaRN" }
+        {
+          "value": "none",
+          "name": "None"
+        },
+        {
+          "value": "linear",
+          "name": "Linear"
+        },
+        {
+          "value": "yarn",
+          "name": "YaRN"
+        }
       ]
     }
   },
@@ -319,7 +406,7 @@
     "description": "RoPE context scaling factor.",
     "controllerType": "input",
     "controllerProps": {
-      "value": 1.0,
+      "value": 1,
       "placeholder": "1.0",
       "type": "number",
       "textAlign": "right",
@@ -345,7 +432,7 @@
     "description": "RoPE frequency scaling factor.",
     "controllerType": "input",
     "controllerProps": {
-      "value": 1.0,
+      "value": 1,
       "placeholder": "1.0",
       "type": "number",
       "textAlign": "right",

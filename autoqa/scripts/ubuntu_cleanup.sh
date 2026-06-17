@@ -1,22 +1,22 @@
 #!/bin/bash
-# Ubuntu cleanup script for Jan app
+# Ubuntu cleanup script for Parlo app
 
-echo "Cleaning existing Jan installations..."
+echo "Cleaning existing Parlo installations..."
 
-# Remove Jan data folders (both regular and nightly)
-rm -rf ~/.config/Jan
-rm -rf ~/.config/Jan-nightly
-rm -rf ~/.local/share/Jan
-rm -rf ~/.local/share/Jan-nightly
-rm -rf ~/.cache/jan
-rm -rf ~/.cache/jan-nightly
-rm -rf ~/.local/share/jan-nightly.ai.app
-rm -rf ~/.local/share/jan.ai.app
+# Remove Parlo data folders (both regular and nightly)
+rm -rf ~/.config/Parlo
+rm -rf ~/.config/Parlo-nightly
+rm -rf ~/.local/share/Parlo
+rm -rf ~/.local/share/Parlo-nightly
+rm -rf ~/.cache/Parlo
+rm -rf ~/.cache/Parlo-nightly
+rm -rf ~/.local/share/Parlo-nightly.ai.app
+rm -rf ~/.local/share/Parlo.ai.app
 
-# Kill any running Jan processes (both regular and nightly)
-pkill -f "Jan" || true
-pkill -f "jan" || true
-pkill -f "Jan-nightly" || true
-pkill -f "jan-nightly" || true
+# Kill any running Parlo processes (both regular and nightly)
+pkill -f "Parlo" || true
+pkill -f "Parlo" || true
+pkill -f "Parlo-nightly" || true
+pkill -f "Parlo-nightly" || true
 
-echo "Jan cleanup completed"
+echo "Parlo cleanup completed"

@@ -60,7 +60,7 @@ There are a few things to keep in mind when writing your extension code:
   In `index.ts`, you will see that the extension function will return a `Promise<any>`.
 
   ```typescript
-  import { events, MessageEvent, MessageRequest } from '@janhq/core'
+  import { events, MessageEvent, MessageRequest } from '@parlo-lab/core'
 
   function onStart(): Promise<any> {
     return events.on(MessageEvent.OnMessageSent, (data: MessageRequest) =>

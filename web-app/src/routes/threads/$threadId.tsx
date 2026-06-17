@@ -38,7 +38,7 @@ import {
   MessageStatus,
   ChatCompletionRole,
   ContentType,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import { createImageAttachment } from '@/types/attachment'
 import {
   useChatAttachments,
@@ -52,7 +52,7 @@ import { OUT_OF_CONTEXT_SIZE, isContextOverflowMessage } from '@/utils/error'
 import { Button } from '@/components/ui/button'
 import { IconAlertCircle, IconRefresh } from '@tabler/icons-react'
 import { useToolApproval } from '@/hooks/useToolApproval'
-import { ExtensionTypeEnum, VectorDBExtension } from '@janhq/core'
+import { ExtensionTypeEnum, VectorDBExtension } from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 import { Shimmer } from '@/components/ai-elements/shimmer'
 import { useMessageQueue } from '@/stores/message-queue-store'

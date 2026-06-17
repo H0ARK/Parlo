@@ -75,11 +75,11 @@ export class CodexAppServerProcessManager {
           const result = await client.request<CodexInitializeResult>(
             'initialize',
             {
-              clientInfo: { name: 'jan', title: 'Jan', version: VERSION },
+              clientInfo: { name: 'Parlo', title: 'Parlo', version: VERSION },
               capabilities: {
                 experimentalApi: true,
                 requestAttestation: true,
-                // Jan host surfaces we advertise to Codex app-server
+                // Parlo host surfaces we advertise to Codex app-server
                 hostApprovals: true,
                 hostMcpCuration: true,
                 hostGitReviewPanel: true,

@@ -39,8 +39,8 @@ describe('TauriDeepLinkService', () => {
 
   describe('getCurrent', () => {
     it('returns deep link urls', async () => {
-      mockGetCurrent.mockResolvedValue(['jan://open/model'])
-      expect(await svc.getCurrent()).toEqual(['jan://open/model'])
+      mockGetCurrent.mockResolvedValue(['Parlo://open/model'])
+      expect(await svc.getCurrent()).toEqual(['Parlo://open/model'])
     })
 
     it('returns empty array when result is null', async () => {

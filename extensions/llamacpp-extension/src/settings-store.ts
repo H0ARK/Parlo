@@ -1,5 +1,5 @@
-import { fs, joinPath, getJanDataFolderPath } from '@janhq/core'
-import type { SettingComponentProps } from '@janhq/core'
+import { fs, joinPath, getParloDataFolderPath } from '@parlo-lab/core'
+import type { SettingComponentProps } from '@parlo-lab/core'
 
 const DIR_NAME = 'llamacpp'
 const FILE_NAME = 'settings.json'
@@ -8,7 +8,7 @@ const TMP_NAME = 'settings.json.tmp'
 let writeChain: Promise<unknown> = Promise.resolve()
 
 async function paths(): Promise<{ dir: string; file: string; tmp: string }> {
-  const root = await getJanDataFolderPath()
+  const root = await getParloDataFolderPath()
   const dir = await joinPath([root, DIR_NAME])
   const file = await joinPath([dir, FILE_NAME])
   const tmp = await joinPath([dir, TMP_NAME])

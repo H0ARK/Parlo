@@ -37,7 +37,7 @@ describe('TauriHardwareService – coverage', () => {
       const result = await svc.getLlamacppDevices()
 
       expect(window.core.extensionManager.getByName).toHaveBeenCalledWith(
-        '@janhq/llamacpp-extension'
+        '@parlo-lab/llamacpp-extension'
       )
       expect(result).toEqual(devices)
     })

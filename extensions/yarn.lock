@@ -313,248 +313,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@janhq/assistant-extension@workspace:assistant-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/assistant-extension@workspace:assistant-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    cpx: "npm:1.5.0"
-    rimraf: "npm:6.0.1"
-    rolldown: "npm:1.0.0-beta.1"
-    run-script-os: "npm:1.1.6"
-    ts-loader: "npm:^9.5.0"
-    typescript: "npm:5.9.2"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/conversational-extension@workspace:conversational-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/conversational-extension@workspace:conversational-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    cpx: "npm:1.5.0"
-    rimraf: "npm:6.0.1"
-    rolldown: "npm:1.0.0-beta.1"
-    ts-loader: "npm:^9.5.0"
-    typescript: "npm:5.9.2"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fassistant-extension%40workspace%3Aassistant-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fassistant-extension%40workspace%3Aassistant-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fconversational-extension%40workspace%3Aconversational-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fconversational-extension%40workspace%3Aconversational-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fdownload-extension%40workspace%3Adownload-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fdownload-extension%40workspace%3Adownload-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Frag-extension%40workspace%3Arag-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Frag-extension%40workspace%3Arag-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/core@file:../../core/package.tgz::locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension":
-  version: 0.1.10
-  resolution: "@janhq/core@file:../../core/package.tgz#../../core/package.tgz::hash=67218b&locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension"
-  dependencies:
-    rxjs: "npm:^7.8.1"
-    ulidx: "npm:^2.3.0"
-  peerDependencies:
-    react: 19.0.0
-  checksum: 10c0/f4c8c061ed8745b9b651f52110abb41b8c58d45084c01107faeb653b4fd32eeeae78d5672cda31e6a8dfb624e112b24fc6f6e58ad5888f56cd93d48d6cc73cf0
-  languageName: node
-  linkType: hard
-
-"@janhq/download-extension@workspace:download-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/download-extension@workspace:download-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    "@tauri-apps/api": "npm:2.8.0"
-    cpx: "npm:1.5.0"
-    rimraf: "npm:6.0.1"
-    rolldown: "npm:1.0.0-beta.1"
-    run-script-os: "npm:1.1.6"
-    typescript: "npm:5.8.3"
-    vitest: "npm:3.2.4"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/llamacpp-extension@workspace:llamacpp-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/llamacpp-extension@workspace:llamacpp-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    "@janhq/tauri-plugin-hardware-api": "link:../../src-tauri/plugins/tauri-plugin-hardware"
-    "@janhq/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp"
-    "@tauri-apps/api": "npm:2.8.0"
-    "@tauri-apps/plugin-http": "npm:2.5.0"
-    "@tauri-apps/plugin-log": "npm:^2.6.0"
-    "@vitest/ui": "npm:2.1.9"
-    cpx: "npm:1.5.0"
-    fetch-retry: "npm:^5.0.6"
-    jsdom: "npm:26.1.0"
-    rimraf: "npm:3.0.2"
-    rolldown: "npm:1.0.0-beta.1"
-    ts-loader: "npm:^9.5.0"
-    typescript: "npm:5.9.2"
-    ulidx: "npm:2.4.1"
-    vitest: "npm:3.2.4"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/mlx-extension@workspace:mlx-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/mlx-extension@workspace:mlx-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    "@janhq/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp"
-    "@janhq/tauri-plugin-mlx-api": "link:../../src-tauri/plugins/tauri-plugin-mlx"
-    "@tauri-apps/api": "npm:2.8.0"
-    "@tauri-apps/plugin-http": "npm:2.5.0"
-    "@tauri-apps/plugin-log": "npm:^2.6.0"
-    cpx: "npm:1.5.0"
-    rimraf: "npm:3.0.2"
-    rolldown: "npm:1.0.0-beta.1"
-    typescript: "npm:5.9.2"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/rag-extension@workspace:rag-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/rag-extension@workspace:rag-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    "@janhq/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag"
-    "@janhq/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
-    cpx: "npm:1.5.0"
-    rimraf: "npm:6.0.1"
-    rolldown: "npm:1.0.0-beta.1"
-    typescript: "npm:5.9.2"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/tauri-plugin-hardware-api@link:../../src-tauri/plugins/tauri-plugin-hardware::locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-hardware-api@link:../../src-tauri/plugins/tauri-plugin-hardware::locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40janhq%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-mlx-api@link:../../src-tauri/plugins/tauri-plugin-mlx::locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-mlx-api@link:../../src-tauri/plugins/tauri-plugin-mlx::locator=%40janhq%2Fmlx-extension%40workspace%3Amlx-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40janhq%2Frag-extension%40workspace%3Arag-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40janhq%2Frag-extension%40workspace%3Arag-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40janhq%2Frag-extension%40workspace%3Arag-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40janhq%2Frag-extension%40workspace%3Arag-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40janhq%2Fvector-db-extension%40workspace%3Avector-db-extension"
-  languageName: node
-  linkType: soft
-
-"@janhq/vector-db-extension@workspace:vector-db-extension":
-  version: 0.0.0-use.local
-  resolution: "@janhq/vector-db-extension@workspace:vector-db-extension"
-  dependencies:
-    "@janhq/core": ../../core/package.tgz
-    "@janhq/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag"
-    "@janhq/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
-    cpx: "npm:1.5.0"
-    rimraf: "npm:6.0.1"
-    rolldown: "npm:1.0.0-beta.1"
-    typescript: "npm:5.9.2"
-  languageName: unknown
-  linkType: soft
-
 "@jridgewell/sourcemap-codec@npm:^1.5.0":
   version: 1.5.0
   resolution: "@jridgewell/sourcemap-codec@npm:1.5.0"
@@ -594,6 +352,248 @@ __metadata:
   checksum: 10c0/c90935d5ce670c87b6b14fab04a965a3b8137e585f8b2a6257263bd7f97756dd736cb165bb470e5156a9e718ecd99413dccc54b1138c1a46d6ec7cf325982fe5
   languageName: node
   linkType: hard
+
+"@parlo-lab/assistant-extension@workspace:assistant-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/assistant-extension@workspace:assistant-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    cpx: "npm:1.5.0"
+    rimraf: "npm:6.0.1"
+    rolldown: "npm:1.0.0-beta.1"
+    run-script-os: "npm:1.1.6"
+    ts-loader: "npm:^9.5.0"
+    typescript: "npm:5.9.2"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/conversational-extension@workspace:conversational-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/conversational-extension@workspace:conversational-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    cpx: "npm:1.5.0"
+    rimraf: "npm:6.0.1"
+    rolldown: "npm:1.0.0-beta.1"
+    ts-loader: "npm:^9.5.0"
+    typescript: "npm:5.9.2"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fassistant-extension%40workspace%3Aassistant-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fassistant-extension%40workspace%3Aassistant-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fconversational-extension%40workspace%3Aconversational-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fconversational-extension%40workspace%3Aconversational-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fdownload-extension%40workspace%3Adownload-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fdownload-extension%40workspace%3Adownload-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/core@file:../../core/package.tgz::locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension":
+  version: 0.1.10
+  resolution: "@parlo-lab/core@file:../../core/package.tgz#../../core/package.tgz::hash=cb70e0&locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension"
+  dependencies:
+    rxjs: "npm:^7.8.1"
+    ulidx: "npm:^2.3.0"
+  peerDependencies:
+    react: 19.0.0
+  checksum: 10c0/2b6d0eeef6d782a2e8b919815eb929abf34960cc35237a379806ae1ea92e542b7c1af315cd9b03d75791c7d1dd170df92093d5ad83e5bd5aaeec5f3399467036
+  languageName: node
+  linkType: hard
+
+"@parlo-lab/download-extension@workspace:download-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/download-extension@workspace:download-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    "@tauri-apps/api": "npm:2.8.0"
+    cpx: "npm:1.5.0"
+    rimraf: "npm:6.0.1"
+    rolldown: "npm:1.0.0-beta.1"
+    run-script-os: "npm:1.1.6"
+    typescript: "npm:5.8.3"
+    vitest: "npm:3.2.4"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/llamacpp-extension@workspace:llamacpp-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/llamacpp-extension@workspace:llamacpp-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    "@parlo-lab/tauri-plugin-hardware-api": "link:../../src-tauri/plugins/tauri-plugin-hardware"
+    "@parlo-lab/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp"
+    "@tauri-apps/api": "npm:2.8.0"
+    "@tauri-apps/plugin-http": "npm:2.5.0"
+    "@tauri-apps/plugin-log": "npm:^2.6.0"
+    "@vitest/ui": "npm:2.1.9"
+    cpx: "npm:1.5.0"
+    fetch-retry: "npm:^5.0.6"
+    jsdom: "npm:26.1.0"
+    rimraf: "npm:3.0.2"
+    rolldown: "npm:1.0.0-beta.1"
+    ts-loader: "npm:^9.5.0"
+    typescript: "npm:5.9.2"
+    ulidx: "npm:2.4.1"
+    vitest: "npm:3.2.4"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/mlx-extension@workspace:mlx-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/mlx-extension@workspace:mlx-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    "@parlo-lab/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp"
+    "@parlo-lab/tauri-plugin-mlx-api": "link:../../src-tauri/plugins/tauri-plugin-mlx"
+    "@tauri-apps/api": "npm:2.8.0"
+    "@tauri-apps/plugin-http": "npm:2.5.0"
+    "@tauri-apps/plugin-log": "npm:^2.6.0"
+    cpx: "npm:1.5.0"
+    rimraf: "npm:3.0.2"
+    rolldown: "npm:1.0.0-beta.1"
+    typescript: "npm:5.9.2"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/rag-extension@workspace:rag-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/rag-extension@workspace:rag-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    "@parlo-lab/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag"
+    "@parlo-lab/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
+    cpx: "npm:1.5.0"
+    rimraf: "npm:6.0.1"
+    rolldown: "npm:1.0.0-beta.1"
+    typescript: "npm:5.9.2"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-hardware-api@link:../../src-tauri/plugins/tauri-plugin-hardware::locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-hardware-api@link:../../src-tauri/plugins/tauri-plugin-hardware::locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40parlo-lab%2Fllamacpp-extension%40workspace%3Allamacpp-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-llamacpp-api@link:../../src-tauri/plugins/tauri-plugin-llamacpp::locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-mlx-api@link:../../src-tauri/plugins/tauri-plugin-mlx::locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-mlx-api@link:../../src-tauri/plugins/tauri-plugin-mlx::locator=%40parlo-lab%2Fmlx-extension%40workspace%3Amlx-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-rag-api@link:../../src-tauri/plugins/tauri-plugin-rag::locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40parlo-lab%2Frag-extension%40workspace%3Arag-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-vector-db-api@link:../../src-tauri/plugins/tauri-plugin-vector-db::locator=%40parlo-lab%2Fvector-db-extension%40workspace%3Avector-db-extension"
+  languageName: node
+  linkType: soft
+
+"@parlo-lab/vector-db-extension@workspace:vector-db-extension":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/vector-db-extension@workspace:vector-db-extension"
+  dependencies:
+    "@parlo-lab/core": ../../core/package.tgz
+    "@parlo-lab/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag"
+    "@parlo-lab/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
+    cpx: "npm:1.5.0"
+    rimraf: "npm:6.0.1"
+    rolldown: "npm:1.0.0-beta.1"
+    typescript: "npm:5.9.2"
+  languageName: unknown
+  linkType: soft
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0

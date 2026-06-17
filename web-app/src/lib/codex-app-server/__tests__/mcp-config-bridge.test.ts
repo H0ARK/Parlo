@@ -3,8 +3,8 @@ import { buildCodexConfigToml } from '../config'
 import {
   buildCodexMcpServersConfig,
   buildCodexMcpServersToml,
-  getActiveJanMcpServers,
-  janMcpServerToCodexEntry,
+  getActiveParloMcpServers,
+  parloMcpServerToCodexEntry,
 } from '../mcp-config-bridge'
 
 describe('Codex MCP config bridge', () => {
@@ -16,7 +16,7 @@ describe('Codex MCP config bridge', () => {
         env: {},
         active: true,
       },
-      'Jan Browser MCP': {
+      'Parlo Browser MCP': {
         command: 'npx',
         args: ['-y', 'search-mcp-server@latest'],
         env: {
@@ -36,7 +36,7 @@ describe('Codex MCP config bridge', () => {
     expect(toml).toContain('[mcp_servers.fetch]')
     expect(toml).toContain('command = "uvx"')
     expect(toml).toContain('args = ["mcp-server-fetch"]')
-    expect(toml).toContain('[mcp_servers."Jan Browser MCP"]')
+    expect(toml).toContain('[mcp_servers."Parlo Browser MCP"]')
     expect(toml).toContain(
       'env = { BRIDGE_HOST = "127.0.0.1", BRIDGE_PORT = "17389" }'
     )
@@ -44,7 +44,7 @@ describe('Codex MCP config bridge', () => {
   })
 
   it('maps HTTP and SSE MCP servers to Codex streamable HTTP config', () => {
-    const httpEntry = janMcpServerToCodexEntry({
+    const httpEntry = parloMcpServerToCodexEntry({
       command: '',
       args: [],
       env: {},
@@ -53,7 +53,7 @@ describe('Codex MCP config bridge', () => {
       headers: { 'X-Test': 'value' },
       active: true,
     })
-    const sseEntry = janMcpServerToCodexEntry({
+    const sseEntry = parloMcpServerToCodexEntry({
       command: '',
       args: [],
       env: {},
@@ -69,7 +69,7 @@ describe('Codex MCP config bridge', () => {
     expect(sseEntry).toEqual({ url: 'https://example.com/sse' })
   })
 
-  it('applies Jan MCP tool timeout defaults to Codex servers', () => {
+  it('applies Parlo MCP tool timeout defaults to Codex servers', () => {
     const toml = buildCodexMcpServersToml(
       {
         exa: {
@@ -89,7 +89,7 @@ describe('Codex MCP config bridge', () => {
 
   it('only returns active servers in stable sorted order', () => {
     expect(
-      getActiveJanMcpServers({
+      getActiveParloMcpServers({
         zeta: {
           command: 'z',
           args: [],

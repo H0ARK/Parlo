@@ -371,7 +371,7 @@ export const predefinedProviders = [
   },
   {
     active: false,
-    api_key: 'jan',
+    api_key: 'Parlo',
     base_url: 'http://127.0.0.1:8000/v1',
     provider: 'vllm',
     settings: [
@@ -379,11 +379,11 @@ export const predefinedProviders = [
         key: 'api-key',
         title: 'API Key',
         description:
-          'Local vLLM servers usually accept any placeholder key. Use `jan` unless your server requires something else.',
+          'Local vLLM servers usually accept any placeholder key. Use `Parlo` unless your server requires something else.',
         controller_type: 'input',
         controller_props: {
-          placeholder: 'jan',
-          value: 'jan',
+          placeholder: 'Parlo',
+          value: 'Parlo',
           type: 'password',
           input_actions: ['unobscure', 'copy'],
         },
@@ -404,7 +404,7 @@ export const predefinedProviders = [
   },
   {
     active: false,
-    api_key: 'jan',
+    api_key: 'Parlo',
     base_url: 'http://127.0.0.1:11434/v1',
     provider: 'ollama',
     settings: [
@@ -412,11 +412,11 @@ export const predefinedProviders = [
         key: 'api-key',
         title: 'API Key',
         description:
-          'Local Ollama usually accepts any placeholder key. Use `jan` unless your server requires something else.',
+          'Local Ollama usually accepts any placeholder key. Use `Parlo` unless your server requires something else.',
         controller_type: 'input',
         controller_props: {
-          placeholder: 'jan',
-          value: 'jan',
+          placeholder: 'Parlo',
+          value: 'Parlo',
           type: 'password',
           input_actions: ['unobscure', 'copy'],
         },
@@ -504,7 +504,7 @@ export const predefinedProviders = [
         key: 'codex-binary-path',
         title: 'Codex Binary',
         description:
-          'Path to a Codex binary with `app-server` support. Leave as the desktop app binary on macOS unless you install a newer CLI. If unavailable, Jan will fall back to `npx @openai/codex app-server --stdio` when possible.',
+          'Path to a Codex binary with `app-server` support. Leave as the desktop app binary on macOS unless you install a newer CLI. If unavailable, Parlo will fall back to `npx @openai/codex app-server --stdio` when possible.',
         controller_type: 'input',
         controller_props: {
           placeholder: IS_MACOS
@@ -513,17 +513,6 @@ export const predefinedProviders = [
           value: IS_MACOS
             ? '/Applications/Codex.app/Contents/Resources/codex'
             : 'codex',
-        },
-      },
-      {
-        key: 'codex-transport',
-        title: 'Codex Transport',
-        description:
-          '`app-server` uses the Codex app-server JSON-RPC protocol. Use `proto` only for Codex CLI builds that expose `codex proto` but not `app-server --stdio`.',
-        controller_type: 'input',
-        controller_props: {
-          placeholder: 'app-server',
-          value: 'app-server',
         },
       },
     ],
@@ -564,11 +553,11 @@ export const predefinedProviders = [
         capabilities: ['completion', 'tools'],
       },
       {
-        id: 'Jan-v1-4B-Q4_K_M',
-        name: 'Jan v1 4B (local)',
+        id: 'Parlo-v1-4B-Q4_K_M',
+        name: 'Parlo v1 4B (local)',
         version: '1.0',
         description:
-          'Local Jan model via llama.cpp. Point Base URL at your running Jan router `/v1` endpoint and set Codex Provider to `llamacpp`.',
+          'Local Parlo model via llama.cpp. Point Base URL at your running Parlo router `/v1` endpoint and set Codex Provider to `llamacpp`.',
         capabilities: ['completion', 'tools'],
       },
     ],

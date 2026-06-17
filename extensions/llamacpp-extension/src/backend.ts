@@ -1,8 +1,8 @@
-import { getJanDataFolderPath, fs, joinPath, events } from '@janhq/core'
+import { getParloDataFolderPath, fs, joinPath, events } from '@parlo-lab/core'
 import { invoke } from '@tauri-apps/api/core'
 import { getProxyConfig } from './util'
 import { dirname } from '@tauri-apps/api/path'
-import { getSystemInfo } from '@janhq/tauri-plugin-hardware-api'
+import { getSystemInfo } from '@parlo-lab/tauri-plugin-hardware-api'
 import {
   getLocalInstalledBackendsInternal,
   normalizeFeatures,
@@ -10,18 +10,18 @@ import {
   listSupportedBackendsFromRust,
   BackendVersion,
   getSupportedFeaturesFromRust,
-} from '@janhq/tauri-plugin-llamacpp-api'
+} from '@parlo-lab/tauri-plugin-llamacpp-api'
 
 /*
- * Reads currently installed backends in janDataFolderPath
+ * Reads currently installed backends in parloDataFolderPath
  *
  */
 export async function getLocalInstalledBackends(): Promise<
   { version: string; backend: string }[]
 > {
-  const janDataFolderPath = await getJanDataFolderPath()
+  const parloDataFolderPath = await getParloDataFolderPath()
   const backendDir = await joinPath([
-    janDataFolderPath,
+    parloDataFolderPath,
     'llamacpp',
     'backends',
   ])
@@ -29,7 +29,7 @@ export async function getLocalInstalledBackends(): Promise<
 }
 
 // folder structure
-// <Jan's data folder>/llamacpp/backends/<backend_version>/<backend_type>
+// <Parlo's data folder>/llamacpp/backends/<backend_version>/<backend_type>
 
 // what should be available to the user for selection?
 /**
@@ -58,7 +58,7 @@ export async function fetchRemoteBackends(): Promise<BackendVersion[]> {
     )
   } catch (e) {
     console.debug(
-      `Not able to get remote backends, Jan might be offline or network problem: ${String(e)}`
+      `Not able to get remote backends, Parlo might be offline or network problem: ${String(e)}`
     )
     return []
   }
@@ -76,11 +76,11 @@ export async function getBackendDir(
   backend: string,
   version: string
 ): Promise<string> {
-  const janDataFolder = await getJanDataFolderPath()
+  const parloDataFolder = await getParloDataFolderPath()
   return invoke<string>('plugin:llamacpp|get_backend_dir', {
     backend,
     version,
-    janDataFolder,
+    parloDataFolder,
   })
 }
 
@@ -88,11 +88,11 @@ export async function getBackendExePath(
   backend: string,
   version: string
 ): Promise<string> {
-  const janDataFolder = await getJanDataFolderPath()
+  const parloDataFolder = await getParloDataFolderPath()
   return invoke<string>('plugin:llamacpp|get_backend_exe_path', {
     backend,
     version,
-    janDataFolder,
+    parloDataFolder,
     isWindows: IS_WINDOWS,
   })
 }
@@ -101,11 +101,11 @@ export async function isBackendInstalled(
   backend: string,
   version: string
 ): Promise<boolean> {
-  const janDataFolder = await getJanDataFolderPath()
+  const parloDataFolder = await getParloDataFolderPath()
   return invoke<boolean>('plugin:llamacpp|check_backend_installed', {
     backend,
     version,
-    janDataFolder,
+    parloDataFolder,
     isWindows: IS_WINDOWS,
   })
 }
@@ -120,13 +120,13 @@ export async function verifyBackendInstallation(
   backend: string,
   version: string
 ): Promise<BackendVerificationResult> {
-  const janDataFolder = await getJanDataFolderPath()
+  const parloDataFolder = await getParloDataFolderPath()
   return invoke<BackendVerificationResult>(
     'plugin:llamacpp|verify_backend_installation',
     {
       backend,
       version,
-      janDataFolder,
+      parloDataFolder,
       isWindows: IS_WINDOWS,
     }
   )
@@ -137,7 +137,7 @@ export async function downloadBackend(
   version: string,
   source: 'github' | 'cdn' = 'github'
 ): Promise<void> {
-  const janDataFolderPath = await getJanDataFolderPath()
+  const parloDataFolderPath = await getParloDataFolderPath()
   const sysInfo = await getSystemInfo()
   const proxyConfig = getProxyConfig()
 
@@ -150,7 +150,7 @@ export async function downloadBackend(
     backend,
     version,
     source,
-    janDataFolder: janDataFolderPath,
+    parloDataFolder: parloDataFolderPath,
     osType: sysInfo.os_type,
   })
 
@@ -161,7 +161,7 @@ export async function downloadBackend(
   }))
 
   const downloadManager = window.core.extensionManager.getByName(
-    '@janhq/download-extension'
+    '@parlo-lab/download-extension'
   )
   const taskId = `llamacpp-${version}-${backend}`.replace(/\./g, '-')
   const downloadType = 'Engine'

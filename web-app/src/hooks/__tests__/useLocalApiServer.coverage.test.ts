@@ -18,7 +18,6 @@ describe('useLocalApiServer - coverage', () => {
     const store = useLocalApiServer.getState()
     store.setDefaultModelLocalApiServer(null)
     store.setLastServerModels([])
-    store.setEnableServerToolExecution(false)
   })
 
   it('should set default model for local api server', () => {
@@ -52,15 +51,4 @@ describe('useLocalApiServer - coverage', () => {
     expect(result.current.lastServerModels).toEqual(models)
   })
 
-  it('should toggle server tool execution', () => {
-    const { result } = renderHook(() => useLocalApiServer())
-
-    expect(result.current.enableServerToolExecution).toBe(false)
-
-    act(() => {
-      result.current.setEnableServerToolExecution(true)
-    })
-
-    expect(result.current.enableServerToolExecution).toBe(true)
-  })
 })

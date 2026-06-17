@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { create } from 'zustand'
-import { ExtensionTypeEnum, VectorDBExtension } from '@janhq/core'
+import { ExtensionTypeEnum, VectorDBExtension } from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 
 type AttachmentNamesState = {

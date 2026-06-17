@@ -4,7 +4,7 @@ import {
   ChatCompletionRole,
   ThreadMessage,
   MessageStatus,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import { ulid } from 'ulidx'
 import { Attachment } from '@/types/attachment'
 import {

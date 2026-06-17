@@ -16,7 +16,7 @@ describe('formatDate', () => {
     const isoString = '2023-01-15T09:45:30Z'
     const formatted = formatDate(isoString)
 
-    expect(formatted).toMatch(/Jan.*15.*2023/i)
+    expect(formatted).toMatch(/Parlo.*15.*2023/i)
     expect(formatted).toMatch(/\d{1,2}:\d{2}/i)
     expect(formatted).toMatch(/(AM|PM)/i)
   })
@@ -40,7 +40,7 @@ describe('formatDate', () => {
 
     const formatted = dates.map((d) => formatDate(d))
 
-    expect(formatted[0]).toMatch(/Jan.*1.*2023/i)
+    expect(formatted[0]).toMatch(/Parlo.*1.*2023/i)
     expect(formatted[1]).toMatch(/Feb.*1.*2023/i)
     expect(formatted[2]).toMatch(/Mar.*1.*2023/i)
     expect(formatted[3]).toMatch(/Dec.*1.*2023/i)
@@ -67,7 +67,7 @@ describe('formatDate', () => {
     expect(() => formatDate(futureDate)).not.toThrow()
 
     // UTC midnight can render as Dec 31, 1899 in US timezones
-    expect(formatDate(oldDate)).toMatch(/(Jan.*1.*1900|Dec.*31.*1899)/i)
+    expect(formatDate(oldDate)).toMatch(/(Parlo.*1.*1900|Dec.*31.*1899)/i)
     // The futureDate might be affected by timezone - let's just check it doesn't throw
     const futureDateResult = formatDate(futureDate)
     expect(futureDateResult).toMatch(/\d{4}/) // Should contain a year

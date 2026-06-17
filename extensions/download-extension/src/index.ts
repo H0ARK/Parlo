@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
-import { BaseExtension, events } from '@janhq/core'
+import { BaseExtension, events } from '@parlo-lab/core'
 
 export enum Settings {
   hfToken = 'hf-token',

@@ -10,14 +10,13 @@ beforeEach(() => {
 })
 
 describe('useCodexProviderProfiles', () => {
-  it('persists Codex transport with runtime provider profiles', () => {
+  it('forces app-server transport with runtime provider profiles', () => {
     const saved = useCodexProviderProfiles.getState().upsertProfile({
-      name: 'Local proto CLI',
+      name: 'Local Codex app-server',
       baseUrl: 'http://localhost:11434/v1',
       model: 'qwen3-coder',
       apiKeyEnv: 'OLLAMA_API_KEY',
-      codexHome: '.codex/profiles/proto',
-      transport: 'proto',
+      codexHome: '.codex/profiles/app-server',
       providerType: 'ollama',
       approvalPolicy: 'on-request',
       sandbox: 'workspace-write',
@@ -25,10 +24,10 @@ describe('useCodexProviderProfiles', () => {
       advancedConfigSnippet: '[hooks]\non-file-change = ["lint"]',
     })
 
-    expect(saved.transport).toBe('proto')
+    expect(saved.transport).toBe('app-server')
     expect(useCodexProviderProfiles.getState().profiles[saved.id]).toEqual(
       expect.objectContaining({
-        transport: 'proto',
+        transport: 'app-server',
         addDirs: ['/tmp/extra', '../sibling'],
         advancedConfigSnippet: '[hooks]\non-file-change = ["lint"]',
       })

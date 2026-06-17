@@ -3,6 +3,7 @@ import { ensureGlobalCodexAppServer } from '@/lib/codex-app-server/global-codex-
 import { buildGlobalCodexSpawnOptions } from '@/lib/codex-app-server/chat-backend'
 import { ensureLocalApiServerRunning } from '@/lib/ensure-local-api-server'
 import { useLocalApiServer } from '@/hooks/useLocalApiServer'
+import { isPlatformTauri } from '@/lib/platform/utils'
 
 /**
  * Starts the shared Codex app-server process once when the desktop app loads.
@@ -27,6 +28,7 @@ export function CodexAppServerBootstrap() {
         })
         const spawnOptions = buildGlobalCodexSpawnOptions()
         if (cancelled) return
+        if (!isPlatformTauri()) return
         await ensureGlobalCodexAppServer(spawnOptions)
       } catch (error) {
         console.error('Failed to start global Codex app-server:', error)

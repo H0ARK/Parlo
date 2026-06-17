@@ -119,14 +119,14 @@ describe('TauriMCPService – coverage', () => {
     })
   })
 
-  describe('checkJanBrowserExtensionConnected', () => {
-    it('invokes check_jan_browser_extension_connected', async () => {
+  describe('checkParloBrowserExtensionConnected', () => {
+    it('invokes check_parlo_browser_extension_connected', async () => {
       const { invoke } = await import('@tauri-apps/api/core')
       vi.mocked(invoke).mockResolvedValue(true)
 
-      const result = await svc.checkJanBrowserExtensionConnected()
+      const result = await svc.checkParloBrowserExtensionConnected()
 
-      expect(invoke).toHaveBeenCalledWith('check_jan_browser_extension_connected')
+      expect(invoke).toHaveBeenCalledWith('check_parlo_browser_extension_connected')
       expect(result).toBe(true)
     })
   })

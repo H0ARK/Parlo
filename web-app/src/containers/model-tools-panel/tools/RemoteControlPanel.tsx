@@ -15,7 +15,6 @@ type RemoteControlPanelState = {
   remotePairingStartParamsJson: string
   remoteStatus: unknown
   remotePairing: unknown
-  isCodexProtoTransport?: boolean
 }
 
 type RemoteControlPanelActions = {
@@ -60,7 +59,6 @@ export function RemoteControlPanel({
     remotePairingStartParamsJson,
     remoteStatus,
     remotePairing,
-    isCodexProtoTransport,
   } = state
   const {
     onSetRemotePairingCode,
@@ -125,47 +123,47 @@ export function RemoteControlPanel({
       <div className="font-mono mb-1 flex items-center justify-between gap-2">
         <span>Remote Control</span>
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            className="text-[9px] underline disabled:opacity-50"
-            disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
-            onClick={() => void onRefreshRemoteControlStatus()}
-          >
-            Status
+        <button
+          type="button"
+          className="text-[9px] underline disabled:opacity-50"
+          disabled={!currentThreadIdForCaps || remoteBusy}
+          onClick={() => void onRefreshRemoteControlStatus()}
+        >
+          Status
           </button>
-          <button
-            type="button"
-            className="text-[9px] underline disabled:opacity-50"
-            disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
-            onClick={() =>
-              void onRunRemoteControlAction(
-                () => onEnableCodexRemoteControl(currentThreadIdForCaps!),
+        <button
+          type="button"
+          className="text-[9px] underline disabled:opacity-50"
+          disabled={!currentThreadIdForCaps || remoteBusy}
+          onClick={() =>
+            void onRunRemoteControlAction(
+              () => onEnableCodexRemoteControl(currentThreadIdForCaps!),
                 'Remote control enabled'
               )
             }
           >
             Enable
           </button>
-          <button
-            type="button"
-            className="text-[9px] underline disabled:opacity-50"
-            disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
-            onClick={() =>
-              void onRunRemoteControlAction(
-                () => onDisableCodexRemoteControl(currentThreadIdForCaps!),
+        <button
+          type="button"
+          className="text-[9px] underline disabled:opacity-50"
+          disabled={!currentThreadIdForCaps || remoteBusy}
+          onClick={() =>
+            void onRunRemoteControlAction(
+              () => onDisableCodexRemoteControl(currentThreadIdForCaps!),
                 'Remote control disabled'
               )
             }
           >
             Disable
           </button>
-          <button
-            type="button"
-            className="text-[9px] underline disabled:opacity-50"
-            disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
-            onClick={() =>
-              void onRunRemoteControlAction(
-                () =>
+        <button
+          type="button"
+          className="text-[9px] underline disabled:opacity-50"
+          disabled={!currentThreadIdForCaps || remoteBusy}
+          onClick={() =>
+            void onRunRemoteControlAction(
+              () =>
                   onListCodexRemoteControlClients(currentThreadIdForCaps!, {}),
                 'Remote clients loaded'
               )
@@ -191,7 +189,7 @@ export function RemoteControlPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || remoteBusy}
           onClick={() => setShowAdvancedPairingParams((previous) => !previous)}
         >
           {showAdvancedPairingParams
@@ -238,7 +236,7 @@ export function RemoteControlPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || remoteBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || remoteBusy}
           onClick={() => void onStartRemoteControlPairing()}
         >
           Start pairing
@@ -263,8 +261,7 @@ export function RemoteControlPanel({
             remoteBusy ||
             (!statusPairingCode.trim() &&
               !statusManualPairingCode.trim() &&
-              !remotePairingCode.trim()) ||
-            !!isCodexProtoTransport
+              !remotePairingCode.trim())
           }
           onClick={() => readPairingStatus()}
         >
@@ -274,7 +271,9 @@ export function RemoteControlPanel({
           type="button"
           className="text-[9px] underline disabled:opacity-50"
           disabled={
-            !currentThreadIdForCaps || remoteBusy || !remoteClientId.trim() || !!isCodexProtoTransport
+            !currentThreadIdForCaps ||
+            remoteBusy ||
+            !remoteClientId.trim()
           }
           onClick={() => {
             void onRunRemoteControlAction(

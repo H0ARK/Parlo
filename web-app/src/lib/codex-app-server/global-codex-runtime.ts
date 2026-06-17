@@ -3,7 +3,7 @@ import { CodexAppServerClient } from './api'
 import { TauriCodexProcessSpawner } from './tauri-process'
 import type { CodexInitializeResult, CodexSessionOptions } from './types'
 
-export const GLOBAL_CODEX_APP_SERVER_SESSION_ID = 'jan-global-codex-app-server'
+export const GLOBAL_CODEX_APP_SERVER_SESSION_ID = 'Parlo-global-codex-app-server'
 
 type GlobalCodexRuntimeState = {
   client: CodexAppServerClient
@@ -19,7 +19,7 @@ let ensureChain: Promise<CodexAppServerClient> = Promise.resolve(
 
 export function buildCodexProcessSignature(options: CodexSessionOptions): string {
   // The Codex app-server reads provider env vars from its process environment.
-  // If the selected chat/provider changes from Jan Gateway to xAI/OpenAI/etc, or
+  // If the selected chat/provider changes from Parlo Gateway to xAI/OpenAI/etc, or
   // if an OAuth/API key is refreshed, reloading config.toml is not enough: the
   // running process will still be missing the env value referenced by env_key.
   // Keep the secret value redacted, but include a stable hash so changes restart

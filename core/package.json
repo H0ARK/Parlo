@@ -1,12 +1,12 @@
 {
-  "name": "@janhq/core",
+  "name": "@parlo-lab/core",
   "version": "0.1.10",
-  "description": "Core library for the Jan AI application framework",
+  "description": "Core library for the Parlo AI application framework",
   "keywords": [
-    "jan",
+    "parlo",
     "core"
   ],
-  "homepage": "https://jan.ai",
+  "homepage": "https://parlo.ai",
   "license": "AGPL-3.0",
   "main": "dist/index.js",
   "typings": "dist/types/index.d.ts",
@@ -14,7 +14,7 @@
     "dist",
     "types"
   ],
-  "author": "Jan <service@jan.ai>",
+  "author": "Parlo <service@parlo.ai>",
   "scripts": {
     "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
     "test": "vitest run",

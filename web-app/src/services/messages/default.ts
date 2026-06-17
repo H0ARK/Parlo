@@ -7,7 +7,7 @@ import {
   ConversationalExtension,
   ExtensionTypeEnum,
   ThreadMessage,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import { TEMPORARY_CHAT_ID } from '@/constants/chat'
 import type { MessagesService } from './types'
 

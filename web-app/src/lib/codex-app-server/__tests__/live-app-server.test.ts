@@ -95,7 +95,7 @@ describe('Codex app-server live integration', () => {
   liveIt(
     'starts the real app-server, sends one turn through an isolated mock provider, and streams assistant output',
     async () => {
-      const tempRoot = mkdtempSync(join(tmpdir(), 'jan-codex-live-'))
+      const tempRoot = mkdtempSync(join(tmpdir(), 'Parlo-codex-live-'))
       const codexHome = join(tempRoot, 'codex-home')
       const workspace = join(tempRoot, 'workspace')
       mkdirSync(workspace, { recursive: true })
@@ -123,7 +123,7 @@ describe('Codex app-server live integration', () => {
                 id: 'mock',
                 name: 'mock',
                 baseUrl: `http://127.0.0.1:${port}/v1`,
-                apiKeyEnvVar: 'JAN_CODEX_MOCK_API_KEY',
+                apiKeyEnvVar: 'PARLO_CODEX_MOCK_API_KEY',
                 wireApi: 'responses',
               },
             ],
@@ -134,7 +134,7 @@ describe('Codex app-server live integration', () => {
           approvalPolicy: 'never',
           sandbox: 'read-only',
           env: {
-            JAN_CODEX_MOCK_API_KEY: 'test-key',
+            PARLO_CODEX_MOCK_API_KEY: 'test-key',
           },
         },
       })
@@ -142,8 +142,8 @@ describe('Codex app-server live integration', () => {
       try {
         const events = []
         for await (const event of session.sendMessage({
-          appThreadId: 'jan-live-thread',
-          clientUserMessageId: 'jan-live-message',
+          appThreadId: 'Parlo-live-thread',
+          clientUserMessageId: 'Parlo-live-message',
           text: 'Say hello from the mock provider.',
         })) {
           events.push(event)

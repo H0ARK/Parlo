@@ -15,7 +15,7 @@ use tokio::{
     sync::{mpsc, Mutex},
 };
 
-use crate::core::app::commands::get_jan_data_folder_path;
+use crate::core::app::commands::get_parlo_data_folder_path;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -83,13 +83,13 @@ struct StudioRuntimeStore {
 }
 
 fn studio_store_path<R: Runtime>(app: &AppHandle<R>) -> PathBuf {
-    get_jan_data_folder_path(app.clone())
+    get_parlo_data_folder_path(app.clone())
         .join("studio")
         .join("runtimes.json")
 }
 
 fn studio_logs_dir<R: Runtime>(app: &AppHandle<R>) -> PathBuf {
-    get_jan_data_folder_path(app.clone())
+    get_parlo_data_folder_path(app.clone())
         .join("studio")
         .join("logs")
 }
@@ -445,7 +445,7 @@ pub async fn spawn_studio_runtime<R: Runtime>(
     };
 
     let normalized_base_url = normalize_base_url(&base_url);
-    let endpoint_probe = probe_openai_endpoint_sync(&normalized_base_url, Some("jan".to_string()));
+    let endpoint_probe = probe_openai_endpoint_sync(&normalized_base_url, Some("Parlo".to_string()));
     if endpoint_probe.reachable {
         let logs_dir = studio_logs_dir(&app);
         fs::create_dir_all(&logs_dir).map_err(|e| e.to_string())?;
@@ -469,7 +469,7 @@ pub async fn spawn_studio_runtime<R: Runtime>(
     let binary_probe = probe_binary_sync(binary);
     let binary_path = binary_probe.path.ok_or_else(|| {
         format!(
-            "{binary} was not found. Install it and ensure the binary is available to Jan (PATH, Homebrew, or /Applications/Ollama.app)."
+            "{binary} was not found. Install it and ensure the binary is available to Parlo (PATH, Homebrew, or /Applications/Ollama.app)."
         )
     })?;
 
@@ -623,7 +623,7 @@ pub async fn write_codex_app_server_config<R: Runtime>(
     let codex_home_path = if path.is_absolute() {
         path
     } else {
-        get_jan_data_folder_path(app).join(path)
+        get_parlo_data_folder_path(app).join(path)
     };
     fs::create_dir_all(&codex_home_path).map_err(|e| e.to_string())?;
     let config_path = codex_home_path.join("config.toml");
@@ -694,7 +694,7 @@ pub async fn start_codex_app_server<R: Runtime>(
     if let Some(codex_home) = env.get_mut("CODEX_HOME") {
         let path = PathBuf::from(&codex_home);
         if !path.is_absolute() {
-            let abs_path = get_jan_data_folder_path(app.clone()).join(path);
+            let abs_path = get_parlo_data_folder_path(app.clone()).join(path);
             *codex_home = abs_path.to_string_lossy().into_owned();
         }
     }
@@ -982,7 +982,7 @@ pub struct CodexCliRunResult {
 }
 
 /// Run a Codex CLI subcommand (doctor, exec, resume, etc.) with optional CODEX_HOME and cwd.
-/// Used by Jan Studio for diagnostics and non-interactive Codex CLI bridging.
+/// Used by Parlo Studio for diagnostics and non-interactive Codex CLI bridging.
 #[tauri::command]
 pub async fn run_codex_cli_subcommand<R: Runtime>(
     app: AppHandle<R>,
@@ -1003,7 +1003,7 @@ pub async fn run_codex_cli_subcommand<R: Runtime>(
         let resolved = if path.is_absolute() {
             path
         } else {
-            get_jan_data_folder_path(app).join(path)
+            get_parlo_data_folder_path(app).join(path)
         };
         env.insert(
             "CODEX_HOME".to_string(),

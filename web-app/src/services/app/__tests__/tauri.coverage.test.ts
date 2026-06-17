@@ -5,7 +5,7 @@ vi.mock('@tauri-apps/api/core', () => ({
   invoke: vi.fn(),
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   EngineManager: {
     instance: () => ({
       engines: new Map([
@@ -89,7 +89,7 @@ describe('TauriAppService – coverage', () => {
       const { invoke } = await import('@tauri-apps/api/core')
       vi.mocked(invoke).mockResolvedValue(undefined)
 
-      const { EngineManager } = await import('@janhq/core')
+      const { EngineManager } = await import('@parlo-lab/core')
       const engine = (EngineManager as any).instance().engines.get('engine1')
       engine.getLoadedModels.mockResolvedValueOnce(null)
 
@@ -99,12 +99,12 @@ describe('TauriAppService – coverage', () => {
     })
   })
 
-  describe('getJanDataFolder', () => {
+  describe('getParloDataFolder', () => {
     it('returns undefined on error', async () => {
       const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
       mockWindowCore.api.getAppConfigurations.mockRejectedValue(new Error('fail'))
 
-      const result = await svc.getJanDataFolder()
+      const result = await svc.getParloDataFolder()
 
       expect(result).toBeUndefined()
       expect(spy).toHaveBeenCalled()
@@ -114,7 +114,7 @@ describe('TauriAppService – coverage', () => {
     it('returns undefined when config has no data_folder', async () => {
       mockWindowCore.api.getAppConfigurations.mockResolvedValue({})
 
-      const result = await svc.getJanDataFolder()
+      const result = await svc.getParloDataFolder()
 
       expect(result).toBeUndefined()
     })

@@ -108,9 +108,9 @@ describe('DefaultMCPService', () => {
     })
   })
 
-  describe('checkJanBrowserExtensionConnected', () => {
+  describe('checkParloBrowserExtensionConnected', () => {
     it('returns false', async () => {
-      const result = await svc.checkJanBrowserExtensionConnected()
+      const result = await svc.checkParloBrowserExtensionConnected()
       expect(result).toBe(false)
     })
   })

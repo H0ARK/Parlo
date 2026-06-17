@@ -2,14 +2,14 @@ pub mod core;
 
 #[cfg(not(feature = "cli"))]
 use core::{
-    app::commands::get_jan_data_folder_path,
+    app::commands::get_parlo_data_folder_path,
     downloads::models::DownloadManagerState,
     mcp::models::McpSettings,
     setup::{self, setup_mcp},
     state::AppState,
 };
 #[cfg(not(feature = "cli"))]
-use jan_utils::generate_app_token;
+use parlo_utils::generate_app_token;
 #[cfg(not(feature = "cli"))]
 use std::{collections::HashMap, sync::Arc};
 #[cfg(not(feature = "cli"))]
@@ -42,13 +42,13 @@ macro_rules! invoke_commands_with_extras {
         core::app::commands::get_app_configurations,
         core::app::commands::get_user_home_path,
         core::app::commands::update_app_configuration,
-        core::app::commands::get_jan_data_folder_path,
+        core::app::commands::get_parlo_data_folder_path,
         core::app::commands::get_configuration_file_path,
         core::app::commands::default_data_folder_path,
         core::app::commands::change_app_data_folder,
         core::app::commands::app_token,
         // Extension commands
-        core::extensions::commands::get_jan_extensions_path,
+        core::extensions::commands::get_parlo_extensions_path,
         core::extensions::commands::install_extensions,
         core::extensions::commands::get_active_extensions,
         // System commands
@@ -61,9 +61,9 @@ macro_rules! invoke_commands_with_extras {
         core::system::commands::list_running_processes,
         core::system::commands::is_library_available,
         core::system::commands::launch_claude_code_with_config,
-        core::system::commands::check_jan_cli_installed,
-        core::system::commands::install_jan_cli,
-        core::system::commands::uninstall_jan_cli,
+        core::system::commands::check_parlo_cli_installed,
+        core::system::commands::install_parlo_cli,
+        core::system::commands::uninstall_parlo_cli,
         core::system::commands::clear_claude_code_env,
         // Studio runtime commands
         core::studio::commands::probe_binary_on_path,
@@ -121,7 +121,7 @@ macro_rules! invoke_commands_with_extras {
         core::mcp::commands::get_mcp_configs,
         core::mcp::commands::activate_mcp_server,
         core::mcp::commands::deactivate_mcp_server,
-        core::mcp::commands::check_jan_browser_extension_connected,
+        core::mcp::commands::check_parlo_browser_extension_connected,
         // Threads
         core::threads::commands::list_threads,
         core::threads::commands::create_thread,
@@ -239,7 +239,7 @@ async fn handle_graceful_exit<R: tauri::Runtime>(
 pub fn run() {
     let mut builder = tauri::Builder::default();
     // Single-instance only in release builds. Dev `cargo run` shares the same
-    // bundle id as the installed Jan.app and would otherwise exit immediately
+    // bundle id as the installed Parlo.app and would otherwise exit immediately
     // when another copy is already open.
     #[cfg(all(desktop, not(debug_assertions)))]
     {
@@ -315,7 +315,7 @@ pub fn run() {
                         tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::Stdout),
                         tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::Webview),
                         tauri_plugin_log::Target::new(tauri_plugin_log::TargetKind::Folder {
-                            path: get_jan_data_folder_path(app.handle().clone()).join("logs"),
+                            path: get_parlo_data_folder_path(app.handle().clone()).join("logs"),
                             file_name: Some("app".to_string()),
                         }),
                     ])
@@ -326,7 +326,7 @@ pub fn run() {
                 .plugin(tauri_plugin_updater::Builder::new().build())?;
 
             // Start migration
-            let mut store_path = get_jan_data_folder_path(app.handle().clone());
+            let mut store_path = get_parlo_data_folder_path(app.handle().clone());
             store_path.push("store.json");
             let store = app
                 .handle()
@@ -379,7 +379,7 @@ pub fn run() {
 
             setup_mcp(app);
             #[cfg(desktop)]
-            setup::setup_jan_cli(app.handle().clone(), stored_version != app_version);
+            setup::setup_parlo_cli(app.handle().clone(), stored_version != app_version);
             setup::setup_theme_listener(app)?;
             #[cfg(target_os = "linux")]
             setup::shrink_gtk_headerbar(app);

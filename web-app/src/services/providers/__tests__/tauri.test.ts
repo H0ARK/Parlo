@@ -24,7 +24,7 @@ vi.mock('@/constants/models', () => ({
   },
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   EngineManager: {
     instance: vi.fn(),
   },
@@ -79,7 +79,7 @@ vi.mock('@/lib/provider-api-keys', () => ({
 }))
 
 import { fetch as fetchTauri } from '@tauri-apps/plugin-http'
-import { EngineManager } from '@janhq/core'
+import { EngineManager } from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 import {
   providerRemoteApiKeyChain,

@@ -229,7 +229,7 @@ describe('CodexAppServerSession', () => {
       spawner,
       options: {
         codexBinaryPath: '/Applications/Codex.app/Contents/Resources/codex',
-        codexHome: '/repo/.jan/codex-home',
+        codexHome: '/repo/.Parlo/codex-home',
         cwd: '/repo',
         model: 'gpt-test',
         modelProvider: 'openai',
@@ -241,12 +241,12 @@ describe('CodexAppServerSession', () => {
     expect(init.userAgent).toBe('codex-test')
     expect(process.spawnArgs).toContain('app-server')
     expect(process.spawnArgs).toContain('--stdio')
-    expect(process.spawnEnv.CODEX_HOME).toBe('/repo/.jan/codex-home')
+    expect(process.spawnEnv.CODEX_HOME).toBe('/repo/.Parlo/codex-home')
     expect(process.spawnCwd).toBe('/repo')
 
     const events = []
     for await (const event of session.sendMessage({
-      appThreadId: 'jan-thread-1',
+      appThreadId: 'Parlo-thread-1',
       text: 'say hello',
     })) {
       events.push(event)
@@ -255,7 +255,7 @@ describe('CodexAppServerSession', () => {
     expect(events).toEqual([
       {
         type: 'thread_started',
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         threadId: 'codex-thread-1',
         thread: expect.objectContaining({ id: 'codex-thread-1' }),
       },
@@ -331,7 +331,7 @@ describe('CodexAppServerSession', () => {
     })
 
     const iterator = session.sendMessage({
-      appThreadId: 'jan-thread-1',
+      appThreadId: 'Parlo-thread-1',
       text: 'say hello',
     })
 
@@ -400,7 +400,7 @@ describe('CodexAppServerSession', () => {
 
     await collectEvents(
       session.sendMessage({
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         text: 'first message',
       })
     )
@@ -408,7 +408,7 @@ describe('CodexAppServerSession', () => {
 
     const secondEvents = await collectEvents(
       session.sendMessage({
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         text: 'second message',
       })
     )
@@ -492,7 +492,7 @@ describe('CodexAppServerSession', () => {
 
     const events = await collectEvents(
       session.sendMessage({
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         text: 'run the tests',
       })
     )
@@ -585,7 +585,7 @@ describe('CodexAppServerSession', () => {
 
     const events = await collectEvents(
       session.sendMessage({
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         text: 'run the tests',
       })
     )
@@ -670,7 +670,7 @@ describe('CodexAppServerSession', () => {
 
     const events = await collectEvents(
       session.sendMessage({
-        appThreadId: 'jan-thread-1',
+        appThreadId: 'Parlo-thread-1',
         text: 'run command',
       })
     )
@@ -808,7 +808,7 @@ describe('Codex app-server notification parity events', () => {
       spawner,
       options: {
         codexBinaryPath: '/Applications/Codex.app/Contents/Resources/codex',
-        codexHome: '/repo/.jan/codex-home',
+        codexHome: '/repo/.Parlo/codex-home',
         cwd: '/repo',
         model: 'gpt-test',
         modelProvider: 'openai',
@@ -820,7 +820,7 @@ describe('Codex app-server notification parity events', () => {
 
     const events: unknown[] = []
     for await (const event of session.sendMessage({
-      appThreadId: 'jan-thread-1',
+      appThreadId: 'Parlo-thread-1',
       text: 'exercise parity events',
     })) {
       events.push(event)

@@ -4,8 +4,8 @@ type CodexThreadMetadata = {
   threadId?: string
 }
 
-export function readPersistedCodexThreadId(janThreadId: string): string | undefined {
-  const thread = useThreads.getState().threads[janThreadId]
+export function readPersistedCodexThreadId(parloThreadId: string): string | undefined {
+  const thread = useThreads.getState().threads[parloThreadId]
   const codex = thread?.metadata?.codex
   if (!codex || typeof codex !== 'object') return undefined
   const threadId = (codex as CodexThreadMetadata).threadId
@@ -13,19 +13,19 @@ export function readPersistedCodexThreadId(janThreadId: string): string | undefi
 }
 
 export function persistCodexThreadId(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ): void {
   const trimmed = codexThreadId.trim()
   if (!trimmed) return
 
-  const thread = useThreads.getState().threads[janThreadId]
+  const thread = useThreads.getState().threads[parloThreadId]
   if (!thread) return
 
-  const existing = readPersistedCodexThreadId(janThreadId)
+  const existing = readPersistedCodexThreadId(parloThreadId)
   if (existing === trimmed) return
 
-  useThreads.getState().updateThread(janThreadId, {
+  useThreads.getState().updateThread(parloThreadId, {
     metadata: {
       ...thread.metadata,
       codex: {

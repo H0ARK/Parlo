@@ -4,7 +4,7 @@ import {
   ExtensionTypeEnum,
   type RAGExtension,
   type SettingComponentProps,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 
 export type AttachmentsSettings = {
   enabled: boolean

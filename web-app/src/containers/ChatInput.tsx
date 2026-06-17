@@ -78,7 +78,7 @@ import {
   MCPExtension,
   fs,
   VectorDBExtension,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import { ExtensionManager } from '@/lib/extension'
 import { useAttachments } from '@/hooks/useAttachments'
 import { toast } from 'sonner'
@@ -95,8 +95,8 @@ import {
   createDocumentAttachment,
   createAudioAttachment,
 } from '@/types/attachment'
-import JanBrowserExtensionDialog from '@/containers/dialogs/JanBrowserExtensionDialog'
-import { useJanBrowserExtension } from '@/hooks/useJanBrowserExtension'
+import ParloBrowserExtensionDialog from '@/containers/dialogs/ParloBrowserExtensionDialog'
+import { useParloBrowserExtension } from '@/hooks/useParloBrowserExtension'
 import { useAgentMode } from '@/hooks/useAgentMode'
 import { ChatWorkspaceBar } from '@/containers/ChatWorkspaceBar'
 import { ChatSlashCommandMenu } from '@/containers/ChatSlashCommandMenu'
@@ -242,7 +242,7 @@ const ChatInput = memo(function ChatInput({
     toggleBrowser: handleBrowseClick,
     handleCancel: handleExtensionDialogCancel,
     setDialogOpen: setExtensionDialogOpen,
-  } = useJanBrowserExtension()
+  } = useParloBrowserExtension()
 
   // Check if model supports browser feature (requires both vision and tools)
   const modelSupportsBrowser = useMemo(() => {
@@ -2503,7 +2503,7 @@ const ChatInput = memo(function ChatInput({
           </div>
         )}
 
-      <JanBrowserExtensionDialog
+      <ParloBrowserExtensionDialog
         open={extensionDialogOpen}
         onOpenChange={setExtensionDialogOpen}
         state={extensionDialogState}

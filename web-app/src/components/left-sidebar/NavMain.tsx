@@ -66,7 +66,7 @@ const getNavMainItems = (
   onNewProject: () => void,
   onSearch: () => void,
   onNewChat: () => void,
-  onJanClaw: () => void
+  onParloClaw: () => void
 ): NavMainItem[] => [
   {
     title: 'common:review',
@@ -91,7 +91,7 @@ const getNavMainItems = (
   {
     title: 'common:newAgentChat',
     animatedIcon: BotIcon,
-    onClick: onJanClaw,
+    onClick: onParloClaw,
     shortcut: (
       <KbdGroup className="ml-auto scale-90 gap-0">
         <Kbd className="bg-transparent size-3">

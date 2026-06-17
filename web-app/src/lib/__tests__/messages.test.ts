@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ContentType, MessageStatus } from '@janhq/core'
+import { ContentType, MessageStatus } from '@parlo-lab/core'
 import type { UIMessage } from '@ai-sdk/react'
 import {
   convertUIMessageToThreadMessage,

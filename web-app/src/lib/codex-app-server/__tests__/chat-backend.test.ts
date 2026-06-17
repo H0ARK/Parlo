@@ -27,7 +27,6 @@ import {
   runCodexCliSandbox,
   runCodexCliUpdate,
   runCodexCliExecServer,
-  runCodexCliProto,
   runCodexCliRemoteControl,
   runCodexLogout,
   runCodexVersion,
@@ -176,7 +175,7 @@ vi.mock('@/hooks/useLocalApiServer', () => ({
       serverHost: '127.0.0.1',
       serverPort: 1337,
       apiPrefix: '/v1',
-      apiKey: 'jan-local-api-key',
+      apiKey: 'Parlo-local-api-key',
       trustedHosts: ['localhost'],
       corsEnabled: true,
       verboseLogs: true,
@@ -263,7 +262,7 @@ vi.mock('../global-codex-runtime', async () => {
     )
 
   return {
-    GLOBAL_CODEX_APP_SERVER_SESSION_ID: 'jan-global-codex-app-server',
+    GLOBAL_CODEX_APP_SERVER_SESSION_ID: 'Parlo-global-codex-app-server',
     buildCodexProcessSignature,
     buildCodexRuntimeSignature,
     getGlobalCodexClientOrNull: () => mockGlobalRuntime.client,
@@ -330,7 +329,7 @@ vi.mock('../api', () => ({
     shutdownCodex = vi.fn()
     setThreadOptions = vi.fn()
     seedCodexThreadBinding = vi.fn()
-    startCodexSession = vi.fn().mockResolvedValue({ userAgent: 'jan-test' })
+    startCodexSession = vi.fn().mockResolvedValue({ userAgent: 'Parlo-test' })
     reloadUserConfig = vi.fn().mockResolvedValue({})
     startReview = vi.fn().mockResolvedValue({ reviewId: 'review-1' })
     refreshMcpServers = vi.fn().mockResolvedValue({})
@@ -435,7 +434,7 @@ describe('Codex chat backend approval bridge', () => {
     })
   })
 
-  it('routes Codex approval requests through Jan approval modal and accepts approved actions', async () => {
+  it('routes Codex approval requests through Parlo approval modal and accepts approved actions', async () => {
     const stream = await sendCodexAppServerChatMessage({
       threadId: 'thread-1',
       messageId: 'assistant-1',
@@ -591,7 +590,7 @@ describe('Codex chat backend approval bridge', () => {
 
     expect(mockSessionState.instances[0].approveAction).toHaveBeenCalledWith(
       'server-request-2',
-      { token: 'v1.jan-offline' }
+      { token: 'v1.Parlo-offline' }
     )
   })
 
@@ -765,9 +764,9 @@ describe('Codex chat backend approval bridge', () => {
 
     await collect(stream)
 
-    // After disconnecting Jan's proxy: we return a failure explaining that Codex
+    // After disconnecting Parlo's proxy: we return a failure explaining that Codex
     // should (and will) use the MCP servers we wrote into its config.toml.
-    // Critically, we must NOT call through to Jan's MCP service for Codex engine tool use.
+    // Critically, we must NOT call through to Parlo's MCP service for Codex engine tool use.
 
     // NOTE: the new runtime capability layer (skills/plugins/hooks + startMcpOauthLogin + callCodexAppServer etc)
     // is exercised via the ReviewSection capabilities inspector (when codex thread) and the high-level exports.
@@ -781,7 +780,7 @@ describe('Codex chat backend approval bridge', () => {
             type: 'inputText',
             text:
               'Host tool proxy disabled. Codex executes tools directly via MCP servers ' +
-              'declared in its per-session config.toml (sourced from Jan MCP settings).',
+              'declared in its per-session config.toml (sourced from Parlo MCP settings).',
           },
         ],
       }
@@ -914,24 +913,24 @@ describe('Codex chat backend approval bridge', () => {
     expect(options).toEqual(
       expect.objectContaining({
         codexBinaryPath: '/usr/local/bin/codex',
-        codexHome: './.jan/codex-home',
+        codexHome: './.Parlo/codex-home',
         cwd: '/Users/conrad/project-one',
         model: 'gpt-oss:20b',
-        modelProvider: 'jan-gateway',
+        modelProvider: 'Parlo-gateway',
         approvalPolicy: 'on-request',
         sandbox: 'workspace-write',
-        env: { JAN_LOCAL_API_SERVER_API_KEY: 'jan-local-api-key' },
+        env: { PARLO_LOCAL_API_SERVER_API_KEY: 'Parlo-local-api-key' },
       })
     )
     expect(options.configToml).toContain('model = "gpt-oss:20b"')
-    expect(options.configToml).toContain('model_provider = "jan-gateway"')
-    expect(options.configToml).toContain('[model_providers.jan-gateway]')
+    expect(options.configToml).toContain('model_provider = "Parlo-gateway"')
+    expect(options.configToml).toContain('[model_providers.Parlo-gateway]')
     expect(options.configToml).not.toContain('[model_providers.openrouter]')
     expect(options.configToml).toContain(
       'base_url = "http://127.0.0.1:1337/v1"'
     )
     expect(options.configToml).toContain(
-      'env_key = "JAN_LOCAL_API_SERVER_API_KEY"'
+      'env_key = "PARLO_LOCAL_API_SERVER_API_KEY"'
     )
     expect(options.configToml).toContain('wire_api = "responses"')
     expect(mockWorkspaceState.calls).toEqual([
@@ -953,7 +952,7 @@ describe('Codex chat backend approval bridge', () => {
 
     expect(options.model).toBe('gpt-5.5')
     expect(options.configToml).toContain('model = "gpt-5.5"')
-    expect(options.configToml).toContain('model_provider = "jan-gateway"')
+    expect(options.configToml).toContain('model_provider = "Parlo-gateway"')
   })
 
   it('falls back to profile-selected supported model when active profile model is stale', () => {
@@ -989,7 +988,7 @@ describe('Codex chat backend approval bridge', () => {
     const ollamaProvider: ModelProvider = {
       active: true,
       provider: 'ollama',
-      api_key: 'jan',
+      api_key: 'Parlo',
       base_url: 'http://127.0.0.1:11434/v1',
       settings: [],
       models: [],
@@ -1006,15 +1005,15 @@ describe('Codex chat backend approval bridge', () => {
       expect.objectContaining({
         codexBinaryPath: '/custom/codex',
         model: 'mistral-small3.1:latest',
-        modelProvider: 'jan-ollama',
-        env: { JAN_CODEX_PROVIDER_API_KEY: 'jan' },
+        modelProvider: 'Parlo-ollama',
+        env: { PARLO_CODEX_PROVIDER_API_KEY: 'Parlo' },
       })
     )
     expect(options.configToml).toContain(
       'model = "mistral-small3.1:latest"'
     )
-    expect(options.configToml).toContain('model_provider = "jan-ollama"')
-    expect(options.configToml).toContain('[model_providers.jan-ollama]')
+    expect(options.configToml).toContain('model_provider = "Parlo-ollama"')
+    expect(options.configToml).toContain('[model_providers.Parlo-ollama]')
     expect(options.configToml).toContain('name = "ollama"')
     expect(options.configToml).toContain(
       'base_url = "http://127.0.0.1:11434/v1"'
@@ -1040,7 +1039,7 @@ describe('Codex chat backend approval bridge', () => {
       expect.objectContaining({
         model: 'grok-4.3',
         modelProvider: 'xai',
-        env: { JAN_CODEX_PROVIDER_API_KEY: 'xai-api-key' },
+        env: { PARLO_CODEX_PROVIDER_API_KEY: 'xai-api-key' },
       })
     )
     expect(options.configToml).toContain('model = "grok-4.3"')
@@ -1070,7 +1069,7 @@ describe('Codex chat backend approval bridge', () => {
     expect(options.configToml).toContain('model_reasoning_effort = "none"')
   })
 
-  it('reroutes grok models away from jan-openai when Codex settings still target openai', () => {
+  it('reroutes grok models away from Parlo-openai when Codex settings still target openai', () => {
     const codexProvider = providerWithSettings({
       codexProvider: 'openai',
       baseUrl: 'https://api.openai.com/v1',
@@ -1083,32 +1082,32 @@ describe('Codex chat backend approval bridge', () => {
     expect(options).toEqual(
       expect.objectContaining({
         model: 'grok-4.3',
-        modelProvider: 'jan-gateway',
+        modelProvider: 'Parlo-gateway',
       })
     )
-    expect(options.configToml).toContain('model_provider = "jan-gateway"')
-    expect(options.configToml).not.toContain('model_provider = "jan-openai"')
+    expect(options.configToml).toContain('model_provider = "Parlo-gateway"')
+    expect(options.configToml).not.toContain('model_provider = "Parlo-openai"')
     expect(options.configToml).toContain('base_url = "http://127.0.0.1:1337/v1"')
     expect(options.configToml).toContain('wire_api = "responses"')
   })
 
-  it('uses the Jan local API server as the default llama.cpp Codex endpoint', () => {
+  it('uses the Parlo local API server as the default llama.cpp Codex endpoint', () => {
     const llamacppProvider: ModelProvider = {
       active: true,
       provider: 'llamacpp',
-      api_key: 'jan',
+      api_key: 'Parlo',
       base_url: '',
       settings: [],
       models: [],
     }
 
     const options = buildCodexSessionOptions('thread-1', llamacppProvider, {
-      id: 'Jan-v1-4B-Q4_K_M',
+      id: 'Parlo-v1-4B-Q4_K_M',
     })
 
     expect(options).toEqual(
       expect.objectContaining({
-        model: 'Jan-v1-4B-Q4_K_M',
+        model: 'Parlo-v1-4B-Q4_K_M',
         modelProvider: 'llamacpp',
       })
     )
@@ -1119,35 +1118,35 @@ describe('Codex chat backend approval bridge', () => {
     expect(options.configToml).toContain('wire_api = "chat"')
   })
 
-  it('starts Jan-hosted local models and the local API server before Codex chat', async () => {
+  it('starts Parlo-hosted local models and the local API server before Codex chat', async () => {
     mockServiceHubState.getServerStatus.mockResolvedValue(false)
     const llamacppProvider: ModelProvider = {
       active: true,
       provider: 'llamacpp',
-      api_key: 'jan',
+      api_key: 'Parlo',
       base_url: '',
       settings: [],
-      models: [{ id: 'Jan-v1-4B-Q4_K_M' }],
+      models: [{ id: 'Parlo-v1-4B-Q4_K_M' }],
     }
 
     const stream = await sendCodexAppServerChatMessage({
       threadId: 'thread-1',
       messages,
       provider: llamacppProvider,
-      model: { id: 'Jan-v1-4B-Q4_K_M' },
+      model: { id: 'Parlo-v1-4B-Q4_K_M' },
     })
     await collect(stream)
 
     expect(mockServiceHubState.startModel).toHaveBeenCalledWith(
       llamacppProvider,
-      'Jan-v1-4B-Q4_K_M',
+      'Parlo-v1-4B-Q4_K_M',
       true
     )
     expect(mockServiceHubState.startServer).toHaveBeenCalledWith({
       host: '127.0.0.1',
       port: 1337,
       prefix: '/v1',
-      apiKey: 'jan-local-api-key',
+      apiKey: 'Parlo-local-api-key',
       trustedHosts: ['localhost'],
       isCorsEnabled: true,
       isVerboseEnabled: true,
@@ -1165,7 +1164,7 @@ describe('Codex chat backend approval bridge', () => {
     expect(buildCodexSessionOptions('thread-1', provider, model)).toEqual(
       expect.objectContaining({
         cwd: '/Users/conrad/chat-space/',
-        codexHome: './.jan/codex-home',
+        codexHome: './.Parlo/codex-home',
       })
     )
 
@@ -1174,26 +1173,26 @@ describe('Codex chat backend approval bridge', () => {
     expect(buildCodexSessionOptions('thread-1', provider, model)).toEqual(
       expect.objectContaining({
         cwd: './',
-        codexHome: './.jan/codex-home',
+        codexHome: './.Parlo/codex-home',
       })
     )
   })
 
-  it('selects proto transport from provider settings', () => {
+  it('always uses app-server transport', () => {
     const options = buildCodexSessionOptions(
       'thread-1',
-      providerWithSettings({ codexTransport: 'proto' }),
+      providerWithSettings(),
       model
     )
 
     expect(options).toEqual(
       expect.objectContaining({
-        transport: 'proto',
+        transport: 'app-server',
       })
     )
   })
 
-  it('writes active Jan MCP servers into Codex config.toml for the runtime', () => {
+  it('writes active Parlo MCP servers into Codex config.toml for the runtime', () => {
     mockMcpServersState.mcpServers = {
       exa: {
         command: '',
@@ -1383,7 +1382,6 @@ describe('Codex chat backend approval bridge', () => {
         model: 'qwen3-coder',
         apiKeyEnv: 'OLLAMA_API_KEY',
         codexHome: '/Users/conrad/ollama-home',
-        transport: 'proto',
         providerType: 'ollama',
       },
     }
@@ -1402,15 +1400,15 @@ describe('Codex chat backend approval bridge', () => {
     expect(options).toEqual(
       expect.objectContaining({
         codexHome: '/Users/conrad/ollama-home',
-        transport: 'proto',
+        transport: 'app-server',
         model: 'qwen3-coder',
-        modelProvider: 'jan-ollama',
+        modelProvider: 'Parlo-ollama',
         env: { OLLAMA_API_KEY: 'ollama-test-key' },
       })
     )
     expect(options.configToml).toContain('model = "qwen3-coder"')
-    expect(options.configToml).toContain('model_provider = "jan-ollama"')
-    expect(options.configToml).toContain('[model_providers.jan-ollama]')
+    expect(options.configToml).toContain('model_provider = "Parlo-ollama"')
+    expect(options.configToml).toContain('[model_providers.Parlo-ollama]')
     expect(options.configToml).not.toContain('[model_providers.ollama]')
     expect(options.configToml).toContain(
       'base_url = "http://localhost:11434/v1"'
@@ -1442,7 +1440,7 @@ describe('Codex chat backend approval bridge', () => {
     expect(mockRuntimePermission.requestPermission).toHaveBeenCalledWith(
       expect.objectContaining({
         details: expect.objectContaining({
-          janThreadId: 'thread-1',
+          parloThreadId: 'thread-1',
           threadId: 'thread-1',
           codexThreadId: 'codex-sub-thread-9',
           source: 'subagent',
@@ -1599,27 +1597,6 @@ describe('Codex chat backend approval bridge', () => {
       args: ['mcp', '-c', 'foo=bar'],
       cwd: null,
       codexHome: '/tmp/codex-home',
-      extraEnv: null,
-    })
-    expect(result.exitCode).toBe(0)
-  })
-
-  it('runs codex proto via dedicated helper', async () => {
-    vi.mocked(invoke).mockResolvedValueOnce({
-      stdout: '',
-      stderr: '',
-      exitCode: 0,
-    })
-
-    const result = await runCodexCliProto({
-      args: ['--help'],
-    })
-
-    expect(invoke).toHaveBeenCalledWith('run_codex_cli_subcommand', {
-      command: 'codex',
-      args: ['proto', '--help'],
-      cwd: null,
-      codexHome: null,
       extraEnv: null,
     })
     expect(result.exitCode).toBe(0)
@@ -2174,7 +2151,6 @@ describe('Codex chat backend approval bridge', () => {
         apiKeyEnv: 'OLLAMA_API_KEY',
         codexHome: '/Users/conrad/ollama-home',
         providerType: 'ollama',
-        transport: 'proto',
         approvalPolicy: 'untrusted',
         sandbox: 'read-only',
       },
@@ -2185,7 +2161,7 @@ describe('Codex chat backend approval bridge', () => {
 
     expect(options).toEqual(
       expect.objectContaining({
-        transport: 'proto',
+        transport: 'app-server',
         approvalPolicy: 'untrusted',
         sandbox: 'read-only',
       })
@@ -2198,13 +2174,11 @@ function providerWithSettings({
   baseUrl = '',
   codexProvider = '',
   codexBinaryPath = '',
-  codexTransport = '',
 }: {
   apiKey?: string
   baseUrl?: string
   codexProvider?: string
   codexBinaryPath?: string
-  codexTransport?: string
 }): ModelProvider {
   return {
     active: true,
@@ -2216,7 +2190,6 @@ function providerWithSettings({
       setting('base-url', baseUrl),
       setting('codex-provider', codexProvider),
       setting('codex-binary-path', codexBinaryPath),
-      setting('codex-transport', codexTransport),
     ],
     models: [],
   }

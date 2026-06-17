@@ -7,68 +7,68 @@ param(
 
 Write-Host "Cleaning up after tests..."
 
-# Kill any running Jan processes (both regular and nightly)
-Get-Process -Name "Jan" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-Process -Name "jan" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-Process -Name "Jan-nightly" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-Process -Name "jan-nightly" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+# Kill any running Parlo processes (both regular and nightly)
+Get-Process -Name "Parlo" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -Name "Parlo" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -Name "Parlo-nightly" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -Name "Parlo-nightly" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
-# Remove Jan data folders (both regular and nightly)
-$janAppData = "$env:APPDATA\Jan"
-$janNightlyAppData = "$env:APPDATA\Jan-nightly"
-$janLocalAppData = "$env:LOCALAPPDATA\jan.ai.app"
-$janNightlyLocalAppData = "$env:LOCALAPPDATA\jan-nightly.ai.app"
-$janProgramsPath = "$env:LOCALAPPDATA\Programs\Jan"
-$janNightlyProgramsPath = "$env:LOCALAPPDATA\Programs\Jan-nightly"
+# Remove Parlo data folders (both regular and nightly)
+$parloAppData = "$env:APPDATA\Parlo"
+$parloNightlyAppData = "$env:APPDATA\Parlo-nightly"
+$parloLocalAppData = "$env:LOCALAPPDATA\Parlo.ai.app"
+$parloNightlyLocalAppData = "$env:LOCALAPPDATA\Parlo-nightly.ai.app"
+$parloProgramsPath = "$env:LOCALAPPDATA\Programs\Parlo"
+$parloNightlyProgramsPath = "$env:LOCALAPPDATA\Programs\Parlo-nightly"
 
-if (Test-Path $janAppData) {
-    Write-Host "Removing $janAppData"
-    Remove-Item -Path $janAppData -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloAppData) {
+    Write-Host "Removing $parloAppData"
+    Remove-Item -Path $parloAppData -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if (Test-Path $janNightlyAppData) {
-    Write-Host "Removing $janNightlyAppData"
-    Remove-Item -Path $janNightlyAppData -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloNightlyAppData) {
+    Write-Host "Removing $parloNightlyAppData"
+    Remove-Item -Path $parloNightlyAppData -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if (Test-Path $janLocalAppData) {
-    Write-Host "Removing $janLocalAppData"
-    Remove-Item -Path $janLocalAppData -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloLocalAppData) {
+    Write-Host "Removing $parloLocalAppData"
+    Remove-Item -Path $parloLocalAppData -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if (Test-Path $janNightlyLocalAppData) {
-    Write-Host "Removing $janNightlyLocalAppData"
-    Remove-Item -Path $janNightlyLocalAppData -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloNightlyLocalAppData) {
+    Write-Host "Removing $parloNightlyLocalAppData"
+    Remove-Item -Path $parloNightlyLocalAppData -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if (Test-Path $janProgramsPath) {
-    Write-Host "Removing $janProgramsPath"
-    Remove-Item -Path $janProgramsPath -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloProgramsPath) {
+    Write-Host "Removing $parloProgramsPath"
+    Remove-Item -Path $parloProgramsPath -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-if (Test-Path $janNightlyProgramsPath) {
-    Write-Host "Removing $janNightlyProgramsPath"
-    Remove-Item -Path $janNightlyProgramsPath -Recurse -Force -ErrorAction SilentlyContinue
+if (Test-Path $parloNightlyProgramsPath) {
+    Write-Host "Removing $parloNightlyProgramsPath"
+    Remove-Item -Path $parloNightlyProgramsPath -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-# Remove Jan extensions folder
-$janExtensionsPath = "$env:USERPROFILE\jan\extensions"
-if (Test-Path $janExtensionsPath) {
-    Write-Host "Removing $janExtensionsPath"
-    Remove-Item -Path $janExtensionsPath -Recurse -Force -ErrorAction SilentlyContinue
+# Remove Parlo extensions folder
+$parloExtensionsPath = "$env:USERPROFILE\Parlo\extensions"
+if (Test-Path $parloExtensionsPath) {
+    Write-Host "Removing $parloExtensionsPath"
+    Remove-Item -Path $parloExtensionsPath -Recurse -Force -ErrorAction SilentlyContinue
 }
 
-# Try to uninstall Jan app silently
+# Try to uninstall Parlo app silently
 try {
     $isNightly = [System.Convert]::ToBoolean($IsNightly)
 
     # Determine uninstaller path based on nightly flag
     if ($isNightly) {
-        $uninstallerPath = "$env:LOCALAPPDATA\Programs\jan-nightly\uninstall.exe"
-        $installPath = "$env:LOCALAPPDATA\Programs\jan-nightly"
+        $uninstallerPath = "$env:LOCALAPPDATA\Programs\Parlo-nightly\uninstall.exe"
+        $installPath = "$env:LOCALAPPDATA\Programs\Parlo-nightly"
     } else {
-        $uninstallerPath = "$env:LOCALAPPDATA\Programs\jan\uninstall.exe"
-        $installPath = "$env:LOCALAPPDATA\Programs\jan"
+        $uninstallerPath = "$env:LOCALAPPDATA\Programs\Parlo\uninstall.exe"
+        $installPath = "$env:LOCALAPPDATA\Programs\Parlo"
     }
 
     Write-Host "Looking for uninstaller at: $uninstallerPath"
@@ -86,15 +86,15 @@ try {
         }
     }
 
-    Write-Host "Jan app cleanup completed"
+    Write-Host "Parlo app cleanup completed"
 }
 catch {
-    Write-Warning "Failed to uninstall Jan app cleanly: $_"
+    Write-Warning "Failed to uninstall Parlo app cleanly: $_"
     Write-Host "Manual cleanup may be required"
 }
 
 # Clean up downloaded installer
-$installerPath = "$env:TEMP\jan-installer.exe"
+$installerPath = "$env:TEMP\Parlo-installer.exe"
 if (Test-Path $installerPath) {
     Remove-Item -Path $installerPath -Force -ErrorAction SilentlyContinue
 }

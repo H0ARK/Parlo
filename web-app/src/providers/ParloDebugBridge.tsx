@@ -50,7 +50,7 @@ const fallbackMacDataFolder = () => {
 
 const resolveJanDataFolder = async (serviceHub: ReturnType<typeof useServiceHub>) => {
   try {
-    const fromService = await serviceHub.app().getJanDataFolder()
+    const fromService = await serviceHub.app().getParloDataFolder()
     if (fromService) return fromService
   } catch (error) {
     console.debug('Jan debug bridge service data-folder lookup failed:', error)
@@ -352,7 +352,7 @@ const buildFallbackDebugState = (error: unknown): JanDebugBridgeState => ({
   },
 })
 
-export function JanDebugBridge() {
+export function ParloDebugBridge() {
   const serviceHub = useServiceHub()
 
   useEffect(() => {

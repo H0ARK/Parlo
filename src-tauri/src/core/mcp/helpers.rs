@@ -18,11 +18,11 @@ use tokio::{
 };
 
 use crate::core::{
-    app::commands::get_jan_data_folder_path,
+    app::commands::get_parlo_data_folder_path,
     mcp::models::{McpServerConfig, McpSettings},
     state::{AppState, RunningServiceEnum, SharedMcpServers},
 };
-use jan_utils::{can_override_npx, can_override_uvx};
+use parlo_utils::{can_override_npx, can_override_uvx};
 
 #[derive(Debug, Clone, Copy)]
 pub enum ShutdownContext {
@@ -62,7 +62,7 @@ pub async fn run_mcp_commands<R: Runtime>(
     app: &AppHandle<R>,
     servers_state: SharedMcpServers,
 ) -> Result<(), String> {
-    let app_path = get_jan_data_folder_path(app.clone());
+    let app_path = get_parlo_data_folder_path(app.clone());
     let app_path_str = app_path.to_str().unwrap().to_string();
     log::trace!(
         "Load MCP configs from {}",
@@ -389,7 +389,7 @@ async fn schedule_mcp_start_task<R: Runtime>(
     name: String,
     config: Value,
 ) -> Result<(), String> {
-    let app_path = get_jan_data_folder_path(app.clone());
+    let app_path = get_parlo_data_folder_path(app.clone());
     let exe_path = env::current_exe().expect("Failed to get current exe path");
     let exe_parent_path = exe_path
         .parent()
@@ -438,7 +438,7 @@ async fn schedule_mcp_start_task<R: Runtime>(
             protocol_version: Default::default(),
             capabilities: ClientCapabilities::default(),
             client_info: Implementation {
-                name: "Jan Streamable Client".to_string(),
+                name: "Parlo Streamable Client".to_string(),
                 version: "0.0.1".to_string(),
                 title: None,
                 website_url: None,
@@ -508,7 +508,7 @@ async fn schedule_mcp_start_task<R: Runtime>(
             protocol_version: Default::default(),
             capabilities: ClientCapabilities::default(),
             client_info: Implementation {
-                name: "Jan SSE Client".to_string(),
+                name: "Parlo SSE Client".to_string(),
                 version: "0.0.1".to_string(),
                 title: None,
                 website_url: None,
@@ -536,11 +536,11 @@ async fn schedule_mcp_start_task<R: Runtime>(
             }
         }
     } else {
-        if name == "Jan Browser MCP" {
+        if name == "Parlo Browser MCP" {
             if let Some(port_str) = config_params.envs.get("BRIDGE_PORT") {
                 if let Some(port_str) = port_str.as_str() {
                     if let Ok(port) = port_str.parse::<u16>() {
-                        if !jan_utils::network::is_port_available(port) {
+                        if !parlo_utils::network::is_port_available(port) {
                             log::warn!("Port {} occupied, attempting cleanup", port);
                             match kill_orphaned_mcp_process_with_app(&app, port).await {
                                 Ok(true) => {
@@ -548,7 +548,7 @@ async fn schedule_mcp_start_task<R: Runtime>(
                                 }
                                 Ok(false) => {
                                     return Err(format!(
-                                        "Port {} is already in use. Please close the application using this port or restart Jan.",
+                                        "Port {} is already in use. Please close the application using this port or restart Parlo.",
                                         port
                                     ));
                                 }
@@ -747,8 +747,8 @@ async fn schedule_mcp_start_task<R: Runtime>(
         // If all attempts failed, we still proceed to emit the event.
         // The health monitor will handle ongoing reconnection.
 
-        // Create lock file for Jan Browser MCP
-        if name == "Jan Browser MCP" {
+        // Create lock file for Parlo Browser MCP
+        if name == "Parlo Browser MCP" {
             if let Some(port_str) = config_params.envs.get("BRIDGE_PORT") {
                 if let Some(port_str) = port_str.as_str() {
                     if let Ok(port) = port_str.parse::<u16>() {
@@ -766,7 +766,7 @@ async fn schedule_mcp_start_task<R: Runtime>(
     Ok(())
 }
 
-/// Route an MCP server's stderr line through Jan's logger at the level the
+/// Route an MCP server's stderr line through Parlo's logger at the level the
 /// server itself reported, defaulting to info when no level tag is present.
 fn log_mcp_stderr_line(server_name: &str, line: &str) {
     let trimmed = line.trim_start();
@@ -882,8 +882,8 @@ pub async fn kill_orphaned_mcp_process_with_app<R: Runtime>(
         }
 
         // Process from lock file is alive - verify it's still the MCP process
-        if let Some(process_info) = jan_utils::network::get_process_info_by_pid(lock.pid) {
-            if jan_utils::network::is_orphaned_mcp_process(&process_info) {
+        if let Some(process_info) = parlo_utils::network::get_process_info_by_pid(lock.pid) {
+            if parlo_utils::network::is_orphaned_mcp_process(&process_info) {
                 log::info!(
                     "Lock file PID {} verified as MCP process, attempting kill",
                     lock.pid
@@ -895,7 +895,7 @@ pub async fn kill_orphaned_mcp_process_with_app<R: Runtime>(
 
                 tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
-                if jan_utils::network::is_port_available(port) {
+                if parlo_utils::network::is_port_available(port) {
                     log::info!("Cleaned up orphaned process via lock file");
                     return Ok(true);
                 }
@@ -919,7 +919,7 @@ pub async fn kill_orphaned_mcp_process_with_app<R: Runtime>(
     }
 
     // Fallback: Use lsof/netstat to find process on port
-    let process_info = match jan_utils::network::find_process_using_port(port) {
+    let process_info = match parlo_utils::network::find_process_using_port(port) {
         Some(info) => info,
         None => return Ok(false),
     };
@@ -932,9 +932,9 @@ pub async fn kill_orphaned_mcp_process_with_app<R: Runtime>(
         process_info.cmd
     );
 
-    if !jan_utils::network::is_orphaned_mcp_process(&process_info) {
+    if !parlo_utils::network::is_orphaned_mcp_process(&process_info) {
         log::warn!(
-            "Port {} occupied by non-Jan process '{}' (PID {})",
+            "Port {} occupied by non-Parlo process '{}' (PID {})",
             port,
             process_info.name,
             process_info.pid
@@ -950,7 +950,7 @@ pub async fn kill_orphaned_mcp_process_with_app<R: Runtime>(
 
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
-    if jan_utils::network::is_port_available(port) {
+    if parlo_utils::network::is_port_available(port) {
         log::info!("Cleaned up orphaned process on port {}", port);
         Ok(true)
     } else {
@@ -1079,7 +1079,7 @@ pub async fn stop_mcp_servers_with_context<R: Runtime>(
         let mut result = Vec::new();
         for key in keys {
             if let Some(service) = servers_map.remove(&key) {
-                let port = if key == "Jan Browser MCP" {
+                let port = if key == "Parlo Browser MCP" {
                     let active_servers = state.mcp_active_servers.lock().await;
                     active_servers.get(&key).and_then(|config| {
                         config
@@ -1125,7 +1125,7 @@ pub async fn stop_mcp_servers_with_context<R: Runtime>(
                     .map(|r| r.is_ok())
                     .unwrap_or(false);
 
-                if name == "Jan Browser MCP" {
+                if name == "Parlo Browser MCP" {
                     if let Some(port) = port {
                         use crate::core::mcp::lockfile::delete_lock_file;
                         if success {
@@ -1215,7 +1215,7 @@ pub fn add_server_config_with_path<R: Runtime>(
     config_filename: Option<&str>,
 ) -> Result<(), String> {
     let config_filename = config_filename.unwrap_or("mcp_config.json");
-    let config_path = get_jan_data_folder_path(app_handle).join(config_filename);
+    let config_path = get_parlo_data_folder_path(app_handle).join(config_filename);
 
     let mut config: Value = serde_json::from_str(
         &std::fs::read_to_string(&config_path)

@@ -43,16 +43,16 @@ describe('DefaultAppService', () => {
     })
   })
 
-  describe('getJanDataFolder', () => {
+  describe('getParloDataFolder', () => {
     it('returns undefined', async () => {
-      const result = await svc.getJanDataFolder()
+      const result = await svc.getParloDataFolder()
       expect(result).toBeUndefined()
     })
   })
 
-  describe('relocateJanDataFolder', () => {
+  describe('relocateParloDataFolder', () => {
     it('resolves without error', async () => {
-      await expect(svc.relocateJanDataFolder('/new/path')).resolves.toBeUndefined()
+      await expect(svc.relocateParloDataFolder('/new/path')).resolves.toBeUndefined()
     })
   })
 

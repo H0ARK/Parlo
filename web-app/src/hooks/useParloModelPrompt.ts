@@ -3,17 +3,17 @@ import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { useModelProvider } from './useModelProvider'
 import { useDownloadStore } from './useDownloadStore'
-import { useLatestJanModel } from './useLatestJanModel'
+import { useLatestParloModel } from './useLatestParloModel'
 import { predefinedProviders } from '@/constants/providers'
 import { providerHasConfiguredRemoteAuth } from '@/lib/provider-api-keys'
 
-export type JanModelPromptDismissedState = {
+export type ParloModelPromptDismissedState = {
   dismissedModelName: string | null
   setDismissedModelName: (modelName: string) => void
 }
 
-export const useJanModelPromptDismissed =
-  create<JanModelPromptDismissedState>()(
+export const useParloModelPromptDismissed =
+  create<ParloModelPromptDismissedState>()(
     persist(
       (set) => ({
         dismissedModelName: null,
@@ -21,7 +21,7 @@ export const useJanModelPromptDismissed =
           set({ dismissedModelName: modelName }),
       }),
       {
-        name: localStorageKey.janModelPromptDismissed,
+        name: localStorageKey.parloModelPromptDismissed,
         storage: createJSONStorage(() => localStorage),
         version: 1,
         migrate: (persistedState: unknown) => {
@@ -29,7 +29,7 @@ export const useJanModelPromptDismissed =
           if ('dismissed' in state && !('dismissedModelName' in state)) {
             return { dismissedModelName: null }
           }
-          return state as JanModelPromptDismissedState
+          return state as ParloModelPromptDismissedState
         },
       }
     )
@@ -37,12 +37,12 @@ export const useJanModelPromptDismissed =
 
 const MIN_VERSION = '0.7.6'
 
-export const useJanModelPrompt = () => {
+export const useParloModelPrompt = () => {
   const { dismissedModelName, setDismissedModelName } =
-    useJanModelPromptDismissed()
+    useParloModelPromptDismissed()
   const { getProviderByName, providers } = useModelProvider()
   const { localDownloadingModels } = useDownloadStore()
-  const latestModel = useLatestJanModel((state) => state.model)
+  const latestModel = useLatestParloModel((state) => state.model)
 
   const llamaProvider = getProviderByName('llamacpp')
 
@@ -71,7 +71,7 @@ export const useJanModelPrompt = () => {
   )
 
   // Check if any variant of the latest Jan model is downloaded
-  const isJanModelDownloaded =
+  const isParloModelDownloaded =
     latestModelQuantIds.size > 0 &&
     (llamaProvider?.models.some(
       (m: { id: string }) => latestModelQuantIds.has(m.id.toLowerCase())
@@ -89,18 +89,18 @@ export const useJanModelPrompt = () => {
     latestModel != null &&
     dismissedModelName === latestModel.model_name
 
-  const showJanModelPrompt =
+  const showParloModelPrompt =
     isTargetVersion &&
     !isOnSetupScreen &&
     !isDismissed &&
     latestModel != null &&
-    !isJanModelDownloaded &&
+    !isParloModelDownloaded &&
     !isDownloading
 
   return {
-    showJanModelPrompt,
+    showParloModelPrompt,
     setDismissedModelName,
-    isJanModelDownloaded,
+    isParloModelDownloaded,
     isDownloading,
   }
 }

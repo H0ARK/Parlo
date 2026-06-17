@@ -1,13 +1,13 @@
-import { Assistant, AssistantExtension, fs, joinPath } from '@janhq/core'
+import { Assistant, AssistantExtension, fs, joinPath } from '@parlo-lab/core'
 
 const V2_IDENTITY_LINE =
-  'You are Jan, a helpful AI assistant who assists users with their requests. Jan is trained by Menlo Research (https://www.menlo.ai).'
+  'You are Parlo, a helpful AI assistant who assists users with their requests. Parlo is trained by Parlo Lab (https://www.parlo.ai).'
 
 /**
- * JanAssistantExtension is an AssistantExtension implementation that provides
+ * ParloAssistantExtension is an AssistantExtension implementation that provides
  * functionality for managing assistants.
  */
-export default class JanAssistantExtension extends AssistantExtension {
+export default class ParloAssistantExtension extends AssistantExtension {
   private readonly CURRENT_MIGRATION_VERSION = 3
   private readonly MIGRATION_FILE = 'file://assistants/.migration_version'
 
@@ -78,8 +78,8 @@ export default class JanAssistantExtension extends AssistantExtension {
     }
 
     if (currentVersion < 2) {
-      console.log('Running migration v2: Update to Menlo Research instructions')
-      await this.migrateToMenloInstructions()
+      console.log('Running migration v2: Update to Parlo Lab instructions')
+      await this.migrateToParloLabInstructions()
       await this.saveMigrationVersion(2)
     }
 
@@ -99,7 +99,7 @@ export default class JanAssistantExtension extends AssistantExtension {
    */
   private async migrateAssistantInstructions(): Promise<void> {
     const OLD_INSTRUCTION = 'You are a helpful AI assistant.'
-    const NEW_INSTRUCTION = 'You are Jan, a helpful AI assistant.' // TODO: Update with new instruction
+    const NEW_INSTRUCTION = 'You are Parlo, a helpful AI assistant.' // TODO: Update with new instruction
 
     if (!(await fs.existsSync('file://assistants'))) {
       return
@@ -137,10 +137,10 @@ export default class JanAssistantExtension extends AssistantExtension {
   }
 
   /**
-   * Migration v2: Update assistant instructions to Menlo Research format and set default parameters
+   * Migration v2: Update assistant instructions to Parlo Lab format and set default parameters
    */
-  private async migrateToMenloInstructions(): Promise<void> {
-    const OLD_INSTRUCTION_PREFIX = 'You are Jan, a helpful AI assistant.'
+  private async migrateToParloLabInstructions(): Promise<void> {
+    const OLD_INSTRUCTION_PREFIX = 'You are Parlo, a helpful AI assistant.'
     const NEW_INSTRUCTION = `${V2_IDENTITY_LINE}
 
 You must output your response in the exact language used in the latest user message. Do not provide translations or switch languages unless explicitly instructed to do so. If the input is mostly English, respond in English.
@@ -199,7 +199,7 @@ Current date: {{current_date}}`
             JSON.stringify(assistantWithParams, null, 2)
           )
           console.log(
-            `Migrated to Menlo instructions for assistant: ${assistant.id}`
+            `Migrated to Parlo Lab instructions for assistant: ${assistant.id}`
           )
         } catch (error) {
           console.error(`Failed to migrate assistant ${assistant.id}:`, error)
@@ -296,12 +296,12 @@ Current date: {{current_date}}`
   private defaultAssistant: Assistant = {
     avatar: '👋',
     thread_location: undefined,
-    id: 'jan',
+    id: 'Parlo',
     object: 'assistant',
     created_at: Date.now() / 1000,
-    name: 'Jan',
+    name: 'Parlo',
     description:
-      'Jan is a helpful desktop assistant that can reason through complex tasks and use tools to complete them on the user’s behalf.',
+      'Parlo is a helpful desktop assistant that can reason through complex tasks and use tools to complete them on the user’s behalf.',
     model: '*',
     instructions: `You must output your response in the exact language used in the latest user message. Do not provide translations or switch languages unless explicitly instructed to do so. If the input is mostly English, respond in English.
 

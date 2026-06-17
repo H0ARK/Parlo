@@ -2,9 +2,13 @@
   "$schema": "../gen/schemas/mobile-schema.json",
   "identifier": "mobile",
   "description": "enables the default permissions for mobile platforms",
-  "windows": ["main"],
+  "windows": [
+    "main"
+  ],
   "remote": {
-    "urls": ["http://*"]
+    "urls": [
+      "http://*"
+    ]
   },
   "permissions": [
     "core:default",
@@ -15,7 +19,7 @@
     "shell:allow-open",
     "core:app:allow-set-app-theme",
     "core:app:default",
-    "jan-default",
+    "parlo-default",
     "core:window:allow-set-focus",
     "os:default",
     "opener:default",
@@ -42,7 +46,9 @@
     {
       "identifier": "opener:allow-open-url",
       "description": "opens the default permissions for the core module",
-      "windows": ["*"],
+      "windows": [
+        "*"
+      ],
       "allow": [
         {
           "url": "https://*"

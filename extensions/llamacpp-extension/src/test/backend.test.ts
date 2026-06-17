@@ -7,17 +7,17 @@ import {
   verifyBackendInstallation,
   fetchRemoteBackends,
 } from '../backend'
-import { getSystemInfo } from '@janhq/tauri-plugin-hardware-api'
-import { fs, getJanDataFolderPath, events } from '@janhq/core'
+import { getSystemInfo } from '@parlo-lab/tauri-plugin-hardware-api'
+import { fs, getParloDataFolderPath, events } from '@parlo-lab/core'
 import { invoke } from '@tauri-apps/api/core'
 import { dirname } from '@tauri-apps/api/path'
 
 // Mock constants
-const MOCK_JAN_PATH_STRING = '/path/to/jan'
+const MOCK_PARLO_PATH_STRING = '/path/to/Parlo'
 
 // Mock the core dependencies
-vi.mock('@janhq/core', () => ({
-  getJanDataFolderPath: vi.fn().mockResolvedValue('/path/to/jan'),
+vi.mock('@parlo-lab/core', () => ({
+  getParloDataFolderPath: vi.fn().mockResolvedValue('/path/to/Parlo'),
   fs: {
     existsSync: vi.fn(),
     readdirSync: vi.fn().mockResolvedValue([]),
@@ -31,7 +31,7 @@ vi.mock('@janhq/core', () => ({
 vi.mock('@tauri-apps/api/core', () => ({
   invoke: vi.fn(),
 }))
-vi.mock('@janhq/tauri-plugin-hardware-api', () => ({
+vi.mock('@parlo-lab/tauri-plugin-hardware-api', () => ({
   getSystemInfo: vi.fn(),
 }))
 vi.mock('../util', () => ({
@@ -42,10 +42,10 @@ vi.mock('@tauri-apps/api/path', () => ({
   dirname: vi.fn(async (path: string) => path.split('/').slice(0, -1).join('/')),
   basename: vi.fn(async (path: string) => path.split('/').pop()),
 }))
-vi.mock('@janhq/tauri-plugin-llamacpp-api', async () => {
+vi.mock('@parlo-lab/tauri-plugin-llamacpp-api', async () => {
   const actual = await vi.importActual<
-    typeof import('@janhq/tauri-plugin-llamacpp-api')
-  >('@janhq/tauri-plugin-llamacpp-api')
+    typeof import('@parlo-lab/tauri-plugin-llamacpp-api')
+  >('@parlo-lab/tauri-plugin-llamacpp-api')
 
   return {
     ...actual,
@@ -82,7 +82,7 @@ vi.mocked(window.core.extensionManager.getByName).mockReturnValue(
 describe('Backend functions', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
-    vi.mocked(getJanDataFolderPath).mockResolvedValue(MOCK_JAN_PATH_STRING)
+    vi.mocked(getParloDataFolderPath).mockResolvedValue(MOCK_PARLO_PATH_STRING)
 
     vi.mocked(getSystemInfo).mockResolvedValue({
       os_type: 'linux',
@@ -108,7 +108,7 @@ describe('Backend functions', () => {
 
   describe('getBackendDir', () => {
     it('should call invoke with correct params and return the path', async () => {
-      const expectedDir = `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.2.3/linux-avx2-x64`
+      const expectedDir = `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.2.3/linux-avx2-x64`
       vi.mocked(invoke).mockResolvedValueOnce(expectedDir)
 
       const dir = await getBackendDir('linux-avx2-x64', 'v1.2.3')
@@ -116,13 +116,13 @@ describe('Backend functions', () => {
       expect(invoke).toHaveBeenCalledWith('plugin:llamacpp|get_backend_dir', {
         backend: 'linux-avx2-x64',
         version: 'v1.2.3',
-        janDataFolder: MOCK_JAN_PATH_STRING,
+        parloDataFolder: MOCK_PARLO_PATH_STRING,
       })
       expect(dir).toBe(expectedDir)
     })
 
     it('should call invoke with correct params for new common backend name', async () => {
-      const expectedDir = `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v2.0.0/win-common_cpus-x64`
+      const expectedDir = `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v2.0.0/win-common_cpus-x64`
       vi.mocked(invoke).mockResolvedValueOnce(expectedDir)
 
       const dir = await getBackendDir('win-common_cpus-x64', 'v2.0.0')
@@ -130,7 +130,7 @@ describe('Backend functions', () => {
       expect(invoke).toHaveBeenCalledWith('plugin:llamacpp|get_backend_dir', {
         backend: 'win-common_cpus-x64',
         version: 'v2.0.0',
-        janDataFolder: MOCK_JAN_PATH_STRING,
+        parloDataFolder: MOCK_PARLO_PATH_STRING,
       })
       expect(dir).toBe(expectedDir)
     })
@@ -139,7 +139,7 @@ describe('Backend functions', () => {
   describe('getBackendExePath', () => {
     it('should call invoke with correct params including isWindows', async () => {
       vi.stubGlobal('IS_WINDOWS', false)
-      const expectedExe = `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.2.3/linux-avx2-x64/llama-server`
+      const expectedExe = `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.2.3/linux-avx2-x64/llama-server`
       vi.mocked(invoke).mockResolvedValueOnce(expectedExe)
 
       const exePath = await getBackendExePath('linux-avx2-x64', 'v1.2.3')
@@ -149,7 +149,7 @@ describe('Backend functions', () => {
         {
           backend: 'linux-avx2-x64',
           version: 'v1.2.3',
-          janDataFolder: MOCK_JAN_PATH_STRING,
+          parloDataFolder: MOCK_PARLO_PATH_STRING,
           isWindows: false,
         }
       )
@@ -158,7 +158,7 @@ describe('Backend functions', () => {
 
     it('should pass isWindows=true on Windows', async () => {
       vi.stubGlobal('IS_WINDOWS', true)
-      const expectedExe = `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.2.3/win-avx2-x64/llama-server.exe`
+      const expectedExe = `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.2.3/win-avx2-x64/llama-server.exe`
       vi.mocked(invoke).mockResolvedValueOnce(expectedExe)
 
       const exePath = await getBackendExePath('win-avx2-x64', 'v1.2.3')
@@ -168,7 +168,7 @@ describe('Backend functions', () => {
         {
           backend: 'win-avx2-x64',
           version: 'v1.2.3',
-          janDataFolder: MOCK_JAN_PATH_STRING,
+          parloDataFolder: MOCK_PARLO_PATH_STRING,
           isWindows: true,
         }
       )
@@ -188,7 +188,7 @@ describe('Backend functions', () => {
         {
           backend: 'win-avx2-x64',
           version: 'v1.0.0',
-          janDataFolder: MOCK_JAN_PATH_STRING,
+          parloDataFolder: MOCK_PARLO_PATH_STRING,
           isWindows: false,
         }
       )
@@ -225,7 +225,7 @@ describe('Backend functions', () => {
         {
           backend: 'linux-vulkan-common_cpus-x64',
           version: 'b8795',
-          janDataFolder: MOCK_JAN_PATH_STRING,
+          parloDataFolder: MOCK_PARLO_PATH_STRING,
           isWindows: false,
         }
       )
@@ -297,8 +297,8 @@ describe('Backend functions', () => {
       const taskId = 'llamacpp-v1-0-0-linux-avx2-x64'
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-x64/backend.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-x64/backend.tar.gz`,
           model_id: taskId,
         },
       ]
@@ -318,7 +318,7 @@ describe('Backend functions', () => {
           backend: 'linux-avx2-x64',
           version: 'v1.0.0',
           source: 'github',
-          janDataFolder: MOCK_JAN_PATH_STRING,
+          parloDataFolder: MOCK_PARLO_PATH_STRING,
           osType: 'linux',
         }
       )
@@ -346,13 +346,13 @@ describe('Backend functions', () => {
       const taskId = 'llamacpp-v1-0-0-win-cuda-12-common_cpus-x64'
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-win-cuda-12-common_cpus-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/backend.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-win-cuda-12-common_cpus-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/backend.tar.gz`,
           model_id: taskId,
         },
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-win-cu12.0-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/build/bin/cuda12.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-win-cu12.0-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/build/bin/cuda12.tar.gz`,
           model_id: taskId,
         },
       ]
@@ -371,11 +371,11 @@ describe('Backend functions', () => {
       expect(downloadItems.length).toBe(2)
       expect(downloadItems[0].url).toContain('win-cuda-12-common_cpus-x64.tar.gz')
       expect(downloadItems[0].save_path).toBe(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/backend.tar.gz`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/backend.tar.gz`
       )
       expect(downloadItems[1].url).toContain('cudart-llama-bin-win-cu12.0-x64.tar.gz')
       expect(downloadItems[1].save_path).toBe(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/build/bin/cuda12.tar.gz`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-cuda-12-common_cpus-x64/build/bin/cuda12.tar.gz`
       )
       expect(downloadItems[0].proxy).toBeDefined()
       expect(downloadItems[1].proxy).toBeDefined()
@@ -397,13 +397,13 @@ describe('Backend functions', () => {
       const taskId = 'llamacpp-v1-0-0-linux-avx2-cuda-cu11-7-x64'
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-cuda-cu11.7-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/backend.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-cuda-cu11.7-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/backend.tar.gz`,
           model_id: taskId,
         },
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-linux-cu11.7-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/build/bin/cuda11.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-linux-cu11.7-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/build/bin/cuda11.tar.gz`,
           model_id: taskId,
         },
       ]
@@ -422,11 +422,11 @@ describe('Backend functions', () => {
       expect(downloadItems.length).toBe(2)
       expect(downloadItems[0].url).toContain('linux-avx2-cuda-cu11.7-x64.tar.gz')
       expect(downloadItems[0].save_path).toBe(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/backend.tar.gz`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/backend.tar.gz`
       )
       expect(downloadItems[1].url).toContain('cudart-llama-bin-linux-cu11.7-x64.tar.gz')
       expect(downloadItems[1].save_path).toBe(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/build/bin/cuda11.tar.gz`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-cuda-cu11.7-x64/build/bin/cuda11.tar.gz`
       )
     })
 
@@ -446,13 +446,13 @@ describe('Backend functions', () => {
       const taskId = 'llamacpp-v1-0-0-linux-cuda-13-common_cpus-x64'
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-cuda-13-common_cpus-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/backend.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-cuda-13-common_cpus-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/backend.tar.gz`,
           model_id: taskId,
         },
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-linux-cu13.0-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/build/bin/cuda13.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/cudart-llama-bin-linux-cu13.0-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/build/bin/cuda13.tar.gz`,
           model_id: taskId,
         },
       ]
@@ -473,7 +473,7 @@ describe('Backend functions', () => {
         'cudart-llama-bin-linux-cu13.0-x64.tar.gz'
       )
       expect(downloadItems[1].save_path).toBe(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/build/bin/cuda13.tar.gz`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-cuda-13-common_cpus-x64/build/bin/cuda13.tar.gz`
       )
     })
 
@@ -486,10 +486,10 @@ describe('Backend functions', () => {
       } as any)
 
       const taskId = 'llamacpp-v1-0-0-win-avx2-x64'
-      const backendTarPath = `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64/backend.tar.gz`
+      const backendTarPath = `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64/backend.tar.gz`
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-win-avx2-x64.tar.gz',
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-win-avx2-x64.tar.gz',
           save_path: backendTarPath,
           model_id: taskId,
         },
@@ -503,14 +503,14 @@ describe('Backend functions', () => {
       })
 
       vi.mocked(dirname).mockResolvedValue(
-        `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64`
+        `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64`
       )
 
       await downloadBackend('win-avx2-x64', 'v1.0.0')
 
       expect(invoke).toHaveBeenCalledWith('decompress', {
         path: backendTarPath,
-        outputDir: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64`,
+        outputDir: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/win-avx2-x64`,
       })
     })
 
@@ -525,8 +525,8 @@ describe('Backend functions', () => {
       const taskId = 'llamacpp-v1-0-0-linux-avx2-x64'
       const mockItems = [
         {
-          url: 'https://github.com/janhq/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-x64.tar.gz',
-          save_path: `${MOCK_JAN_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-x64/backend.tar.gz`,
+          url: 'https://github.com/parlo-lab/llama.cpp/releases/download/v1.0.0/llama-v1.0.0-bin-linux-avx2-x64.tar.gz',
+          save_path: `${MOCK_PARLO_PATH_STRING}/llamacpp/backends/v1.0.0/linux-avx2-x64/backend.tar.gz`,
           model_id: taskId,
         },
       ]

@@ -2,7 +2,7 @@
  * Messages Service Types
  */
 
-import { ThreadMessage } from '@janhq/core'
+import { ThreadMessage } from '@parlo-lab/core'
 
 export interface MessagesService {
   fetchMessages(threadId: string): Promise<ThreadMessage[]>

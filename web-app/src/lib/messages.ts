@@ -4,14 +4,14 @@ import {
   ContentType,
   MessageStatus,
   ChatCompletionRole,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import type { UIMessage } from '@ai-sdk/react'
 // Attachments are now handled upstream in newUserThreadContent
 
 type ThreadContent = NonNullable<ThreadMessage['content']>[number]
 
 /**
- * Convert AI SDK UIMessage to Jan's ThreadMessage format.
+ * Convert AI SDK UIMessage to Parlo's ThreadMessage format.
  * This allows using chatMessages from useChat with ThreadContent component.
  */
 export function convertUIMessageToThreadMessage(
@@ -123,7 +123,7 @@ export function convertUIMessageToThreadMessage(
 }
 
 /**
- * Convert an array of AI SDK UIMessages to Jan's ThreadMessage format.
+ * Convert an array of AI SDK UIMessages to Parlo's ThreadMessage format.
  */
 export function convertUIMessagesToThreadMessages(
   uiMessages: UIMessage[],
@@ -186,7 +186,7 @@ export const parseReasoning = (text: string) => {
 }
 
 /**
- * Convert Jan's ThreadMessage format to AI SDK UIMessage format.
+ * Convert Parlo's ThreadMessage format to AI SDK UIMessage format.
  * This is used to load existing messages into the AI SDK chat.
  * Tool calls are now part of the content array and will be converted to tool parts.
  */
@@ -400,7 +400,7 @@ export function threadMessageIsEmpty(message: ThreadMessage): boolean {
 }
 
 /**
- * Convert an array of Jan's ThreadMessages to AI SDK UIMessage format.
+ * Convert an array of Parlo's ThreadMessages to AI SDK UIMessage format.
  * Tool calls are now part of the content array, so no special merging is needed.
  */
 export function convertThreadMessagesToUIMessages(

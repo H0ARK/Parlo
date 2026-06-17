@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react'
 import { useServiceHub } from '@/hooks/useServiceHub'
 import { useMCPServers } from '@/hooks/useMCPServers'
 import { toast } from 'sonner'
-import type { JanBrowserExtensionDialogState } from '@/containers/dialogs/JanBrowserExtensionDialog'
+import type { ParloBrowserExtensionDialogState } from '@/containers/dialogs/ParloBrowserExtensionDialog'
 
 const JAN_BROWSER_MCP_NAME = 'Jan Browser MCP'
 
@@ -11,11 +11,11 @@ const PING_TIMEOUT_MS = 6000 // Backend ping takes up to 3s
 const POLL_INTERVAL_MS = 500
 const SERVER_START_DELAY_MS = 1000
 
-export function useJanBrowserExtension() {
+export function useParloBrowserExtension() {
   const serviceHub = useServiceHub()
   const { mcpServers, editServer, syncServers } = useMCPServers()
 
-  const [dialogState, setDialogState] = useState<JanBrowserExtensionDialogState>('closed')
+  const [dialogState, setDialogState] = useState<ParloBrowserExtensionDialogState>('closed')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isCancelling, setIsCancelling] = useState(false)
@@ -33,7 +33,7 @@ export function useJanBrowserExtension() {
    */
   const checkExtensionConnection = useCallback(async (): Promise<boolean> => {
     try {
-      return await serviceHub.mcp().checkJanBrowserExtensionConnected()
+      return await serviceHub.mcp().checkParloBrowserExtensionConnected()
     } catch (error) {
       console.error('Error checking extension connection:', error)
       return false

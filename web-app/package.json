@@ -1,5 +1,5 @@
 {
-  "name": "@janhq/web-app",
+  "name": "@parlo-lab/web-app",
   "private": true,
   "version": "0.7.6",
   "type": "module",
@@ -12,19 +12,13 @@
     "test:coverage": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vitest --coverage --run"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.0",
-    "@ai-sdk/google": "^3.0.0",
-    "@ai-sdk/mistral": "^3.0.0",
-    "@ai-sdk/openai": "^3.0.0",
-    "@ai-sdk/openai-compatible": "^2.0.0",
     "@ai-sdk/react": "^3.0.0",
-    "@ai-sdk/xai": "^3.0.0",
     "@dnd-kit/core": "6.3.1",
     "@dnd-kit/modifiers": "9.0.0",
     "@dnd-kit/sortable": "10.0.0",
-    "@janhq/core": "workspace:*",
     "@janhq/interfaces": "0.0.2",
     "@monaco-editor/react": "^4.7.0",
+    "@parlo-lab/core": "workspace:*",
     "@radix-ui/react-accordion": "1.2.11",
     "@radix-ui/react-avatar": "1.1.10",
     "@radix-ui/react-collapsible": "^1.1.12",

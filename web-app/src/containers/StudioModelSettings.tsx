@@ -96,9 +96,7 @@ function ModelSettingsSection({
   const [profileCodexHome, setProfileCodexHome] = useState(
     '.codex/profiles/local'
   )
-  const [profileTransport, setProfileTransport] = useState<
-    'app-server' | 'proto'
-  >('app-server')
+  const profileTransport = 'app-server' as const
   const [profileApprovalPolicy, setProfileApprovalPolicy] = useState<
     'untrusted' | 'on-failure' | 'on-request' | 'never'
   >('on-request')
@@ -158,7 +156,6 @@ function ModelSettingsSection({
       setProfileModel('qwen3-coder')
       setProfileApiKeyEnv('OLLAMA_API_KEY')
       setProfileCodexHome('.codex/profiles/ollama')
-      setProfileTransport('app-server')
       setProfileApprovalPolicy('on-request')
       setProfileSandbox('workspace-write')
       return
@@ -169,7 +166,6 @@ function ModelSettingsSection({
       setProfileModel('local-model')
       setProfileApiKeyEnv('LLAMA_CPP_API_KEY')
       setProfileCodexHome('.codex/profiles/llama-cpp')
-      setProfileTransport('app-server')
       setProfileApprovalPolicy('on-request')
       setProfileSandbox('workspace-write')
       return
@@ -179,7 +175,6 @@ function ModelSettingsSection({
     setProfileModel('gpt-4.1')
     setProfileApiKeyEnv('OPENAI_API_KEY')
     setProfileCodexHome('.codex/profiles/openai-compatible')
-    setProfileTransport('app-server')
     setProfileApprovalPolicy('on-request')
     setProfileSandbox('workspace-write')
   }
@@ -193,7 +188,6 @@ function ModelSettingsSection({
     setProfileModel('')
     setProfileApiKeyEnv('OPENAI_API_KEY')
     setProfileCodexHome('.codex/profiles/local')
-    setProfileTransport('app-server')
     setProfileApprovalPolicy('on-request')
     setProfileSandbox('workspace-write')
     setProfileAgentsMd('')
@@ -260,7 +254,6 @@ function ModelSettingsSection({
     setProfileModel(profile.model)
     setProfileApiKeyEnv(profile.apiKeyEnv ?? '')
     setProfileCodexHome(profile.codexHome)
-    setProfileTransport(profile.transport ?? 'app-server')
     setProfileApprovalPolicy(profile.approvalPolicy ?? 'on-request')
     setProfileSandbox(profile.sandbox ?? 'workspace-write')
     setProfileAgentsMd(profile.agentsMd ?? '')
@@ -504,33 +497,6 @@ function ModelSettingsSection({
               >
                 Choose
               </Button>
-            </div>
-          </label>
-          <label className="block space-y-1.5 text-xs">
-            <span className="text-muted-foreground">Codex transport</span>
-            <select
-              className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none text-foreground dark:bg-neutral-900"
-              value={profileTransport}
-              onChange={(event) =>
-                setProfileTransport(event.target.value as 'app-server' | 'proto')
-              }
-            >
-              <option
-                value="app-server"
-                className="dark:bg-neutral-950 text-foreground"
-              >
-                app-server (JSON-RPC)
-              </option>
-              <option
-                value="proto"
-                className="dark:bg-neutral-950 text-foreground"
-              >
-                proto (CLI protocol fallback)
-              </option>
-            </select>
-            <div className="text-[10px] leading-4 text-muted-foreground">
-              Use proto only when your Codex CLI has `codex proto` but does not
-              support `app-server --stdio`.
             </div>
           </label>
           <label className="block space-y-1.5 text-xs">

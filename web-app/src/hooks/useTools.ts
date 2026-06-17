@@ -4,7 +4,7 @@ import { SystemEvent } from '@/types/events'
 import { useAppState } from './useAppState'
 import { useToolAvailable } from './useToolAvailable'
 import { ExtensionManager } from '@/lib/extension'
-import { ExtensionTypeEnum, MCPExtension } from '@janhq/core'
+import { ExtensionTypeEnum, MCPExtension } from '@parlo-lab/core'
 
 export const useTools = () => {
   const updateTools = useAppState((state) => state.updateTools)

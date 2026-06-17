@@ -1,14 +1,24 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ],
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@janhq/core": ["../core/src/index.ts"],
-      "@janhq/conversational-extension": ["../extensions/conversational-extension/src/index.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@parlo-lab/core": [
+        "../core/src/index.ts"
+      ],
+      "@parlo-lab/conversational-extension": [
+        "../extensions/conversational-extension/src/index.ts"
+      ]
     }
   }
 }

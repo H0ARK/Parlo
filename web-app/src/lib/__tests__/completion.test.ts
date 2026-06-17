@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ContentType } from '@janhq/core'
+import { ContentType } from '@parlo-lab/core'
 import { newUserThreadContent } from '../completion'
 import type { Attachment } from '@/types/attachment'
 

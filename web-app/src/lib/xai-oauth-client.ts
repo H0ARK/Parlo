@@ -144,7 +144,7 @@ function authHeaders(): Record<string, string> {
   return {
     'Content-Type': 'application/x-www-form-urlencoded',
     Accept: 'application/json',
-    'User-Agent': 'Jan/0.8',
+    'User-Agent': 'Parlo/0.8',
   }
 }
 
@@ -219,7 +219,7 @@ export function buildAuthorizeUrl(pkce: PkceCodes, state: string): string {
     state,
     nonce: generateState(),
     plan: 'generic',
-    referrer: 'jan',
+    referrer: 'Parlo',
   })
   return `${AUTHORIZE_URL}?${params.toString()}`
 }

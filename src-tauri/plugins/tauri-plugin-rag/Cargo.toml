@@ -1,10 +1,10 @@
 [package]
 name = "tauri-plugin-rag"
 version = "0.1.0"
-authors = ["Jan <service@jan.ai>"]
+authors = ["Parlo <service@Parlo.ai>"]
 description = "Tauri plugin for RAG utilities (document parsing, types)"
 license = "MIT"
-repository = "https://github.com/janhq/jan"
+repository = "https://github.com/parlo-lab/Parlo"
 edition = "2021"
 rust-version = "1.77.2"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]

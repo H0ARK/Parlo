@@ -64,8 +64,8 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '@janhq/core': path.resolve(__dirname, '../core/src/index.ts'),
-        '@janhq/conversational-extension': path.resolve(__dirname, '../extensions/conversational-extension/src/index.ts'),
+        '@parlo-lab/core': path.resolve(__dirname, '../core/src/index.ts'),
+        '@parlo-lab/conversational-extension': path.resolve(__dirname, '../extensions/conversational-extension/src/index.ts'),
       },
     },
     define: {
@@ -95,10 +95,10 @@ export default defineConfig(({ mode }) => {
       POSTHOG_HOST: JSON.stringify(env.POSTHOG_HOST),
       GA_MEASUREMENT_ID: JSON.stringify(env.GA_MEASUREMENT_ID),
       MODEL_CATALOG_URL: JSON.stringify(
-        'https://raw.githubusercontent.com/janhq/model-catalog/main/model_catalog_v2.json'
+        'https://raw.githubusercontent.com/parlo-lab/model-catalog/main/model_catalog_v2.json'
       ),
-      LATEST_JAN_MODEL_URL: JSON.stringify(
-        'https://raw.githubusercontent.com/janhq/model-catalog/main/latest_jan_model.json'
+      LATEST_PARLO_MODEL_URL: JSON.stringify(
+        'https://raw.githubusercontent.com/parlo-lab/model-catalog/main/latest_parlo_model.json'
       ),
       AUTO_UPDATER_DISABLED: JSON.stringify(
         env.AUTO_UPDATER_DISABLED === 'true'

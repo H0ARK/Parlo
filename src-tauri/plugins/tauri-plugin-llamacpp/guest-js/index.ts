@@ -280,13 +280,13 @@ export async function isCudaInstalledFromRust(
   backendDir: string,
   version: string,
   osType: string,
-  janDataFolderPath: string
+  parloDataFolderPath: string
 ): Promise<boolean> {
   return invoke<boolean>('plugin:llamacpp|is_cuda_installed', {
     backendDir,
     version,
     osType,
-    janDataFolderPath,
+    parloDataFolderPath,
   })
 }
 

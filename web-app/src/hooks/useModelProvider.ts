@@ -29,7 +29,6 @@ const REMOVED_XAI_DEFAULT_MODELS = new Set([
   'grok-2-vision-1212',
   'grok-imagine-image',
 ])
-const CODEX_DEFAULT_MODEL_ID = 'gpt-5.5'
 const REMOVED_CODEX_DEFAULT_MODELS = new Set([
   'gpt-5.1-codex-max',
   'gpt-5.1',
@@ -51,9 +50,6 @@ const ensureCodexDefaultModels = (provider: ModelProvider) => {
     }
   }
 }
-
-const getCodexDefaultModel = (provider: ModelProvider | undefined) =>
-  provider?.models.find((model) => model.id === CODEX_DEFAULT_MODEL_ID) ?? null
 
 const resolveSelectedProviderState = (
   providers: ModelProvider[],
@@ -108,10 +104,7 @@ const resolveSelectedProviderState = (
 
   return {
     selectedProvider: nextSelectedProvider,
-    selectedModel:
-      fallbackProvider.provider === 'codex'
-        ? getCodexDefaultModel(fallbackProvider)
-        : fallbackProvider.models?.[0] ?? null,
+    selectedModel: fallbackProvider.models?.[0] ?? null,
   }
 }
 
@@ -460,10 +453,7 @@ export const useModelProvider = create<ModelProviderState>()(
         return provider
       },
       selectModelProvider: (providerName: string, modelName: string) => {
-        const requestedModelName =
-          providerName === 'codex' && REMOVED_CODEX_DEFAULT_MODELS.has(modelName)
-            ? CODEX_DEFAULT_MODEL_ID
-            : modelName
+        const requestedModelName = modelName
         let modelObject: Model | undefined = undefined
 
         set((state) => {
@@ -479,9 +469,13 @@ export const useModelProvider = create<ModelProviderState>()(
           const provider = providers.find(
             (candidate) => candidate.provider === providerName
           )
-          modelObject = provider?.models?.find(
-            (model) => model.id === requestedModelName
-          )
+          modelObject =
+            provider?.models?.find((model) => model.id === requestedModelName) ??
+            (providerName === 'codex'
+              ? provider?.models?.find(
+                  (model) => !REMOVED_CODEX_DEFAULT_MODELS.has(model.id)
+                )
+              : undefined)
 
           return {
             providers,
@@ -1061,24 +1055,10 @@ export const useModelProvider = create<ModelProviderState>()(
             state.selectedModel =
               state.providers
                 .find((provider) => provider.provider === 'codex')
-                ?.models.find((model) => model.id === CODEX_DEFAULT_MODEL_ID) ??
-              null
+                ?.models.find(
+                  (model) => !REMOVED_CODEX_DEFAULT_MODELS.has(model.id)
+                ) ?? null
           }
-        }
-
-        if (
-          version <= 25 &&
-          state?.providers &&
-          state.selectedProvider === 'codex' &&
-          state.selectedModel?.id === CODEX_DEFAULT_MODEL_ID
-        ) {
-          const resolvedSelection = resolveSelectedProviderState(
-            state.providers,
-            '__missing_provider__',
-            null
-          )
-          state.selectedProvider = resolvedSelection.selectedProvider
-          state.selectedModel = resolvedSelection.selectedModel
         }
 
         return state

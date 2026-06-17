@@ -1,14 +1,14 @@
 /**
- * @file This file exports a class that implements the InferenceExtension interface from the @janhq/core package.
+ * @file This file exports a class that implements the InferenceExtension interface from the -lab/core package.
  * The class provides methods for initializing and stopping a model, and for making inference requests.
- * It also subscribes to events emitted by the @janhq/core package and handles new message requests.
+ * It also subscribes to events emitted by the -lab/core package and handles new message requests.
  * @version 1.0.0
  * @module llamacpp-extension/src/index
  */
 
 import {
   AIEngine,
-  getJanDataFolderPath,
+  getParloDataFolderPath,
   fs,
   joinPath,
   modelInfo,
@@ -24,7 +24,7 @@ import {
   chatCompletionRequestMessage,
   SettingComponentProps,
   DropdownComponentProps,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import {
   readSettingsFile,
   writeSettingsFile,
@@ -73,8 +73,8 @@ import {
   removeOldBackendVersions,
   shouldMigrateBackend,
   handleSettingUpdate,
-} from '@janhq/tauri-plugin-llamacpp-api'
-import { getSystemUsage, getSystemInfo } from '@janhq/tauri-plugin-hardware-api'
+} from '@parlo-lab/tauri-plugin-llamacpp-api'
+import { getSystemUsage, getSystemInfo } from '@parlo-lab/tauri-plugin-hardware-api'
 
 const EMBEDDING_CHECK_VERSION = 3
 const MTP_CHECK_VERSION = 1
@@ -115,7 +115,7 @@ const PRESET_AFFECTING_KEYS = new Set<string>([
 ])
 
 /**
- * Override the default app.log function to use Jan's logging system.
+ * Override the default app.log function to use Parlo's logging system.
  * @param args
  */
 function formatLogArg(arg: unknown): string {
@@ -149,9 +149,9 @@ const logger = {
 }
 
 /**
- * A class that implements the InferenceExtension interface from the @janhq/core package.
+ * A class that implements the InferenceExtension interface from the -lab/core package.
  * The class provides methods for initializing and stopping a model, and for making inference requests.
- * It also subscribes to events emitted by the @janhq/core package and handles new message requests.
+ * It also subscribes to events emitted by the -lab/core package and handles new message requests.
  */
 
 /**
@@ -272,7 +272,7 @@ function readPersistedLlamacppModels(): PersistedModelState[] {
  * Breadth-first search of `rootDir` for the directory directly containing
  * a file named `serverName`. Returns the absolute path of that directory,
  * or null if not found. Used by manual backend install to tolerate
- * different archive layouts (Jan-built `build/bin/...` vs upstream
+ * different archive layouts (Parlo-built `build/bin/...` vs upstream
  * llama.cpp's flat `llama-bXXXX/...`).
  */
 async function findLlamaServerDir(
@@ -311,7 +311,7 @@ async function findLlamaServerDir(
 }
 
 // Folder structure for llamacpp extension:
-// <Jan's data folder>/llamacpp
+// <Parlo's data folder>/llamacpp
 //  - models/<modelId>/
 //    - model.yml (required)
 //    - model.gguf (optional, present if downloaded from URL)
@@ -624,12 +624,12 @@ export default class llamacpp_extension extends AIEngine {
     }
 
     const providerPath = await this.getProviderPath()
-    const janDataFolderPath = await getJanDataFolderPath()
+    const parloDataFolderPath = await getParloDataFolderPath()
     const build = parseBuildNumber(version)
     const supportsMtp = build !== null && build >= MTP_MIN_BUILD
     const { path: presetPath, embeddingCount } = await generatePreset(
       providerPath,
-      janDataFolderPath,
+      parloDataFolderPath,
       this.config,
       { supportsMtp }
     )
@@ -773,8 +773,8 @@ export default class llamacpp_extension extends AIEngine {
     mmprojPath: string
   ): Promise<{ vision: boolean; audio: boolean }> {
     try {
-      const janDataFolderPath = await getJanDataFolderPath()
-      const fullPath = await joinPath([janDataFolderPath, mmprojPath])
+      const parloDataFolderPath = await getParloDataFolderPath()
+      const fullPath = await joinPath([parloDataFolderPath, mmprojPath])
       const meta = (await readGgufMetadata(fullPath)).metadata ?? {}
       const truthy = (v: string | undefined) =>
         typeof v === 'string' && v.toLowerCase() === 'true'
@@ -1421,9 +1421,9 @@ export default class llamacpp_extension extends AIEngine {
 
       // Clean up old versions — best-effort, don't fail the update if this errors
       try {
-        const janDataFolderPath = await getJanDataFolderPath()
+        const parloDataFolderPath = await getParloDataFolderPath()
         const backendsDir = await joinPath([
-          janDataFolderPath,
+          parloDataFolderPath,
           'llamacpp',
           'backends',
         ])
@@ -1576,7 +1576,7 @@ export default class llamacpp_extension extends AIEngine {
   async getProviderPath(): Promise<string> {
     if (!this.providerPath) {
       this.providerPath = await joinPath([
-        await getJanDataFolderPath(),
+        await getParloDataFolderPath(),
         this.providerId,
       ])
     }
@@ -1768,9 +1768,9 @@ export default class llamacpp_extension extends AIEngine {
 
     let isEmbedding = false
     try {
-      const janDataFolderPath = await getJanDataFolderPath()
+      const parloDataFolderPath = await getParloDataFolderPath()
       const fullModelPath = await joinPath([
-        janDataFolderPath,
+        parloDataFolderPath,
         modelConfig.model_path,
       ])
 
@@ -1834,9 +1834,9 @@ export default class llamacpp_extension extends AIEngine {
 
     let mtpLayers = 0
     try {
-      const janDataFolderPath = await getJanDataFolderPath()
+      const parloDataFolderPath = await getParloDataFolderPath()
       const fullModelPath = await joinPath([
-        janDataFolderPath,
+        parloDataFolderPath,
         modelConfig.model_path,
       ])
       if (await fs.existsSync(fullModelPath)) {
@@ -1968,8 +1968,8 @@ export default class llamacpp_extension extends AIEngine {
     // Attempt to migrate only once
     if (localStorage.getItem('cortex_models_migrated') === 'true') return
 
-    const janDataFolderPath = await getJanDataFolderPath()
-    const modelsDir = await joinPath([janDataFolderPath, 'models'])
+    const parloDataFolderPath = await getParloDataFolderPath()
+    const modelsDir = await joinPath([parloDataFolderPath, 'models'])
     if (!(await fs.existsSync(modelsDir))) return
 
     // DFS
@@ -2017,12 +2017,12 @@ export default class llamacpp_extension extends AIEngine {
               ])
               if (await fs.existsSync(configPath)) continue // Don't reimport
 
-              // this is relative to Jan's data folder
+              // this is relative to Parlo's data folder
               const modelDir = `${this.providerId}/models/${modelId}`
 
               let size_bytes = (
                 await fs.fileStat(
-                  await joinPath([janDataFolderPath, legacyModelPath])
+                  await joinPath([parloDataFolderPath, legacyModelPath])
                 )
               ).size
 
@@ -2032,7 +2032,7 @@ export default class llamacpp_extension extends AIEngine {
                 name: modelName,
                 size_bytes,
               } as ModelConfig
-              await fs.mkdir(await joinPath([janDataFolderPath, modelDir]))
+              await fs.mkdir(await joinPath([parloDataFolderPath, modelDir]))
               await invoke<void>('write_yaml', {
                 data: modelConfig,
                 savePath: configPath,
@@ -2131,7 +2131,7 @@ export default class llamacpp_extension extends AIEngine {
     const expectedBinDir = await joinPath([backendDir, 'build', 'bin'])
     const expectedBinPath = await joinPath([expectedBinDir, serverName])
 
-    // Archive layouts vary: Jan-published tarballs expand to
+    // Archive layouts vary: Parlo-published tarballs expand to
     // `<backendDir>/build/bin/llama-server`, while upstream llama.cpp
     // GitHub release tarballs (e.g. `llama-b9193-bin-...`) expand to
     // a flat `<backendDir>/llama-bXXXX/llama-server`. If the binary is
@@ -2258,7 +2258,7 @@ export default class llamacpp_extension extends AIEngine {
     if (await fs.existsSync(configPath))
       throw new Error(`Model ${modelId} already exists`)
 
-    // this is relative to Jan's data folder
+    // this is relative to Parlo's data folder
     const modelDir = `${this.providerId}/models/${modelId}`
 
     // we only use these from opts
@@ -2307,7 +2307,7 @@ export default class llamacpp_extension extends AIEngine {
           })
         }
         const downloadManager = window.core.extensionManager.getByName(
-          '@janhq/download-extension'
+          '@parlo-lab/download-extension'
         )
         await downloadManager.downloadFiles(
           downloadItems,
@@ -2372,8 +2372,8 @@ export default class llamacpp_extension extends AIEngine {
     }
 
     // Validate GGUF files
-    const janDataFolderPath = await getJanDataFolderPath()
-    const fullModelPath = await joinPath([janDataFolderPath, modelPath])
+    const parloDataFolderPath = await getParloDataFolderPath()
+    const fullModelPath = await joinPath([parloDataFolderPath, modelPath])
     let isEmbedding = false
     let mtpLayers = 0
     let resolvedName: string | undefined
@@ -2398,7 +2398,7 @@ export default class llamacpp_extension extends AIEngine {
 
       // Validate mmproj file if present
       if (mmprojPath) {
-        const fullMmprojPath = await joinPath([janDataFolderPath, mmprojPath])
+        const fullMmprojPath = await joinPath([parloDataFolderPath, mmprojPath])
         const mmprojMetadata = await readGgufMetadata(fullMmprojPath)
         logger.info(
           `Mmproj GGUF validation successful: version ${mmprojMetadata.version}, tensors: ${mmprojMetadata.tensor_count}`
@@ -2417,7 +2417,7 @@ export default class llamacpp_extension extends AIEngine {
     let size_bytes = (await fs.fileStat(fullModelPath)).size
     if (mmprojPath) {
       size_bytes += (
-        await fs.fileStat(await joinPath([janDataFolderPath, mmprojPath]))
+        await fs.fileStat(await joinPath([parloDataFolderPath, mmprojPath]))
       ).size
     }
 
@@ -2444,7 +2444,7 @@ export default class llamacpp_extension extends AIEngine {
         ? { pooling: 'mean', ubatch_size: 2048, batch_size: 2048 }
         : {}),
     } as ModelConfig
-    await fs.mkdir(await joinPath([janDataFolderPath, modelDir]))
+    await fs.mkdir(await joinPath([parloDataFolderPath, modelDir]))
     await invoke<void>('write_yaml', {
       data: modelConfig,
       savePath: configPath,
@@ -2501,7 +2501,7 @@ export default class llamacpp_extension extends AIEngine {
     // prepend provider name to avoid name collision
     const taskId = this.createDownloadTaskId(modelId)
     const downloadManager = window.core.extensionManager.getByName(
-      '@janhq/download-extension'
+      '@parlo-lab/download-extension'
     )
 
     try {
@@ -2517,7 +2517,7 @@ export default class llamacpp_extension extends AIEngine {
   override async pauseImport(modelId: string): Promise<void> {
     const taskId = this.createDownloadTaskId(modelId)
     const downloadManager = window.core.extensionManager.getByName(
-      '@janhq/download-extension'
+      '@parlo-lab/download-extension'
     )
     // Pause keeps the partial .tmp for resume; the model folder is preserved.
     await downloadManager.pauseDownload(taskId)
@@ -3059,7 +3059,7 @@ export default class llamacpp_extension extends AIEngine {
    * `router.preset.ini`, so updating Zustand alone has no effect on inference.
    *
    * Sidebar keys are mapped to the canonical `model.yml` / preset keys here.
-   * Keys not in the mapping are silently ignored — they're either Jan-side
+   * Keys not in the mapping are silently ignored — they're either Parlo-side
    * concerns (`reasoning`, `auto_increase_ctx_len`) or not yet emitted by
    * `preset.ts` (deferred to phase b).
    */
@@ -3308,7 +3308,7 @@ export default class llamacpp_extension extends AIEngine {
    * @returns
    */
   async isToolSupported(modelId: string): Promise<boolean> {
-    const janDataFolderPath = await getJanDataFolderPath()
+    const parloDataFolderPath = await getParloDataFolderPath()
     const modelConfigPath = await joinPath([
       this.providerPath,
       'models',
@@ -3319,9 +3319,9 @@ export default class llamacpp_extension extends AIEngine {
       path: modelConfigPath,
     })
     // model option is required
-    // NOTE: model_path and mmproj_path can be either relative to Jan's data folder or absolute path
+    // NOTE: model_path and mmproj_path can be either relative to Parlo's data folder or absolute path
     const modelPath = await joinPath([
-      janDataFolderPath,
+      parloDataFolderPath,
       modelConfig.model_path,
     ])
     return (await readGgufMetadata(modelPath)).metadata?.[
@@ -3402,7 +3402,7 @@ export default class llamacpp_extension extends AIEngine {
 
     if (hasImages) {
       try {
-        const janDataFolderPath = await getJanDataFolderPath()
+        const parloDataFolderPath = await getParloDataFolderPath()
         const modelConfigPath = await joinPath([
           this.providerPath,
           'models',
@@ -3414,7 +3414,7 @@ export default class llamacpp_extension extends AIEngine {
         })
         if (modelConfig.mmproj_path) {
           const mmprojPath = await joinPath([
-            janDataFolderPath,
+            parloDataFolderPath,
             modelConfig.mmproj_path,
           ])
           const metadata = await readGgufMetadata(mmprojPath)

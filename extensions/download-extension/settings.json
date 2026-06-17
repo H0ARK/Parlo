@@ -8,7 +8,10 @@
       "value": "",
       "placeholder": "hf_**********************************",
       "type": "password",
-      "inputActions": ["unobscure", "copy"]
+      "inputActions": [
+        "unobscure",
+        "copy"
+      ]
     }
   }
 ]

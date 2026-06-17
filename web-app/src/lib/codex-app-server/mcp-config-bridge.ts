@@ -1,18 +1,18 @@
 import type { MCPServerConfig, MCPServers } from '@/hooks/useMCPServers'
 
 /**
- * MCP Config Bridge — the primary connection from Jan's MCP system into the Codex engine.
+ * MCP Config Bridge — the primary connection from Parlo's MCP system into the Codex engine.
  *
  * When using the 'codex' provider (Codex app-server as the agent engine):
- * - Jan's useMCPServers store + UI remains the source of truth for available tools/servers.
+ * - Parlo's useMCPServers store + UI remains the source of truth for available tools/servers.
  * - This module projects active servers into the [mcp_servers.*] section of the Codex config.toml
  *   written for each session (see config.ts + chat-backend.ts buildCodexSessionOptions).
  * - Codex (the plugged-in engine) is then responsible for spawning the MCP server processes
  *   (stdio or http) and performing all tool calling, selection, parallel use, etc.
- * - Jan no longer proxies 'item/tool/call' execution for Codex (see chat-backend.ts disconnect).
- *   Approvals (including mcp elicitation) and the config itself are still mediated by Jan.
+ * - Parlo no longer proxies 'item/tool/call' execution for Codex (see chat-backend.ts disconnect).
+ *   Approvals (including mcp elicitation) and the config itself are still mediated by Parlo.
  *
- * This keeps Jan as the desktop host (MCP curation, approvals UI, workspace management,
+ * This keeps Parlo as the desktop host (MCP curation, approvals UI, workspace management,
  * provider profiles for local models, event rendering) while Codex is the engine.
  */
 
@@ -34,11 +34,11 @@ export type CodexMcpServerTomlEntry = {
   env_vars?: unknown
 }
 
-export type JanMcpToCodexOptions = {
+export type ParloMcpToCodexOptions = {
   toolTimeoutSeconds?: number
 }
 
-export function getActiveJanMcpServers(
+export function getActiveParloMcpServers(
   servers: MCPServers
 ): Array<[string, MCPServerConfig]> {
   return Object.entries(servers)
@@ -46,9 +46,9 @@ export function getActiveJanMcpServers(
     .sort(([left], [right]) => left.localeCompare(right))
 }
 
-export function janMcpServerToCodexEntry(
+export function parloMcpServerToCodexEntry(
   config: MCPServerConfig,
-  options: JanMcpToCodexOptions = {}
+  options: ParloMcpToCodexOptions = {}
 ): CodexMcpServerTomlEntry | null {
   const transport = config.type ?? 'stdio'
 
@@ -99,12 +99,12 @@ export function janMcpServerToCodexEntry(
 
 export function buildCodexMcpServersToml(
   servers: MCPServers,
-  options: JanMcpToCodexOptions = {}
+  options: ParloMcpToCodexOptions = {}
 ): string {
   const lines: string[] = []
 
-  for (const [name, config] of getActiveJanMcpServers(servers)) {
-    const entry = janMcpServerToCodexEntry(config, options)
+  for (const [name, config] of getActiveParloMcpServers(servers)) {
+    const entry = parloMcpServerToCodexEntry(config, options)
     if (!entry) continue
 
     lines.push(`[mcp_servers.${tomlTableKey(name)}]`)
@@ -117,12 +117,12 @@ export function buildCodexMcpServersToml(
 
 export function buildCodexMcpServersConfig(
   servers: MCPServers,
-  options: JanMcpToCodexOptions = {}
+  options: ParloMcpToCodexOptions = {}
 ): Record<string, CodexMcpServerTomlEntry> {
   const config: Record<string, CodexMcpServerTomlEntry> = {}
 
-  for (const [name, server] of getActiveJanMcpServers(servers)) {
-    const entry = janMcpServerToCodexEntry(server, options)
+  for (const [name, server] of getActiveParloMcpServers(servers)) {
+    const entry = parloMcpServerToCodexEntry(server, options)
     if (!entry) continue
     config[name] = entry
   }

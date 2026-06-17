@@ -204,6 +204,9 @@ export async function pollXaiDeviceLogin(
 export function onXaiOAuthLoginComplete(
   handler: (result: XaiOAuthLoginResult) => void
 ): Promise<UnlistenFn> {
+  if (!isXaiOAuthAvailable()) {
+    return Promise.resolve(() => undefined)
+  }
   return listen<XaiOAuthLoginResult>('xai-oauth-login-complete', (event) => {
     setXaiOAuthConnectedCache(event.payload.success)
     handler(event.payload)

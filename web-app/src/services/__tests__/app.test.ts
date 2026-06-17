@@ -7,7 +7,7 @@ vi.mock('@tauri-apps/api/core', () => ({
 }))
 
 // Mock EngineManager
-vi.mock('@janhq/core', async (importOriginal) => {
+vi.mock('@parlo-lab/core', async (importOriginal) => {
   const actual = await importOriginal()
   return {
     ...actual,
@@ -114,24 +114,24 @@ describe('TauriAppService', () => {
     })
   })
 
-  describe('getJanDataFolder', () => {
-    it('should get jan data folder path', async () => {
-      const mockConfig = { data_folder: '/path/to/jan/data' }
+  describe('getParloDataFolder', () => {
+    it('should get Parlo data folder path', async () => {
+      const mockConfig = { data_folder: '/path/to/Parlo/data' }
       mockWindow.core.api.getAppConfigurations.mockResolvedValue(mockConfig)
 
-      const result = await appService.getJanDataFolder()
+      const result = await appService.getParloDataFolder()
 
       expect(mockWindow.core.api.getAppConfigurations).toHaveBeenCalled()
-      expect(result).toBe('/path/to/jan/data')
+      expect(result).toBe('/path/to/Parlo/data')
     })
   })
 
-  describe('relocateJanDataFolder', () => {
-    it('should relocate jan data folder', async () => {
-      const newPath = '/new/path/to/jan/data'
+  describe('relocateParloDataFolder', () => {
+    it('should relocate Parlo data folder', async () => {
+      const newPath = '/new/path/to/Parlo/data'
       mockWindow.core.api.changeAppDataFolder.mockResolvedValue(undefined)
 
-      await appService.relocateJanDataFolder(newPath)
+      await appService.relocateParloDataFolder(newPath)
 
       expect(mockWindow.core.api.changeAppDataFolder).toHaveBeenCalledWith({
         newDataFolder: newPath,

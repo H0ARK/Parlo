@@ -3,7 +3,7 @@
  */
 
 import { ExtensionManager } from '@/lib/extension'
-import { Assistant, AssistantExtension, ExtensionTypeEnum } from '@janhq/core'
+import { Assistant, AssistantExtension, ExtensionTypeEnum } from '@parlo-lab/core'
 import type { AssistantsService } from './types'
 
 export class DefaultAssistantsService implements AssistantsService {

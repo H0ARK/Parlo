@@ -1,10 +1,10 @@
 [package]
 name = "tauri-plugin-llamacpp"
 version = "0.8.2"
-authors = ["Jan <service@jan.ai>"]
-description = "Tauri plugin for managing Jan LlamaCpp server processes and model loading"
+authors = ["Parlo <service@Parlo.ai>"]
+description = "Tauri plugin for managing Parlo LlamaCpp server processes and model loading"
 license = "MIT"
-repository = "https://github.com/janhq/jan"
+repository = "https://github.com/parlo-lab/Parlo"
 edition = "2021"
 rust-version = "1.77.2"
 exclude = ["/examples", "/dist-js", "/guest-js", "/node_modules"]
@@ -14,7 +14,7 @@ links = "tauri-plugin-llamacpp"
 base64 = "0.22.1"
 byteorder = "1.5.0"
 hmac = "0.12.1"
-jan-utils = { path = "../../utils" }
+parlo-utils = { path = "../../utils" }
 walkdir = "2"
 log = "0.4"
 rand = "0.8"

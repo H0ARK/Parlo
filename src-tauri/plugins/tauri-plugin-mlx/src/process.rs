@@ -3,7 +3,7 @@ use sysinfo::{Pid, System};
 use tauri::{Manager, Runtime, State};
 
 use crate::state::{MlxState, SessionInfo};
-use jan_utils::generate_random_port;
+use parlo_utils::generate_random_port;
 
 /// Check if a process is running by PID
 pub async fn is_process_running_by_pid<R: Runtime>(

@@ -47,7 +47,7 @@ vi.mock('@/hooks/useAgentMode', () => ({
   },
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   ExtensionTypeEnum: { VectorDB: 'VectorDB' },
   VectorDBExtension: class {},
 }))

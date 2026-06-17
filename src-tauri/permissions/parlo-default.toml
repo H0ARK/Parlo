@@ -1,6 +1,6 @@
 [[permission]]
-identifier = "allow-jan-default-commands"
-description = "Enables default Jan desktop invoke commands."
+identifier = "allow-parlo-default-commands"
+description = "Enables default Parlo desktop invoke commands."
 commands.allow = [
   "join_path",
   "mkdir",
@@ -105,6 +105,6 @@ commands.allow = [
 ]
 
 [[set]]
-identifier = "jan-default"
-description = "Default Jan app command permissions."
-permissions = ["allow-jan-default-commands"]
+identifier = "parlo-default"
+description = "Default Parlo app command permissions."
+permissions = ["allow-parlo-default-commands"]

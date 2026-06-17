@@ -46,11 +46,11 @@ describe('TauriCodexProcessSpawner', () => {
     const process = await spawner.spawn('/codex', ['app-server', '--stdio'], {
       cwd: '/repo',
       env: {
-        CODEX_HOME: '/repo/.jan/codex-home',
+        CODEX_HOME: '/repo/.Parlo/codex-home',
         OPENAI_API_KEY: 'test',
         UNUSED: undefined,
       },
-      codexHome: '/repo/.jan/codex-home',
+      codexHome: '/repo/.Parlo/codex-home',
       configToml: 'model = "gpt-test"',
     })
     const stdout = vi.fn()
@@ -59,7 +59,7 @@ describe('TauriCodexProcessSpawner', () => {
     process.onStderrLine(stderr)
 
     expect(invoke).toHaveBeenNthCalledWith(1, 'write_codex_app_server_config', {
-      codexHome: '/repo/.jan/codex-home',
+      codexHome: '/repo/.Parlo/codex-home',
       configToml: 'model = "gpt-test"',
       agentsMd: null,
       customAgents: null,
@@ -70,7 +70,7 @@ describe('TauriCodexProcessSpawner', () => {
       args: ['app-server', '--stdio'],
       cwd: '/repo',
       env: {
-        CODEX_HOME: '/repo/.jan/codex-home',
+        CODEX_HOME: '/repo/.Parlo/codex-home',
         OPENAI_API_KEY: 'test',
       },
     })

@@ -1,14 +1,14 @@
 #!/bin/bash
 # Common test runner script
 
-JAN_APP_PATH="$1"
+PARLO_APP_PATH="$1"
 PROCESS_NAME="$2"
 RP_TOKEN="$3"
 PLATFORM="$4"
 
 echo "Starting Auto QA Tests..."
 echo "Platform: $PLATFORM"
-echo "Jan app path: $JAN_APP_PATH"
+echo "Parlo app path: $PARLO_APP_PATH"
 echo "Process name: $PROCESS_NAME"
 
 # Platform-specific setup
@@ -31,22 +31,22 @@ if [ "$PLATFORM" = "ubuntu" ]; then
         exit 1
     }
 
-    # Make Jan executable if needed
-    if [ -f "/usr/bin/Jan-nightly" ]; then
-        sudo chmod +x /usr/bin/Jan-nightly
+    # Make Parlo executable if needed
+    if [ -f "/usr/bin/Parlo-nightly" ]; then
+        sudo chmod +x /usr/bin/Parlo-nightly
     fi
-    if [ -f "/usr/bin/Jan" ]; then
-        sudo chmod +x /usr/bin/Jan
+    if [ -f "/usr/bin/Parlo" ]; then
+        sudo chmod +x /usr/bin/Parlo
     fi
 fi
 
 # macOS specific setup
 if [ "$PLATFORM" = "macos" ]; then
-    # Verify Jan app path
-    if [ ! -f "$JAN_APP_PATH" ]; then
-        echo "❌ Jan app not found at: $JAN_APP_PATH"
+    # Verify Parlo app path
+    if [ ! -f "$PARLO_APP_PATH" ]; then
+        echo "❌ Parlo app not found at: $PARLO_APP_PATH"
         echo "Available files in /Applications:"
-        ls -la /Applications/ | grep -i jan || echo "No Jan apps found"
+        ls -la /Applications/ | grep -i Parlo || echo "No Parlo apps found"
         exit 1
     fi
 fi
@@ -60,10 +60,10 @@ echo "Contents of trajectories directory (if exists):"
 ls -la trajectories/ 2>/dev/null || echo "trajectories directory not found"
 
 # Run the main test with proper arguments
-if [ -n "$JAN_APP_PATH" ] && [ -n "$PROCESS_NAME" ]; then
-    python main.py --enable-reportportal --rp-token "$RP_TOKEN" --jan-app-path "$JAN_APP_PATH" --jan-process-name "$PROCESS_NAME"
-elif [ -n "$JAN_APP_PATH" ]; then
-    python main.py --enable-reportportal --rp-token "$RP_TOKEN" --jan-app-path "$JAN_APP_PATH"
+if [ -n "$PARLO_APP_PATH" ] && [ -n "$PROCESS_NAME" ]; then
+    python main.py --enable-reportportal --rp-token "$RP_TOKEN" --Parlo-app-path "$PARLO_APP_PATH" --Parlo-process-name "$PROCESS_NAME"
+elif [ -n "$PARLO_APP_PATH" ]; then
+    python main.py --enable-reportportal --rp-token "$RP_TOKEN" --Parlo-app-path "$PARLO_APP_PATH"
 else
     python main.py --enable-reportportal --rp-token "$RP_TOKEN"
 fi

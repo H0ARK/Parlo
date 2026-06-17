@@ -1,4 +1,4 @@
-import type { BaseExtension, ExtensionTypeEnum } from '@janhq/core'
+import type { BaseExtension, ExtensionTypeEnum } from '@parlo-lab/core'
 
 declare global {
   interface Window {

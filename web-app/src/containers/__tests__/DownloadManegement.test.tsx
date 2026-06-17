@@ -66,7 +66,7 @@ vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => hoisted.navigateMock,
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   DownloadEvent: {
     onFileDownloadUpdate: 'fdu',
     onFileDownloadError: 'fde',

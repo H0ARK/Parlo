@@ -32,13 +32,11 @@ type ConfigAdminPanelActions = {
 type ConfigAdminPanelProps = {
   state: ConfigAdminPanelState
   actions: ConfigAdminPanelActions
-  isCodexProtoTransport?: boolean
 }
 
 export function ConfigAdminPanel({
   state,
   actions,
-  isCodexProtoTransport,
 }: ConfigAdminPanelProps) {
   const {
     adminBusy,
@@ -229,7 +227,7 @@ export function ConfigAdminPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={() => void onRefreshCodexAdminSnapshot()}
         >
           {adminBusy ? 'Loading' : 'Refresh'}
@@ -315,7 +313,7 @@ export function ConfigAdminPanel({
           <button
             type="button"
             className="text-[9px] underline disabled:opacity-50"
-            disabled={adminBusy || !batchKeyPath.trim() || !!isCodexProtoTransport}
+            disabled={adminBusy || !batchKeyPath.trim()}
             onClick={() => appendBatchEdit(batchKeyPath, batchValue)}
           >
             add batch edit
@@ -323,7 +321,7 @@ export function ConfigAdminPanel({
           <button
             type="button"
             className="text-[9px] underline disabled:opacity-50"
-            disabled={adminBusy || !codexConfigKeyPath.trim() || !!isCodexProtoTransport}
+            disabled={adminBusy || !codexConfigKeyPath.trim()}
             onClick={() => {
               setBatchKeyPath(codexConfigKeyPath)
               setBatchValue(singleConfigValue)
@@ -345,7 +343,7 @@ export function ConfigAdminPanel({
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={adminBusy || !!isCodexProtoTransport}
+              disabled={adminBusy}
               onClick={() =>
                 setShowAdvancedWindowsJson((previous) => !previous)
               }
@@ -394,7 +392,7 @@ export function ConfigAdminPanel({
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={adminBusy || !!isCodexProtoTransport}
+              disabled={adminBusy}
               onClick={() =>
                 setShowAdvancedExternalImportJson((previous) => !previous)
               }
@@ -472,7 +470,7 @@ export function ConfigAdminPanel({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={async () => {
             if (!currentThreadIdForCaps) return
             const keyPath = codexConfigKeyPath.trim()
@@ -504,7 +502,7 @@ export function ConfigAdminPanel({
         <button 
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={async () => {
             if (!currentThreadIdForCaps) return
             onSetAdminBusy(true)
@@ -536,7 +534,7 @@ export function ConfigAdminPanel({
         <button 
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={async () => {
             if (!currentThreadIdForCaps) return
             onSetAdminBusy(true)
@@ -563,7 +561,7 @@ export function ConfigAdminPanel({
         <button 
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={async () => {
             if (!currentThreadIdForCaps) return
             onSetAdminBusy(true)
@@ -591,7 +589,7 @@ export function ConfigAdminPanel({
         <button 
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || adminBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || adminBusy}
           onClick={async () => {
             if (!currentThreadIdForCaps) return
             onSetAdminBusy(true)

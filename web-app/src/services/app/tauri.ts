@@ -3,7 +3,7 @@
  */
 
 import { invoke } from '@tauri-apps/api/core'
-import { AppConfiguration } from '@janhq/core'
+import { AppConfiguration } from '@parlo-lab/core'
 import type { FactoryResetOptions, LogEntry } from './types'
 import { DefaultAppService } from './default'
 
@@ -18,7 +18,7 @@ export class TauriAppService extends DefaultAppService {
    * wiped on disk by the Rust side.
    */
   async factoryReset(options?: FactoryResetOptions): Promise<void> {
-    const { EngineManager } = await import('@janhq/core')
+    const { EngineManager } = await import('@parlo-lab/core')
     for (const [, engine] of EngineManager.instance().engines) {
       const activeModels = await engine.getLoadedModels()
       if (activeModels) {
@@ -41,19 +41,19 @@ export class TauriAppService extends DefaultAppService {
     return logData.split('\n').map(this.parseLogLine)
   }
 
-  async getJanDataFolder(): Promise<string | undefined> {
+  async getParloDataFolder(): Promise<string | undefined> {
     try {
       const appConfiguration: AppConfiguration | undefined =
         await window.core?.api?.getAppConfigurations()
 
       return appConfiguration?.data_folder
     } catch (error) {
-      console.error('Failed to get Jan data folder:', error)
+      console.error('Failed to get Parlo data folder:', error)
       return undefined
     }
   }
 
-  async relocateJanDataFolder(path: string): Promise<void> {
+  async relocateParloDataFolder(path: string): Promise<void> {
     await window.core?.api?.changeAppDataFolder({ newDataFolder: path })
   }
 

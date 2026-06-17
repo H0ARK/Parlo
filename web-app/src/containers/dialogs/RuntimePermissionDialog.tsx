@@ -30,15 +30,15 @@ export default function RuntimePermissionDialog() {
     typeof pending.details?.codexThreadId === 'string'
       ? pending.details.codexThreadId
       : undefined
-  const janThreadId =
-    typeof pending.details?.janThreadId === 'string'
-      ? pending.details.janThreadId
+  const parloThreadId =
+    typeof pending.details?.parloThreadId === 'string'
+      ? pending.details.parloThreadId
       : typeof pending.details?.threadId === 'string'
         ? pending.details.threadId
         : undefined
   const isSubagentApproval =
     pending.details?.source === 'subagent' ||
-    (codexThreadId && janThreadId && codexThreadId !== janThreadId)
+    (codexThreadId && parloThreadId && codexThreadId !== parloThreadId)
 
   return (
     <Dialog

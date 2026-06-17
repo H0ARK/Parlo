@@ -1,55 +1,56 @@
-#!/bin/bash
-
-# Check if the correct number of arguments is provided
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <path_to_json_input_file> <channel>"
-    exit 1
-fi
-
-INPUT_JSON_FILE="$1"
-
-CHANNEL="$2"
-
-if [ "$CHANNEL" == "nightly" ]; then
-    UPDATER="latest"
-else
-    UPDATER="beta"
-fi
-
-# Check if the input file exists
-if [ ! -f "$INPUT_JSON_FILE" ]; then
-    echo "Input file not found: $INPUT_JSON_FILE"
-    exit 1
-fi
-
-# Use jq to transform the content
-jq --arg channel "$CHANNEL" --arg updater "$UPDATER" '
-    .name = "jan-\($channel)" |
-    .productName = "Jan-\($channel)" |
-    .build.appId = "jan-\($channel).ai.app" |
-    .build.productName = "Jan-\($channel)" |
-    .build.appId = "jan-\($channel).ai.app" |
-    .build.protocols[0].name = "Jan-\($channel)" |
-    .build.protocols[0].schemes = ["jan-\($channel)"] |
-    .build.artifactName = "jan-\($channel)-${os}-${arch}-${version}.${ext}" |
-    .build.publish[0].channel = $updater
-' "$INPUT_JSON_FILE" > ./package.json.tmp
-
-cat ./package.json.tmp
-
-rm $INPUT_JSON_FILE
-mv ./package.json.tmp $INPUT_JSON_FILE
-
-# Update the layout file
-LAYOUT_FILE_PATH="web/app/layout.tsx"
-
-if [ ! -f "$LAYOUT_FILE_PATH" ]; then
-    echo "File does not exist: $LAYOUT_FILE_PATH"
-    exit 1
-fi
-
-# Perform the replacements
-sed -i -e "s#Jan#Jan-$CHANNEL#g" "$LAYOUT_FILE_PATH"
-
-# Notify completion
-echo "File has been updated: $LAYOUT_FILE_PATH"
+-lab#-lab!-lab/-labb-labi-labn-lab/-labb-laba-labs-labh-lab
+-lab
+-lab#-lab -labC-labh-labe-labc-labk-lab -labi-labf-lab -labt-labh-labe-lab -labc-labo-labr-labr-labe-labc-labt-lab -labn-labu-labm-labb-labe-labr-lab -labo-labf-lab -laba-labr-labg-labu-labm-labe-labn-labt-labs-lab -labi-labs-lab -labp-labr-labo-labv-labi-labd-labe-labd-lab
+-labi-labf-lab -lab[-lab -lab"-lab$-lab#-lab"-lab -lab--labn-labe-lab -lab2-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labU-labs-laba-labg-labe-lab:-lab -lab$-lab0-lab -lab<-labp-laba-labt-labh-lab_-labt-labo-lab_-labj-labs-labo-labn-lab_-labi-labn-labp-labu-labt-lab_-labf-labi-labl-labe-lab>-lab -lab<-labc-labh-laba-labn-labn-labe-labl-lab>-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab=-lab"-lab$-lab1-lab"-lab
+-lab
+-labC-labH-labA-labN-labN-labE-labL-lab=-lab"-lab$-lab2-lab"-lab
+-lab
+-labi-labf-lab -lab[-lab -lab"-lab$-labC-labH-labA-labN-labN-labE-labL-lab"-lab -lab=-lab=-lab -lab"-labn-labi-labg-labh-labt-labl-laby-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labU-labP-labD-labA-labT-labE-labR-lab=-lab"-labl-laba-labt-labe-labs-labt-lab"-lab
+-labe-labl-labs-labe-lab
+-lab -lab -lab -lab -labU-labP-labD-labA-labT-labE-labR-lab=-lab"-labb-labe-labt-laba-lab"-lab
+-labf-labi-lab
+-lab
+-lab#-lab -labC-labh-labe-labc-labk-lab -labi-labf-lab -labt-labh-labe-lab -labi-labn-labp-labu-labt-lab -labf-labi-labl-labe-lab -labe-labx-labi-labs-labt-labs-lab
+-labi-labf-lab -lab[-lab -lab!-lab -lab--labf-lab -lab"-lab$-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labI-labn-labp-labu-labt-lab -labf-labi-labl-labe-lab -labn-labo-labt-lab -labf-labo-labu-labn-labd-lab:-lab -lab$-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-lab#-lab -labU-labs-labe-lab -labj-labq-lab -labt-labo-lab -labt-labr-laba-labn-labs-labf-labo-labr-labm-lab -labt-labh-labe-lab -labc-labo-labn-labt-labe-labn-labt-lab
+-labj-labq-lab -lab--lab--laba-labr-labg-lab -labc-labh-laba-labn-labn-labe-labl-lab -lab"-lab$-labC-labH-labA-labN-labN-labE-labL-lab"-lab -lab--lab--laba-labr-labg-lab -labu-labp-labd-laba-labt-labe-labr-lab -lab"-lab$-labU-labP-labD-labA-labT-labE-labR-lab"-lab -lab'-lab
+-lab -lab -lab -lab -lab.-labn-laba-labm-labe-lab -lab=-lab -lab"-labj-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labp-labr-labo-labd-labu-labc-labt-labN-laba-labm-labe-lab -lab=-lab -lab"-labJ-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-laba-labp-labp-labI-labd-lab -lab=-lab -lab"-labj-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab.-laba-labi-lab.-laba-labp-labp-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-labp-labr-labo-labd-labu-labc-labt-labN-laba-labm-labe-lab -lab=-lab -lab"-labJ-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-laba-labp-labp-labI-labd-lab -lab=-lab -lab"-labj-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab.-laba-labi-lab.-laba-labp-labp-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-labp-labr-labo-labt-labo-labc-labo-labl-labs-lab[-lab0-lab]-lab.-labn-laba-labm-labe-lab -lab=-lab -lab"-labJ-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-labp-labr-labo-labt-labo-labc-labo-labl-labs-lab[-lab0-lab]-lab.-labs-labc-labh-labe-labm-labe-labs-lab -lab=-lab -lab[-lab"-labj-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab"-lab]-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-laba-labr-labt-labi-labf-laba-labc-labt-labN-laba-labm-labe-lab -lab=-lab -lab"-labj-laba-labn-lab--lab\-lab(-lab$-labc-labh-laba-labn-labn-labe-labl-lab)-lab--lab$-lab{-labo-labs-lab}-lab--lab$-lab{-laba-labr-labc-labh-lab}-lab--lab$-lab{-labv-labe-labr-labs-labi-labo-labn-lab}-lab.-lab$-lab{-labe-labx-labt-lab}-lab"-lab -lab|-lab
+-lab -lab -lab -lab -lab.-labb-labu-labi-labl-labd-lab.-labp-labu-labb-labl-labi-labs-labh-lab[-lab0-lab]-lab.-labc-labh-laba-labn-labn-labe-labl-lab -lab=-lab -lab$-labu-labp-labd-laba-labt-labe-labr-lab
+-lab'-lab -lab"-lab$-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab"-lab -lab>-lab -lab.-lab/-labp-laba-labc-labk-laba-labg-labe-lab.-labj-labs-labo-labn-lab.-labt-labm-labp-lab
+-lab
+-labc-laba-labt-lab -lab.-lab/-labp-laba-labc-labk-laba-labg-labe-lab.-labj-labs-labo-labn-lab.-labt-labm-labp-lab
+-lab
+-labr-labm-lab -lab$-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab
+-labm-labv-lab -lab.-lab/-labp-laba-labc-labk-laba-labg-labe-lab.-labj-labs-labo-labn-lab.-labt-labm-labp-lab -lab$-labI-labN-labP-labU-labT-lab_-labJ-labS-labO-labN-lab_-labF-labI-labL-labE-lab
+-lab
+-lab#-lab -labU-labp-labd-laba-labt-labe-lab -labt-labh-labe-lab -labl-laba-laby-labo-labu-labt-lab -labf-labi-labl-labe-lab
+-labL-labA-labY-labO-labU-labT-lab_-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab=-lab"-labw-labe-labb-lab/-laba-labp-labp-lab/-labl-laba-laby-labo-labu-labt-lab.-labt-labs-labx-lab"-lab
+-lab
+-labi-labf-lab -lab[-lab -lab!-lab -lab--labf-lab -lab"-lab$-labL-labA-labY-labO-labU-labT-lab_-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab -lab]-lab;-lab -labt-labh-labe-labn-lab
+-lab -lab -lab -lab -labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labd-labo-labe-labs-lab -labn-labo-labt-lab -labe-labx-labi-labs-labt-lab:-lab -lab$-labL-labA-labY-labO-labU-labT-lab_-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab -lab -lab -lab -labe-labx-labi-labt-lab -lab1-lab
+-labf-labi-lab
+-lab
+-lab#-lab -labP-labe-labr-labf-labo-labr-labm-lab -labt-labh-labe-lab -labr-labe-labp-labl-laba-labc-labe-labm-labe-labn-labt-labs-lab
+-labs-labe-labd-lab -lab--labi-lab -lab--labe-lab -lab"-labs-lab#-labJ-laba-labn-lab#-labJ-laba-labn-lab--lab$-labC-labH-labA-labN-labN-labE-labL-lab#-labg-lab"-lab -lab"-lab$-labL-labA-labY-labO-labU-labT-lab_-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab
+-lab#-lab -labN-labo-labt-labi-labf-laby-lab -labc-labo-labm-labp-labl-labe-labt-labi-labo-labn-lab
+-labe-labc-labh-labo-lab -lab"-labF-labi-labl-labe-lab -labh-laba-labs-lab -labb-labe-labe-labn-lab -labu-labp-labd-laba-labt-labe-labd-lab:-lab -lab$-labL-labA-labY-labO-labU-labT-lab_-labF-labI-labL-labE-lab_-labP-labA-labT-labH-lab"-lab
+-lab

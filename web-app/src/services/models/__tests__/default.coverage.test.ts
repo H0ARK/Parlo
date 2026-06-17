@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { DefaultModelsService } from '../default'
-import { EngineManager, events, DownloadEvent, ContentType } from '@janhq/core'
+import { EngineManager, events, DownloadEvent, ContentType } from '@parlo-lab/core'
 
 const { mockEvents } = vi.hoisted(() => ({
   mockEvents: { emit: vi.fn() },
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   EngineManager: { instance: vi.fn() },
   events: mockEvents,
   DownloadEvent: {
@@ -32,7 +32,7 @@ Object.defineProperty(global, 'MODEL_CATALOG_URL', {
   writable: true,
   configurable: true,
 })
-Object.defineProperty(global, 'LATEST_JAN_MODEL_URL', {
+Object.defineProperty(global, 'LATEST_PARLO_MODEL_URL', {
   value: 'https://example.com/latest',
   writable: true,
   configurable: true,

@@ -1,8 +1,8 @@
-# Contributing to Jan Extensions
+# Contributing to Parlo Extensions
 
 [← Back to Main Contributing Guide](../CONTRIBUTING.md)
 
-Extensions add specific features to Jan as self-contained modules.
+Extensions add specific features to Parlo as self-contained modules.
 
 ## Current Extensions
 
@@ -48,7 +48,7 @@ my-extension/
 ### Basic Extension
 
 ```typescript
-import { Extension } from '@janhq/core'
+import { Extension } from '@parlo-lab/core'
 
 export default class MyExtension extends Extension {
   async onLoad() {
@@ -93,7 +93,7 @@ async onLoad() {
 
 ## Extension Lifecycle
 
-1. **Jan starts** → Discovers extensions
+1. **Parlo starts** → Discovers extensions
 2. **Loading** → Calls `onLoad()` method  
 3. **Active** → Extension responds to events
 4. **Unloading** → Calls `onUnload()` on shutdown
@@ -114,7 +114,7 @@ console.log(window.core.api)
 ## Common Issues
 
 **Extension not loading?**
-- Check package.json format: `@janhq/extension-name`
+- Check package.json format: `-lab/extension-name`
 - Ensure `onLoad()` doesn't throw errors
 - Verify exports in index.ts
 
@@ -132,6 +132,6 @@ console.log(window.core.api)
 
 ## Dependencies
 
-- **@janhq/core** - Core SDK and extension system
+- **-lab/core** - Core SDK and extension system
 - **TypeScript** - Type safety
 - **Rolldown** - Bundling

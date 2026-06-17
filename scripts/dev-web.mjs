@@ -129,7 +129,7 @@ if (!acquireLock()) {
   }
 }
 
-const child = spawn('yarn', ['workspace', '@janhq/web-app', 'dev'], {
+const child = spawn('yarn', ['workspace', '@parlo-lab/web-app', 'dev'], {
   stdio: 'inherit',
   env: {
     ...process.env,

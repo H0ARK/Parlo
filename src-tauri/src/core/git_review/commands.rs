@@ -144,14 +144,14 @@ fn sanitize_branch_name(value: &str) -> String {
     }
     let trimmed = out.trim_matches(&['-', '_', '/'][..]).to_string();
     if trimmed.is_empty() {
-        "jan-worktree".to_string()
+        "Parlo-worktree".to_string()
     } else {
         trimmed
     }
 }
 
 /// Create a git worktree for Codex --add-dir / extra workspace roots.
-/// Defaults to `<repo>/.worktrees/<branch>` with a new branch `jan/<name>-<timestamp>`.
+/// Defaults to `<repo>/.worktrees/<branch>` with a new branch `Parlo/<name>-<timestamp>`.
 #[tauri::command]
 pub async fn git_worktree_add(
     repo_cwd: String,
@@ -176,7 +176,7 @@ pub async fn git_worktree_add(
         .duration_since(std::time::UNIX_EPOCH)
         .map(|d| d.as_secs())
         .unwrap_or(0);
-    let branch = branch_name.unwrap_or_else(|| format!("jan/{suffix}-{timestamp}"));
+    let branch = branch_name.unwrap_or_else(|| format!("Parlo/{suffix}-{timestamp}"));
     let path = worktree_path.unwrap_or_else(|| {
         format!("{repo_cwd}/.worktrees/{suffix}")
     });

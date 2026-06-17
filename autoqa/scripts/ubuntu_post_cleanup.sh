@@ -5,27 +5,27 @@ IS_NIGHTLY="$1"
 
 echo "Cleaning up after tests..."
 
-# Kill any running Jan processes (both regular and nightly)
-pkill -f "Jan" || true
-pkill -f "jan" || true
-pkill -f "Jan-nightly" || true
-pkill -f "jan-nightly" || true
+# Kill any running Parlo processes (both regular and nightly)
+pkill -f "Parlo" || true
+pkill -f "Parlo" || true
+pkill -f "Parlo-nightly" || true
+pkill -f "Parlo-nightly" || true
 
-# Remove Jan data folders (both regular and nightly)
-rm -rf ~/.config/Jan
-rm -rf ~/.config/Jan-nightly
-rm -rf ~/.local/share/Jan
-rm -rf ~/.local/share/Jan-nightly
-rm -rf ~/.cache/jan
-rm -rf ~/.cache/jan-nightly
-rm -rf ~/.local/share/jan-nightly.ai.app
-rm -rf ~/.local/share/jan.ai.app
+# Remove Parlo data folders (both regular and nightly)
+rm -rf ~/.config/Parlo
+rm -rf ~/.config/Parlo-nightly
+rm -rf ~/.local/share/Parlo
+rm -rf ~/.local/share/Parlo-nightly
+rm -rf ~/.cache/Parlo
+rm -rf ~/.cache/Parlo-nightly
+rm -rf ~/.local/share/Parlo-nightly.ai.app
+rm -rf ~/.local/share/Parlo.ai.app
 
-# Try to uninstall Jan app
+# Try to uninstall Parlo app
 if [ "$IS_NIGHTLY" = "true" ]; then
-    PACKAGE_NAME="jan-nightly"
+    PACKAGE_NAME="Parlo-nightly"
 else
-    PACKAGE_NAME="jan"
+    PACKAGE_NAME="Parlo"
 fi
 
 echo "Attempting to uninstall package: $PACKAGE_NAME"
@@ -39,6 +39,6 @@ else
 fi
 
 # Clean up downloaded installer
-rm -f "/tmp/jan-installer.deb"
+rm -f "/tmp/Parlo-installer.deb"
 
 echo "Cleanup completed"

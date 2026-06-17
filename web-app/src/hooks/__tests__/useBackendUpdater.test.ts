@@ -6,7 +6,7 @@ const mockOn = vi.fn()
 const mockOff = vi.fn()
 const mockEmit = vi.fn()
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   events: {
     on: mockOn,
     off: mockOff,

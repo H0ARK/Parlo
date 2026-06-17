@@ -17,7 +17,7 @@ export class TauriHardwareService extends DefaultHardwareService {
 
   async getLlamacppDevices(): Promise<DeviceList[]> {
     const extensionManager = window.core.extensionManager
-    const llamacppExtension = extensionManager.getByName('@janhq/llamacpp-extension')
+    const llamacppExtension = extensionManager.getByName('@parlo-lab/llamacpp-extension')
 
     if (!llamacppExtension) {
       throw new Error('llamacpp extension not found')

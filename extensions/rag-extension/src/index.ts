@@ -8,10 +8,10 @@ import {
   type SettingComponentProps,
   AIEngine,
   type AttachmentFileInfo,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 import './env.d'
 import { getRAGTools, RETRIEVE, LIST_ATTACHMENTS, GET_CHUNKS } from './tools'
-import * as ragApi from '@janhq/tauri-plugin-rag-api'
+import * as ragApi from '@parlo-lab/tauri-plugin-rag-api'
 
 export default class RagExtension extends RAGExtension {
   private config = {
@@ -530,7 +530,7 @@ export default class RagExtension extends RAGExtension {
   // Locally implement embedding logic (previously in embeddings-extension)
   private async embedTexts(texts: string[]): Promise<number[][]> {
     const llm = window.core?.extensionManager.getByName(
-      '@janhq/llamacpp-extension'
+      '@parlo-lab/llamacpp-extension'
     ) as AIEngine & {
       embed?: (
         texts: string[]

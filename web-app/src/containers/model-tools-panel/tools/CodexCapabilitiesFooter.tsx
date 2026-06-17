@@ -1,6 +1,5 @@
 type CodexCapabilitiesFooterProps = {
   message?: string
-  isCodexProtoTransport?: boolean
 }
 
 export function CodexCapabilitiesFooter({

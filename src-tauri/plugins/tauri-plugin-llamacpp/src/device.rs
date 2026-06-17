@@ -7,7 +7,7 @@ use tokio::time::timeout;
 
 use crate::error::{ErrorCode, LlamacppError, ServerError, ServerResult};
 use crate::path::validate_binary_path;
-use jan_utils::{binary_requires_cuda, find_cuda_paths, setup_library_path, setup_windows_process_flags};
+use parlo_utils::{binary_requires_cuda, find_cuda_paths, setup_library_path, setup_windows_process_flags};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DeviceInfo {

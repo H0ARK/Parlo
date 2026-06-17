@@ -54,33 +54,33 @@ describe('getModelToStart', () => {
     ).toEqual({ model: 'gpt-4', provider: openai })
   })
 
-  it('falls back to first llamacpp model when last-used provider exists but model missing', () => {
+  it('uses selected model when last-used provider exists but model is missing', () => {
     localStorage.setItem(
       LS_KEY,
       JSON.stringify({ provider: 'openai', model: 'vanished' })
     )
     const openai = mkProvider('openai', ['gpt-4'])
-    const llama = mkProvider('llamacpp', ['local-a', 'local-b'])
     const getProviderByName = vi.fn((name: string) =>
-      name === 'openai' ? openai : name === 'llamacpp' ? llama : undefined
+      name === 'openai' ? openai : undefined
     )
     expect(
-      getModelToStart({ getProviderByName, selectedModel: null, selectedProvider: null })
-    ).toEqual({ model: 'local-a', provider: llama })
+      getModelToStart({
+        getProviderByName,
+        selectedModel: { id: 'gpt-4' } as any,
+        selectedProvider: 'openai',
+      })
+    ).toEqual({ model: 'gpt-4', provider: openai })
   })
 
-  it('falls back to first llamacpp model when last-used provider not found', () => {
+  it('returns null when last-used provider is not found and nothing is selected', () => {
     localStorage.setItem(
       LS_KEY,
       JSON.stringify({ provider: 'ghost', model: 'x' })
     )
-    const llama = mkProvider('llamacpp', ['local-a'])
-    const getProviderByName = vi.fn((name: string) =>
-      name === 'llamacpp' ? llama : undefined
-    )
+    const getProviderByName = vi.fn(() => undefined)
     expect(
       getModelToStart({ getProviderByName, selectedModel: null, selectedProvider: null })
-    ).toEqual({ model: 'local-a', provider: llama })
+    ).toBeNull()
   })
 
   it('uses selected model + provider when no last-used model stored', () => {
@@ -97,18 +97,15 @@ describe('getModelToStart', () => {
     ).toEqual({ model: 'gpt-4', provider: openai })
   })
 
-  it('falls through to llamacpp when selected provider does not resolve', () => {
-    const llama = mkProvider('llamacpp', ['local-a'])
-    const getProviderByName = vi.fn((name: string) =>
-      name === 'llamacpp' ? llama : undefined
-    )
+  it('returns null when selected provider does not resolve', () => {
+    const getProviderByName = vi.fn(() => undefined)
     expect(
       getModelToStart({
         getProviderByName,
         selectedModel: { id: 'x' } as any,
         selectedProvider: 'ghost',
       })
-    ).toEqual({ model: 'local-a', provider: llama })
+    ).toBeNull()
   })
 
   it('returns null when no fallbacks resolve', () => {

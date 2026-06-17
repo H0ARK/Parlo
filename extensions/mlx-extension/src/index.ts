@@ -10,7 +10,7 @@
 
 import {
   AIEngine,
-  getJanDataFolderPath,
+  getParloDataFolderPath,
   fs,
   joinPath,
   modelInfo,
@@ -23,7 +23,7 @@ import {
   events,
   AppEvent,
   DownloadEvent,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 
 import { info, warn, error as logError } from '@tauri-apps/plugin-log'
 import { invoke } from '@tauri-apps/api/core'
@@ -31,8 +31,8 @@ import {
   loadMlxModel,
   unloadMlxModel,
   MlxConfig,
-} from '@janhq/tauri-plugin-mlx-api'
-import { readGgufMetadata, ModelConfig } from '@janhq/tauri-plugin-llamacpp-api'
+} from '@parlo-lab/tauri-plugin-mlx-api'
+import { readGgufMetadata, ModelConfig } from '@parlo-lab/tauri-plugin-llamacpp-api'
 
 // Error message constant
 const OUT_OF_CONTEXT_SIZE = 'the request exceeds the available context size.'
@@ -60,7 +60,7 @@ export default class mlx_extension extends AIEngine {
 
   private config: any = {}
   private providerPath!: string
-  private apiSecret: string = 'JanMLX'
+  private apiSecret: string = 'ParloMLX'
   private loadingModels = new Map<string, Promise<SessionInfo>>()
 
   override async onLoad(): Promise<void> {
@@ -88,7 +88,7 @@ export default class mlx_extension extends AIEngine {
   async getProviderPath(): Promise<string> {
     if (!this.providerPath) {
       // Use mlx folder for models
-      this.providerPath = await joinPath([await getJanDataFolderPath(), 'mlx'])
+      this.providerPath = await joinPath([await getParloDataFolderPath(), 'mlx'])
     }
     return this.providerPath
   }
@@ -268,7 +268,7 @@ export default class mlx_extension extends AIEngine {
 
     const cfg = { ...this.config, ...(overrideSettings ?? {}) }
 
-    const janDataFolderPath = await getJanDataFolderPath()
+    const parloDataFolderPath = await getParloDataFolderPath()
     const modelConfigPath = await joinPath([
       this.providerPath,
       'models',
@@ -294,8 +294,8 @@ export default class mlx_extension extends AIEngine {
       // Absolute path
       modelPath = modelConfig.model_path
     } else {
-      // Relative path - resolve from Jan data folder
-      modelPath = await joinPath([janDataFolderPath, modelConfig.model_path])
+      // Relative path - resolve from Parlo data folder
+      modelPath = await joinPath([parloDataFolderPath, modelConfig.model_path])
     }
 
     const mlxConfig: MlxConfig = {
@@ -528,11 +528,11 @@ export default class mlx_extension extends AIEngine {
       !modelConfig.model_path.startsWith('/') &&
       !modelConfig.model_path.includes(':')
     ) {
-      // Model file is at {janDataFolder}/{model_path}
+      // Model file is at {parloDataFolder}/{model_path}
       // Delete the parent folder containing the actual model file
-      const janDataFolderPath = await getJanDataFolderPath()
+      const parloDataFolderPath = await getParloDataFolderPath()
       const modelPath = await joinPath([
-        janDataFolderPath,
+        parloDataFolderPath,
         modelConfig.model_path,
       ])
       const parentDir = modelPath.substring(0, modelPath.lastIndexOf('/'))
@@ -610,9 +610,9 @@ export default class mlx_extension extends AIEngine {
 
     if (sourcePath.startsWith('https://')) {
       // Download from URL to mlx models folder
-      const janDataFolderPath = await getJanDataFolderPath()
+      const parloDataFolderPath = await getParloDataFolderPath()
       const modelDir = await joinPath([
-        janDataFolderPath,
+        parloDataFolderPath,
         'mlx',
         'models',
         modelId,
@@ -620,7 +620,7 @@ export default class mlx_extension extends AIEngine {
       const localPath = await joinPath([modelDir, 'model.safetensors'])
 
       const downloadManager = window.core.extensionManager.getByName(
-        '@janhq/download-extension'
+        '@parlo-lab/download-extension'
       )
 
       // Build download items list
@@ -793,7 +793,7 @@ export default class mlx_extension extends AIEngine {
     // prepend provider name to avoid name collision
     const taskId = this.createDownloadTaskId(modelId)
     const downloadManager = window.core.extensionManager.getByName(
-      '@janhq/download-extension'
+      '@parlo-lab/download-extension'
     )
 
     try {
@@ -809,7 +809,7 @@ export default class mlx_extension extends AIEngine {
   override async pauseImport(modelId: string): Promise<void> {
     const taskId = this.createDownloadTaskId(modelId)
     const downloadManager = window.core.extensionManager.getByName(
-      '@janhq/download-extension'
+      '@parlo-lab/download-extension'
     )
     // Pause keeps the partial .tmp for resume; the model folder is preserved.
     await downloadManager.pauseDownload(taskId)
@@ -957,9 +957,9 @@ export default class mlx_extension extends AIEngine {
       // Absolute path
       modelPath = modelConfig.model_path
     } else {
-      // Relative path - resolve from Jan data folder
-      const janDataFolderPath = await getJanDataFolderPath()
-      modelPath = await joinPath([janDataFolderPath, modelConfig.model_path])
+      // Relative path - resolve from Parlo data folder
+      const parloDataFolderPath = await getParloDataFolderPath()
+      modelPath = await joinPath([parloDataFolderPath, modelConfig.model_path])
     }
 
     // Check if model is safetensors or GGUF

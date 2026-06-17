@@ -357,7 +357,7 @@ pub fn build_authorize_url(pkce: &PkceCodes, state: &str) -> String {
     params.append_pair("state", state);
     params.append_pair("nonce", &nonce);
     params.append_pair("plan", "generic");
-    params.append_pair("referrer", "jan");
+    params.append_pair("referrer", "Parlo");
     format!("{AUTHORIZE_URL}?{}", params.finish())
 }
 
@@ -370,7 +370,7 @@ pub async fn exchange_code_for_tokens(
         .post(TOKEN_URL)
         .header("Content-Type", "application/x-www-form-urlencoded")
         .header("Accept", "application/json")
-        .header("User-Agent", "Jan/0.8")
+        .header("User-Agent", "Parlo/0.8")
         .body(format!(
             "grant_type=authorization_code&code={}&redirect_uri={}&client_id={}&code_verifier={}&code_challenge={}&code_challenge_method=S256",
             urlencoding_encode(code),
@@ -410,7 +410,7 @@ pub async fn refresh_access_token(refresh_token: &str) -> Result<StoredXaiTokens
         .post(TOKEN_URL)
         .header("Content-Type", "application/x-www-form-urlencoded")
         .header("Accept", "application/json")
-        .header("User-Agent", "Jan/0.8")
+        .header("User-Agent", "Parlo/0.8")
         .body(format!(
             "grant_type=refresh_token&refresh_token={}&client_id={}",
             urlencoding_encode(refresh_token),
@@ -447,7 +447,7 @@ pub async fn request_device_code() -> Result<DeviceCodeResponse, String> {
         .post(DEVICE_AUTHORIZATION_URL)
         .header("Content-Type", "application/x-www-form-urlencoded")
         .header("Accept", "application/json")
-        .header("User-Agent", "Jan/0.8")
+        .header("User-Agent", "Parlo/0.8")
         .body(format!(
             "client_id={}&scope={}",
             urlencoding_encode(CLIENT_ID),
@@ -498,7 +498,7 @@ pub async fn poll_device_code_token(device: &DeviceCodeResponse) -> Result<Store
             .post(TOKEN_URL)
             .header("Content-Type", "application/x-www-form-urlencoded")
             .header("Accept", "application/json")
-            .header("User-Agent", "Jan/0.8")
+            .header("User-Agent", "Parlo/0.8")
             .body(format!(
                 "grant_type={}&client_id={}&device_code={}",
                 urlencoding_encode(DEVICE_CODE_GRANT_TYPE),
@@ -723,7 +723,7 @@ fn text_response(status: StatusCode, body: &str) -> Response<Body> {
 
 fn html_error(error: &str) -> String {
     format!(
-        "<!doctype html><html><head><title>Jan - xAI Authorization Failed</title></head><body><h1>Authorization Failed</h1><p>{}</p></body></html>",
+        "<!doctype html><html><head><title>Parlo - xAI Authorization Failed</title></head><body><h1>Authorization Failed</h1><p>{}</p></body></html>",
         escape_html(error)
     )
 }
@@ -737,7 +737,7 @@ fn escape_html(value: &str) -> String {
         .replace('\'', "&#39;")
 }
 
-const HTML_SUCCESS: &str = "<!doctype html><html><head><title>Jan - xAI Authorization Successful</title></head><body><h1>Authorization Successful</h1><p>You can close this window and return to Jan.</p><script>setTimeout(() => window.close(), 2000)</script></body></html>";
+const HTML_SUCCESS: &str = "<!doctype html><html><head><title>Parlo - xAI Authorization Successful</title></head><body><h1>Authorization Successful</h1><p>You can close this window and return to Parlo.</p><script>setTimeout(() => window.close(), 2000)</script></body></html>";
 
 #[cfg(test)]
 mod tests {
@@ -762,7 +762,7 @@ mod tests {
         let url = build_authorize_url(&pkce, &state);
         assert!(url.starts_with(AUTHORIZE_URL));
         assert!(url.contains("plan=generic"));
-        assert!(url.contains("referrer=jan"));
+        assert!(url.contains("referrer=Parlo"));
         assert!(url.contains(&urlencoding_encode(&pkce.challenge)));
         assert!(url.contains(&urlencoding_encode(&state)));
     }

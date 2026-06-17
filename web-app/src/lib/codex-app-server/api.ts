@@ -1,5 +1,4 @@
 import { CodexAppServerSession } from './client'
-import { CodexProtoSession } from './proto-session'
 import type { CodexProcessSpawner } from './process-manager'
 import type {
   CodexAppServerEvent,
@@ -121,13 +120,10 @@ export type CodexAccountLoginParams =
 export type CodexAddCreditsNudgeCreditType = 'credits' | 'usage_limit'
 
 export class CodexAppServerClient {
-  private readonly session: CodexAppServerSession | CodexProtoSession
+  private readonly session: CodexAppServerSession
 
   constructor(params: StartCodexSessionParams) {
-    this.session =
-      params.options.transport === 'proto'
-        ? new CodexProtoSession(params)
-        : new CodexAppServerSession(params)
+    this.session = new CodexAppServerSession(params)
   }
 
   startCodexSession(): Promise<CodexInitializeResult> {

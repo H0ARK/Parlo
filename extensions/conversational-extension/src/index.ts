@@ -3,13 +3,13 @@ import {
   Thread,
   ThreadAssistantInfo,
   ThreadMessage,
-} from '@janhq/core'
+} from '@parlo-lab/core'
 
 /**
- * JanConversationalExtension is a ConversationalExtension implementation that provides
+ * ParloConversationalExtension is a ConversationalExtension implementation that provides
  * functionality for managing threads.
  */
-export default class JanConversationalExtension extends ConversationalExtension {
+export default class ParloConversationalExtension extends ConversationalExtension {
   /**
    * Called when the extension is loaded.
    */

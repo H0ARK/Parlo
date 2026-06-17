@@ -64,14 +64,12 @@ type AppServerRuntimeLogsProps = {
   codexRuntimeLogsLength: number
   runtimeLogsText: string
   onClearCodexRuntimeLogs: () => void
-  isCodexProtoTransport?: boolean
 }
 
 export function AppServerRuntimeLogs({
   codexRuntimeLogsLength,
   runtimeLogsText,
   onClearCodexRuntimeLogs,
-  isCodexProtoTransport,
 }: AppServerRuntimeLogsProps) {
   const [streamFilter, setStreamFilter] = useState<StreamFilter>('all')
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all')
@@ -165,7 +163,6 @@ export function AppServerRuntimeLogs({
           type="button"
           className="text-[9px] underline"
           onClick={onClearCodexRuntimeLogs}
-          disabled={!!isCodexProtoTransport}
         >
           Clear
         </button>
@@ -216,7 +213,7 @@ export function AppServerRuntimeLogs({
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={filteredLines.length === 0 || !!isCodexProtoTransport}
+          disabled={filteredLines.length === 0}
           onClick={() => void handleCopyVisibleLogs()}
         >
           Copy visible

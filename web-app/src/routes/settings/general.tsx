@@ -72,7 +72,7 @@ function General() {
 
   useEffect(() => {
     const fetchDataFolder = async () => {
-      const path = await serviceHub.app().getJanDataFolder()
+      const path = await serviceHub.app().getParloDataFolder()
       setJanDataFolder(path)
     }
 
@@ -165,7 +165,7 @@ function General() {
             // Prevent relocating to root directory (e.g., C:\ or D:\ on Windows, / on Unix)
             if (isRootDir(selectedNewPath))
               throw new Error(t('settings:general.couldNotRelocateToRoot'))
-            await serviceHub.app().relocateJanDataFolder(selectedNewPath)
+            await serviceHub.app().relocateParloDataFolder(selectedNewPath)
             setJanDataFolder(selectedNewPath)
             // Only relaunch if relocation was successful
             window.core?.api?.relaunch()
@@ -183,7 +183,7 @@ function General() {
       } catch (error) {
         console.error('Failed to relocate data folder:', error)
         // Revert the data folder path on error
-        const originalPath = await serviceHub.app().getJanDataFolder()
+        const originalPath = await serviceHub.app().getParloDataFolder()
         setJanDataFolder(originalPath)
 
         toast.error(t('settings:general.failedToRelocateDataFolderDesc'))

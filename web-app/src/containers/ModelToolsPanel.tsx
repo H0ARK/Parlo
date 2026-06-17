@@ -96,7 +96,6 @@ import {
   type TerminalSessionInfo,
 } from '@/stores/terminal-runtime-store'
 import { useCodexAppServerRuntime } from '@/stores/codex-app-server-runtime-store'
-import { useCodexProviderProfiles } from '@/stores/codex-provider-profile-store'
 import { ChatSessionContext } from '@/hooks/useChatSessionScope'
 import {
   useChatSessionUi,
@@ -249,7 +248,6 @@ import {
 import { CodexCliPanel } from './model-tools-panel/tools/CodexCliPanel'
 import { McpPanel } from './model-tools-panel/tools/McpPanel'
 import { PluginsMarketplaceTool } from './model-tools-panel/tools/PluginsMarketplaceTool'
-import { ProtoFallbackNotice } from './model-tools-panel/tools/ProtoFallbackNotice'
 import { RawRpcTool } from './model-tools-panel/tools/RawRpcTool'
 import { RuntimeFsProcessPanel } from './model-tools-panel/tools/RuntimeFsProcessPanel'
 import { ThreadsPanel } from './model-tools-panel/tools/ThreadsPanel'
@@ -260,7 +258,6 @@ import { ModelsProvidersFeaturesPanel } from './model-tools-panel/tools/ModelsPr
 import { CodexReviewPanel } from './model-tools-panel/tools/CodexReviewPanel'
 import { CodexSummaryCards } from './model-tools-panel/tools/CodexSummaryCards'
 import { AppServerRuntimeLogs } from './model-tools-panel/tools/AppServerRuntimeLogs'
-import { CodexCapabilitiesFooter } from './model-tools-panel/tools/CodexCapabilitiesFooter'
 import {
   buildCodexRawRpcCatalog,
   resolveCodexRawRpcMethod,
@@ -371,7 +368,7 @@ function getFileName(path: string) {
 async function readDirectoryEntries(
   directoryPath: string
 ): Promise<DirectoryTreeEntry[]> {
-  const { fs } = await import('@janhq/core')
+  const { fs } = await import('@parlo-lab/core')
   const pathsResult = await fs.readdirSync(directoryPath)
   const paths: string[] = Array.isArray(pathsResult) ? pathsResult : []
   const entries = await Promise.all(
@@ -774,7 +771,7 @@ const FilesSection = memo(function FilesSection({
     setSidePanelWidth('48rem')
 
     try {
-      const { fs } = await import('@janhq/core')
+      const { fs } = await import('@parlo-lab/core')
       const content = await fs.readFileSync(filePath, 'utf8')
       setFileContent(content)
     } catch (err) {
@@ -1981,20 +1978,9 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
   // bridged RPCs. This makes skills/plugins/hooks first-class inspectable/manageable
   // from Jan's UI while Codex remains the engine.
   const currentThreadIdForCaps = useThreads((s) => s.currentThreadId)
-  const activeCodexProfile = useCodexProviderProfiles((s) =>
-    s.activeProfileId ? s.profiles[s.activeProfileId] : null
-  )
-  const isCodexProtoTransport = activeCodexProfile?.transport === 'proto'
-
   const refreshCodexCapabilities = async () => {
     if (!currentThreadIdForCaps) {
       setCapError('No active thread. Open a chat with a Codex provider profile to inspect runtime capabilities.')
-      return
-    }
-    if (isCodexProtoTransport) {
-      setCapError(
-        'This Codex profile uses proto transport. Chat streaming is available, but app-server-only capability controls are unsupported until the profile uses app-server transport.'
-      )
       return
     }
     setCapLoading(true)
@@ -2287,10 +2273,10 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
       return await addCodexMarketplace(currentThreadIdForCaps, params)
     } catch (error) {
       const source = typeof params.source === 'string' ? params.source : ''
+      const sparsePaths = source ? (getOpenAiPluginsSparsePaths(source) ?? []) : []
       const supportsSparsePaths =
         Boolean(source) &&
-        getOpenAiPluginsSparsePaths(source) &&
-        getOpenAiPluginsSparsePaths(source)?.length > 0
+        sparsePaths.length > 0
       const hasSparsePaths = Boolean(params.sparsePaths)
       if (!isMissingMarketplaceManifestError(error) || !supportsSparsePaths || !hasSparsePaths) {
         throw error
@@ -3669,9 +3655,7 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             type="button"
             className="text-[10px] px-2 py-0.5 border rounded hover:bg-accent disabled:opacity-50"
             onClick={() => void refreshCodexCapabilities()}
-            disabled={
-              capLoading || !currentThreadIdForCaps || isCodexProtoTransport
-            }
+            disabled={capLoading || !currentThreadIdForCaps}
           >
             {capLoading ? 'Loading...' : 'Refresh from Codex session'}
           </button>
@@ -3681,13 +3665,9 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
           Static declaration happens via the Advanced config snippet in the active profile.
           These extend what the agent can do without changing the git diff.
         </div>
-        {isCodexProtoTransport ? (
-          <ProtoFallbackNotice />
-        ) : null}
         {capError && <div className="text-destructive text-[10px] mb-1">{capError}</div>}
         <fieldset
-          className={cn('contents', isCodexProtoTransport ? 'opacity-60' : undefined)}
-          disabled={isCodexProtoTransport}
+          className={cn('contents')}
         >
         <ThreadsPanel
           state={{
@@ -4093,7 +4073,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
                 'Codex thread unsubscribed'
               ),
           }}
-          isCodexProtoTransport={isCodexProtoTransport}
         />
         <AccountPanel
           state={{
@@ -4108,7 +4087,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             accountType,
             accountEmail,
             accountPlan,
-            isCodexProtoTransport,
           }}
           actions={{
             onSetAccountCreditsNudgeType: setAccountCreditsNudgeType,
@@ -4134,7 +4112,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             remotePairingStartParamsJson,
             remoteStatus,
             remotePairing,
-            isCodexProtoTransport,
           }}
           actions={{
             onSetRemotePairingCode: setRemotePairingCode,
@@ -4170,7 +4147,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             onImportCodexExternalAgentConfig: importCodexExternalAgentConfig,
             onSetCodexAdminSnapshot: setCodexAdminSnapshot,
           }}
-          isCodexProtoTransport={isCodexProtoTransport}
         />
         <ModelsProvidersFeaturesPanel
           state={{
@@ -4180,7 +4156,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             codexEnvironmentId,
             codexEnvironmentExecUrl,
             codexModelSnapshot,
-            isCodexProtoTransport,
           }}
           actions={{
             onSetCodexFeatureEnablementJson: setCodexFeatureEnablementJson,
@@ -4212,7 +4187,7 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             setCodexRawRpcParams,
           }}
         />
-        <CodexCliPanel cwd={cwd} isCodexProtoTransport={isCodexProtoTransport} />
+        <CodexCliPanel cwd={cwd} />
         <PluginsMarketplaceTool
       state={{
         codexMarketplaceDescriptors,
@@ -4434,7 +4409,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             currentThreadIdForCaps,
             cwd,
             filteredCodexProcessTerminalLines,
-            isCodexProtoTransport,
             runtimeBusy,
             selectableCodexProcessHandles,
             selectedCodexProcessTerminal,
@@ -4487,7 +4461,6 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
             filteredCodexMcpToolDescriptors,
             selectedCodexMcpToolDescriptor,
             codexMcpToolArgumentValidation,
-            isCodexProtoTransport,
           }}
           actions={{
             onSetCodexMcpServerName: setCodexMcpServerName,
@@ -4508,15 +4481,12 @@ function ReviewSection({ scope }: { scope?: ModelToolsPanelScope } = {}) {
           onSetSkillExtraRoots={handleSetSkillExtraRoots}
           onSelectPluginId={setCodexPluginId}
           onSelectSkillId={setCodexPluginSkillId}
-          isCodexProtoTransport={isCodexProtoTransport}
         />
         <AppServerRuntimeLogs
           codexRuntimeLogsLength={codexRuntimeLogs.length}
           runtimeLogsText={getCodexAppServerRuntimeLogs()}
           onClearCodexRuntimeLogs={clearCodexRuntimeLogs}
-          isCodexProtoTransport={isCodexProtoTransport}
         />
-        <CodexCapabilitiesFooter isCodexProtoTransport={isCodexProtoTransport} />
         </fieldset>
       </div>
     </section>
@@ -4902,7 +4872,7 @@ function ContextPickerSection({
     const paths = Array.isArray(selection) ? selection : [selection]
     if (paths.length === 0) return
 
-    const { fs } = await import('@janhq/core')
+    const { fs } = await import('@parlo-lab/core')
     const prepared = await Promise.all(
       paths.map(async (path) => {
         const name = path.split(/[\\/]/).filter(Boolean).pop() || path

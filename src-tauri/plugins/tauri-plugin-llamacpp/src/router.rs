@@ -54,7 +54,7 @@ fn is_backend_error_line(line_lower: &str) -> bool {
 }
 
 use crate::error::{ErrorCode, LlamacppError, ServerError, ServerResult};
-use jan_utils::{binary_requires_cuda, find_cuda_paths, setup_library_path, setup_windows_process_flags};
+use parlo_utils::{binary_requires_cuda, find_cuda_paths, setup_library_path, setup_windows_process_flags};
 
 /// A handle to a running router-mode `llama-server` process.
 pub struct RouterHandle {

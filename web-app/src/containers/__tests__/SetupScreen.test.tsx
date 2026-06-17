@@ -76,7 +76,7 @@ vi.mock('@tanstack/react-router', () => ({
   useNavigate: () => hoisted.navigateMock,
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   AppEvent: { onModelImported: 'onModelImported' },
   events: {
     on: vi.fn((name: string, handler: any) => {

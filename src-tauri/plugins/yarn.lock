@@ -28,66 +28,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@janhq/tauri-plugin-hardware-api@workspace:tauri-plugin-hardware":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-hardware-api@workspace:tauri-plugin-hardware"
-  dependencies:
-    "@rollup/plugin-typescript": "npm:^12.0.0"
-    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
-    rollup: "npm:^4.9.6"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/tauri-plugin-llamacpp-api@workspace:tauri-plugin-llamacpp":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-llamacpp-api@workspace:tauri-plugin-llamacpp"
-  dependencies:
-    "@rollup/plugin-typescript": "npm:^12.0.0"
-    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
-    rollup: "npm:^4.9.6"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/tauri-plugin-mlx-api@workspace:tauri-plugin-mlx":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-mlx-api@workspace:tauri-plugin-mlx"
-  dependencies:
-    "@rollup/plugin-typescript": "npm:^12.0.0"
-    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
-    rollup: "npm:^4.9.6"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/tauri-plugin-rag-api@workspace:tauri-plugin-rag":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-rag-api@workspace:tauri-plugin-rag"
-  dependencies:
-    "@rollup/plugin-typescript": "npm:^12.0.0"
-    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
-    rollup: "npm:^4.9.6"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
-"@janhq/tauri-plugin-vector-db-api@workspace:tauri-plugin-vector-db":
-  version: 0.0.0-use.local
-  resolution: "@janhq/tauri-plugin-vector-db-api@workspace:tauri-plugin-vector-db"
-  dependencies:
-    "@rollup/plugin-typescript": "npm:^12.0.0"
-    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
-    rollup: "npm:^4.9.6"
-    tslib: "npm:^2.6.2"
-    typescript: "npm:^5.3.3"
-  languageName: unknown
-  linkType: soft
-
 "@npmcli/agent@npm:^3.0.0":
   version: 3.0.0
   resolution: "@npmcli/agent@npm:3.0.0"
@@ -109,6 +49,66 @@ __metadata:
   checksum: 10c0/c90935d5ce670c87b6b14fab04a965a3b8137e585f8b2a6257263bd7f97756dd736cb165bb470e5156a9e718ecd99413dccc54b1138c1a46d6ec7cf325982fe5
   languageName: node
   linkType: hard
+
+"@parlo-lab/tauri-plugin-hardware-api@workspace:tauri-plugin-hardware":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-hardware-api@workspace:tauri-plugin-hardware"
+  dependencies:
+    "@rollup/plugin-typescript": "npm:^12.0.0"
+    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
+    rollup: "npm:^4.9.6"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-llamacpp-api@workspace:tauri-plugin-llamacpp":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-llamacpp-api@workspace:tauri-plugin-llamacpp"
+  dependencies:
+    "@rollup/plugin-typescript": "npm:^12.0.0"
+    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
+    rollup: "npm:^4.9.6"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-mlx-api@workspace:tauri-plugin-mlx":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-mlx-api@workspace:tauri-plugin-mlx"
+  dependencies:
+    "@rollup/plugin-typescript": "npm:^12.0.0"
+    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
+    rollup: "npm:^4.9.6"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-rag-api@workspace:tauri-plugin-rag":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-rag-api@workspace:tauri-plugin-rag"
+  dependencies:
+    "@rollup/plugin-typescript": "npm:^12.0.0"
+    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
+    rollup: "npm:^4.9.6"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
+
+"@parlo-lab/tauri-plugin-vector-db-api@workspace:tauri-plugin-vector-db":
+  version: 0.0.0-use.local
+  resolution: "@parlo-lab/tauri-plugin-vector-db-api@workspace:tauri-plugin-vector-db"
+  dependencies:
+    "@rollup/plugin-typescript": "npm:^12.0.0"
+    "@tauri-apps/api": "npm:>=2.0.0-beta.6"
+    rollup: "npm:^4.9.6"
+    tslib: "npm:^2.6.2"
+    typescript: "npm:^5.3.3"
+  languageName: unknown
+  linkType: soft
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0

@@ -64,7 +64,7 @@ describe('CodexJsonRpcClient', () => {
 
   it('writes app-server requests without the JSON-RPC version field', async () => {
     const promise = client.request('initialize', {
-      clientInfo: { name: 'jan', title: 'Jan', version: '0.0.0-test' },
+      clientInfo: { name: 'Parlo', title: 'Parlo', version: '0.0.0-test' },
       capabilities: { experimentalApi: true, requestAttestation: false },
     })
 

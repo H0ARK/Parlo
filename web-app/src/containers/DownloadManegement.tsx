@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress'
 import { useDownloadStore } from '@/hooks/useDownloadStore'
 import { useAppUpdater } from '@/hooks/useAppUpdater'
 import { useServiceHub } from '@/hooks/useServiceHub'
-import { DownloadEvent, DownloadState, events, AppEvent } from '@janhq/core'
+import { DownloadEvent, DownloadState, events, AppEvent } from '@parlo-lab/core'
 import { IconPlayerPause, IconPlayerPlay, IconX } from '@tabler/icons-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
@@ -312,7 +312,7 @@ export function DownloadManagement() {
       removeLocalDownloadingModel(id)
       if (id.startsWith('llamacpp') || id.startsWith('mlx')) {
         const downloadManager = window.core.extensionManager.getByName(
-          '@janhq/download-extension'
+          '@parlo-lab/download-extension'
         )
         downloadManager.cancelDownload(id)
       } else {

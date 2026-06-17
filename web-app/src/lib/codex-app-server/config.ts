@@ -3,7 +3,7 @@ import { buildCodexMcpServersToml } from './mcp-config-bridge'
 import type { CodexProviderConfig, CodexSessionOptions } from './types'
 
 const DEFAULT_CODEX_BINARY = 'codex'
-const DEFAULT_CODEX_HOME = './.jan/codex-home'
+const DEFAULT_CODEX_HOME = './.Parlo/codex-home'
 const DEFAULT_WORKSPACE_DIR = './'
 
 export type CodexSpawnCommand = {
@@ -37,8 +37,7 @@ export const buildCodexSpawnCommand = (
 ): CodexSpawnCommand => {
   const cwd = options.cwd ?? DEFAULT_WORKSPACE_DIR
   const codexHome = options.codexHome ?? DEFAULT_CODEX_HOME
-  const args =
-    options.transport === 'proto' ? ['proto'] : ['app-server', '--stdio']
+  const args = ['app-server', '--stdio']
   return {
     command: options.codexBinaryPath ?? DEFAULT_CODEX_BINARY,
     args,
@@ -60,7 +59,7 @@ export const buildThreadStartParams = (options: CodexSessionOptions) => ({
   cwd: options.cwd ?? DEFAULT_WORKSPACE_DIR,
   approvalPolicy: options.approvalPolicy ?? 'on-request',
   sandbox: options.sandbox ?? 'workspace-write',
-  serviceName: options.serviceName ?? 'Jan',
+  serviceName: options.serviceName ?? 'Parlo',
   // Extra grant roots for Codex (maps to --add-dir behavior / extra workspace roots)
   ...(options.addDirs && options.addDirs.length > 0
     ? { extraDirectories: options.addDirs }

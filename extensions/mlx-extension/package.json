@@ -1,12 +1,12 @@
 {
-  "name": "@janhq/mlx-extension",
+  "name": "@parlo-lab/mlx-extension",
   "productName": "MLX Inference Engine",
   "version": "1.0.0",
   "description": "This extension enables MLX-Swift inference on Apple Silicon Macs",
   "main": "dist/index.js",
   "module": "dist/module.js",
   "engine": "mlx",
-  "author": "Jan <service@jan.ai>",
+  "author": "Parlo <service@parlo.ai>",
   "license": "AGPL-3.0",
   "scripts": {
     "build": "rolldown -c rolldown.config.mjs",
@@ -19,9 +19,9 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@janhq/core": "../../core/package.tgz",
-    "@janhq/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp",
-    "@janhq/tauri-plugin-mlx-api": "link:../../src-tauri/plugins/tauri-plugin-mlx",
+    "@parlo-lab/core": "../../core/package.tgz",
+    "@parlo-lab/tauri-plugin-llamacpp-api": "link:../../src-tauri/plugins/tauri-plugin-llamacpp",
+    "@parlo-lab/tauri-plugin-mlx-api": "link:../../src-tauri/plugins/tauri-plugin-mlx",
     "@tauri-apps/api": "2.8.0",
     "@tauri-apps/plugin-http": "2.5.0",
     "@tauri-apps/plugin-log": "^2.6.0"

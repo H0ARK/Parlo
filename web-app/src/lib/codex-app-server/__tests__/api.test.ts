@@ -368,21 +368,21 @@ describe('Codex app-server integration API', () => {
     })
 
     const events = []
-    for await (const event of client.sendToCodex('jan-thread-1', 'say hello', {
+    for await (const event of client.sendToCodex('Parlo-thread-1', 'say hello', {
       clientUserMessageId: 'user-message-1',
     })) {
       events.push(event)
     }
 
     client.approveAction('approval-1', { decision: 'approved' })
-    await client.interruptTurn('jan-thread-1')
-    await client.compactThread('jan-thread-1')
+    await client.interruptTurn('Parlo-thread-1')
+    await client.compactThread('Parlo-thread-1')
     await client.reloadUserConfig()
     await client.refreshMcpServers()
-    await client.runShellCommand('jan-thread-1', 'git status --short')
-    await client.rollbackThread('jan-thread-1', 2)
+    await client.runShellCommand('Parlo-thread-1', 'git status --short')
+    await client.rollbackThread('Parlo-thread-1', 2)
     await client.startReview(
-      'jan-thread-1',
+      'Parlo-thread-1',
       { type: 'commit', sha: 'abc1234', title: 'Polish colors' },
       { delivery: 'detached', userFacingHint: 'review this commit' } // detached to use git review panel
     )

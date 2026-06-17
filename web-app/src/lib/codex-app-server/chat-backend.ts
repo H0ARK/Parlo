@@ -64,11 +64,11 @@ type CodexChatBackendRequest = {
   abortSignal?: AbortSignal
 }
 
-const JAN_HOSTED_LOCAL_PROVIDERS = new Set(['llamacpp', 'mlx'])
+const PARLO_HOSTED_LOCAL_PROVIDERS = new Set(['llamacpp', 'mlx'])
 const GLOBAL_CODEX_THREAD_PLACEHOLDER = '__global__'
 const CODEX_FALLBACK_MODEL_ID = 'gpt-5.5'
-const CODEX_JAN_GATEWAY_PROVIDER_ID = 'jan-gateway'
-const CODEX_JAN_GATEWAY_API_KEY_ENV = 'JAN_LOCAL_API_SERVER_API_KEY'
+const CODEX_PARLO_GATEWAY_PROVIDER_ID = 'Parlo-gateway'
+const CODEX_PARLO_GATEWAY_API_KEY_ENV = 'PARLO_LOCAL_API_SERVER_API_KEY'
 
 const CODEX_NOT_RUNNING_ERROR =
   'Codex app-server is not running yet. Wait for app startup to finish.'
@@ -184,7 +184,7 @@ async function ensureCodexTargetProviderReady(
   provider: ModelProvider,
   model: Model
 ) {
-  if (!JAN_HOSTED_LOCAL_PROVIDERS.has(provider.provider)) return
+  if (!PARLO_HOSTED_LOCAL_PROVIDERS.has(provider.provider)) return
 
   const appState = useAppState.getState()
   const serviceHub = getServiceHub()
@@ -231,8 +231,8 @@ function requireCodexClient(): CodexAppServerClient {
   return client
 }
 
-function requireCodexSession(janThreadId: string) {
-  void janThreadId
+function requireCodexSession(parloThreadId: string) {
+  void parloThreadId
   return requireCodexClient()
 }
 
@@ -290,7 +290,7 @@ export function buildGlobalCodexSpawnOptions(): CodexSessionOptions {
     cwd: './',
     approvalPolicy: 'on-request',
     sandbox: 'workspace-write',
-    ...buildJanGatewayCodexConfig(selectedModel.id),
+    ...buildParloGatewayCodexConfig(selectedModel.id),
     mcpRefreshConfig: {
       mcp_servers: {},
       mcp_oauth_credentials_store_mode: 'auto',
@@ -299,24 +299,24 @@ export function buildGlobalCodexSpawnOptions(): CodexSessionOptions {
   })
 }
 
-export async function compactCodexThread(janThreadId: string) {
-  return requireCodexSession(janThreadId).compactThread(janThreadId)
+export async function compactCodexThread(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).compactThread(parloThreadId)
 }
 
-export async function interruptCodexTurn(janThreadId: string) {
-  return requireCodexSession(janThreadId).interruptTurn(janThreadId)
+export async function interruptCodexTurn(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).interruptTurn(parloThreadId)
 }
 
-export async function rollbackCodexThread(janThreadId: string, numTurns = 1) {
-  return requireCodexSession(janThreadId).rollbackThread(janThreadId, numTurns)
+export async function rollbackCodexThread(parloThreadId: string, numTurns = 1) {
+  return requireCodexSession(parloThreadId).rollbackThread(parloThreadId, numTurns)
 }
 
-export async function reloadCodexUserConfig(janThreadId: string) {
-  return requireCodexSession(janThreadId).reloadUserConfig()
+export async function reloadCodexUserConfig(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).reloadUserConfig()
 }
 
-export async function refreshCodexMcpServers(janThreadId: string) {
-  return requireCodexSession(janThreadId).refreshMcpServers()
+export async function refreshCodexMcpServers(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).refreshMcpServers()
 }
 
 async function* bridgeCodexApprovalRequests(
@@ -362,7 +362,7 @@ async function* bridgeCodexApprovalRequests(
 }
 
 function isMissingCodexProviderEnvError(error: Error) {
-  return /Missing environment variable:\s*`?JAN_CODEX_PROVIDER_API_KEY`?/i.test(
+  return /Missing environment variable:\s*`?PARLO_CODEX_PROVIDER_API_KEY`?/i.test(
     error.message
   )
 }
@@ -383,7 +383,7 @@ async function requestCodexApproval(
     risk: details.risk,
     rememberKey: details.rememberKey,
     details: {
-      janThreadId: threadId,
+      parloThreadId: threadId,
       threadId,
       ...(codexThreadId ? { codexThreadId } : {}),
       ...(codexThreadId && codexThreadId !== threadId
@@ -467,7 +467,7 @@ async function resolveServerRequest(request: CodexWireServerRequest) {
   }
 
   if (request.method === 'attestation/generate') {
-    return { token: 'v1.jan-offline' }
+    return { token: 'v1.Parlo-offline' }
   }
 
   if (request.method === 'item/tool/requestUserInput') {
@@ -475,7 +475,7 @@ async function resolveServerRequest(request: CodexWireServerRequest) {
   }
 
   if (request.method === 'item/tool/call') {
-    // "Disconnect Jan": when the Codex engine (app-server) is the agent brain,
+    // "Disconnect Parlo": when the Codex engine (app-server) is the agent brain,
     // we no longer act as a tool proxy. Codex performs tool use against the
     // MCP servers we have declared for it in config.toml (mcp-config-bridge).
     // Any host-mediated item/tool/call is rejected with guidance.
@@ -487,7 +487,7 @@ async function resolveServerRequest(request: CodexWireServerRequest) {
           type: 'inputText',
           text:
             'Host tool proxy disabled. Codex executes tools directly via MCP servers ' +
-            'declared in its per-session config.toml (sourced from Jan MCP settings).',
+            'declared in its per-session config.toml (sourced from Parlo MCP settings).',
         },
       ],
     }
@@ -646,7 +646,7 @@ export function clearCodexAppServerChatSessionsForTests() {
  * Events from the steer will flow back through the normal stream (tagged with the sub threadId).
  */
 export async function steerCodexSubThread(
-  janThreadId: string,
+  parloThreadId: string,
   targetCodexThreadId: string,
   text: string,
   options?: {
@@ -654,7 +654,7 @@ export async function steerCodexSubThread(
     images?: Array<{ data: string; mediaType: string }>
   }
 ) {
-  return requireCodexSession(janThreadId).steerThread(
+  return requireCodexSession(parloThreadId).steerThread(
     targetCodexThreadId,
     text,
     options?.clientUserMessageId,
@@ -667,7 +667,7 @@ export async function steerCodexSubThread(
  * sub-thread turn completes. Powers the subagent inspector's live activity panel.
  */
 export async function* steerCodexSubThreadEvents(
-  janThreadId: string,
+  parloThreadId: string,
   targetCodexThreadId: string,
   text: string,
   options?: {
@@ -684,7 +684,7 @@ export async function* steerCodexSubThreadEvents(
       options?.images
     ),
     client,
-    janThreadId
+    parloThreadId
   )
   yield* events
 }
@@ -694,7 +694,7 @@ export async function* steerCodexSubThreadEvents(
  * findings surface as analysis on top of the authoritative git-diff review panel.
  */
 export async function startCodexReview(
-  janThreadId: string,
+  parloThreadId: string,
   target:
     | { type: 'uncommittedChanges' }
     | { type: 'baseBranch'; branch: string }
@@ -702,7 +702,7 @@ export async function startCodexReview(
     | { type: 'custom'; instructions: string } = { type: 'uncommittedChanges' },
   options?: { userFacingHint?: string }
 ) {
-  return requireCodexSession(janThreadId).startReview(janThreadId, target, {
+  return requireCodexSession(parloThreadId).startReview(parloThreadId, target, {
     delivery: 'detached',
     userFacingHint:
       options?.userFacingHint ??
@@ -713,486 +713,486 @@ export async function startCodexReview(
 /**
  * High-level access to Codex app-server runtime capabilities (the "next layer"
  * after static config/MCP/AGENTS emission).
- * These delegate to the active session for a Jan thread (Codex owns the
- * planning/execution; Jan owns the curation UI + approvals + workspace).
+ * These delegate to the active session for a Parlo thread (Codex owns the
+ * planning/execution; Parlo owns the curation UI + approvals + workspace).
  * Skills, plugins, hooks, MCP OAuth, remote control, and live config are
  * all available via the app-server when the profile/chat is codex-backed.
  */
-export async function listCodexSkills(janThreadId: string, params: Record<string, unknown> = {}) {
-  return requireCodexSession(janThreadId).listSkills(params)
+export async function listCodexSkills(parloThreadId: string, params: Record<string, unknown> = {}) {
+  return requireCodexSession(parloThreadId).listSkills(params)
 }
 
-export async function setCodexSkillExtraRoots(janThreadId: string, roots: string[]) {
-  return requireCodexSession(janThreadId).setSkillExtraRoots(roots)
+export async function setCodexSkillExtraRoots(parloThreadId: string, roots: string[]) {
+  return requireCodexSession(parloThreadId).setSkillExtraRoots(roots)
 }
 
-export async function listCodexHooks(janThreadId: string, params: Record<string, unknown> = {}) {
-  return requireCodexSession(janThreadId).listHooks(params)
+export async function listCodexHooks(parloThreadId: string, params: Record<string, unknown> = {}) {
+  return requireCodexSession(parloThreadId).listHooks(params)
 }
 
-export async function listCodexPlugins(janThreadId: string, params: Record<string, unknown> = {}) {
-  return requireCodexSession(janThreadId).listPlugins(params)
+export async function listCodexPlugins(parloThreadId: string, params: Record<string, unknown> = {}) {
+  return requireCodexSession(parloThreadId).listPlugins(params)
 }
 
-export async function listInstalledCodexPlugins(janThreadId: string, params: Record<string, unknown> = {}) {
-  return requireCodexSession(janThreadId).listInstalledPlugins(params)
+export async function listInstalledCodexPlugins(parloThreadId: string, params: Record<string, unknown> = {}) {
+  return requireCodexSession(parloThreadId).listInstalledPlugins(params)
 }
 
-export async function listCodexApps(janThreadId: string, params: Record<string, unknown> = {}) {
-  return requireCodexSession(janThreadId).listApps(params)
+export async function listCodexApps(parloThreadId: string, params: Record<string, unknown> = {}) {
+  return requireCodexSession(parloThreadId).listApps(params)
 }
 
-export async function installCodexPlugin(janThreadId: string, params: Record<string, unknown>) {
-  return requireCodexSession(janThreadId).installPlugin(params)
+export async function installCodexPlugin(parloThreadId: string, params: Record<string, unknown>) {
+  return requireCodexSession(parloThreadId).installPlugin(params)
 }
 
-export async function uninstallCodexPlugin(janThreadId: string, params: Record<string, unknown>) {
-  return requireCodexSession(janThreadId).uninstallPlugin(params)
+export async function uninstallCodexPlugin(parloThreadId: string, params: Record<string, unknown>) {
+  return requireCodexSession(parloThreadId).uninstallPlugin(params)
 }
 
 export async function readCodexPlugin(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).readPlugin(params)
+  return requireCodexSession(parloThreadId).readPlugin(params)
 }
 
 export async function readCodexPluginSkill(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).readPluginSkill(params)
+  return requireCodexSession(parloThreadId).readPluginSkill(params)
 }
 
 export async function addCodexMarketplace(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).addMarketplace(params)
+  return requireCodexSession(parloThreadId).addMarketplace(params)
 }
 
 export async function removeCodexMarketplace(
-  janThreadId: string,
+  parloThreadId: string,
   marketplaceName: string
 ) {
-  return requireCodexSession(janThreadId).removeMarketplace(marketplaceName)
+  return requireCodexSession(parloThreadId).removeMarketplace(marketplaceName)
 }
 
 export async function upgradeCodexMarketplace(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).upgradeMarketplace(params)
+  return requireCodexSession(parloThreadId).upgradeMarketplace(params)
 }
 
-export async function writeCodexSkillConfig(janThreadId: string, params: Record<string, unknown>) {
-  return requireCodexSession(janThreadId).writeSkillConfig(params)
+export async function writeCodexSkillConfig(parloThreadId: string, params: Record<string, unknown>) {
+  return requireCodexSession(parloThreadId).writeSkillConfig(params)
 }
 
 export async function setCodexExperimentalFeatureEnablement(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).setExperimentalFeatureEnablement(params)
+  return requireCodexSession(parloThreadId).setExperimentalFeatureEnablement(params)
 }
 
 export async function addCodexEnvironment(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).addEnvironment(params)
+  return requireCodexSession(parloThreadId).addEnvironment(params)
 }
 
 export async function execCodexCommand(
-  janThreadId: string,
+  parloThreadId: string,
   params: CodexCommandExecParams
 ) {
-  return requireCodexSession(janThreadId).execCommand(params)
+  return requireCodexSession(parloThreadId).execCommand(params)
 }
 
 export async function writeCodexCommandInput(
-  janThreadId: string,
+  parloThreadId: string,
   processId: string,
   params: { deltaBase64?: string; closeStdin?: boolean }
 ) {
-  return requireCodexSession(janThreadId).writeCommandStdin(processId, params)
+  return requireCodexSession(parloThreadId).writeCommandStdin(processId, params)
 }
 
 export async function resizeCodexCommandTerminal(
-  janThreadId: string,
+  parloThreadId: string,
   processId: string,
   size: { rows: number; cols: number }
 ) {
-  return requireCodexSession(janThreadId).resizeCommandPty(processId, size)
+  return requireCodexSession(parloThreadId).resizeCommandPty(processId, size)
 }
 
 export async function terminateCodexCommand(
-  janThreadId: string,
+  parloThreadId: string,
   processId: string
 ) {
-  return requireCodexSession(janThreadId).terminateCommand(processId)
+  return requireCodexSession(parloThreadId).terminateCommand(processId)
 }
 
 export async function spawnCodexProcess(
-  janThreadId: string,
+  parloThreadId: string,
   params: CodexProcessSpawnParams
 ) {
-  return requireCodexSession(janThreadId).spawnProcess(params)
+  return requireCodexSession(parloThreadId).spawnProcess(params)
 }
 
 export async function writeCodexProcessInput(
-  janThreadId: string,
+  parloThreadId: string,
   processHandle: string,
   params: { deltaBase64?: string; closeStdin?: boolean }
 ) {
-  return requireCodexSession(janThreadId).writeProcessStdin(processHandle, params)
+  return requireCodexSession(parloThreadId).writeProcessStdin(processHandle, params)
 }
 
 export async function resizeCodexProcessTerminal(
-  janThreadId: string,
+  parloThreadId: string,
   processHandle: string,
   size: { rows: number; cols: number }
 ) {
-  return requireCodexSession(janThreadId).resizeProcessPty(processHandle, size)
+  return requireCodexSession(parloThreadId).resizeProcessPty(processHandle, size)
 }
 
 export async function killCodexProcess(
-  janThreadId: string,
+  parloThreadId: string,
   processHandle: string
 ) {
-  return requireCodexSession(janThreadId).killProcess(processHandle)
+  return requireCodexSession(parloThreadId).killProcess(processHandle)
 }
 
 export async function readCodexDirectory(
-  janThreadId: string,
+  parloThreadId: string,
   path: string
 ) {
-  return requireCodexSession(janThreadId).readDirectory(path)
+  return requireCodexSession(parloThreadId).readDirectory(path)
 }
 
 export async function readCodexFile(
-  janThreadId: string,
+  parloThreadId: string,
   path: string
 ) {
-  return requireCodexSession(janThreadId).readFile(path)
+  return requireCodexSession(parloThreadId).readFile(path)
 }
 
 export async function getCodexMetadata(
-  janThreadId: string,
+  parloThreadId: string,
   path: string
 ) {
-  return requireCodexSession(janThreadId).getMetadata(path)
+  return requireCodexSession(parloThreadId).getMetadata(path)
 }
 
 export async function writeCodexFile(
-  janThreadId: string,
+  parloThreadId: string,
   path: string,
   dataBase64: string
 ) {
-  return requireCodexSession(janThreadId).writeFile(path, dataBase64)
+  return requireCodexSession(parloThreadId).writeFile(path, dataBase64)
 }
 
 export async function createCodexDirectory(
-  janThreadId: string,
+  parloThreadId: string,
   path: string,
   recursive?: boolean
 ) {
-  return requireCodexSession(janThreadId).createDirectory(path, recursive)
+  return requireCodexSession(parloThreadId).createDirectory(path, recursive)
 }
 
 export async function removeCodexFileSystemPath(
-  janThreadId: string,
+  parloThreadId: string,
   params: CodexFileSystemRemoveParams
 ) {
-  return requireCodexSession(janThreadId).removeFileSystemPath(params)
+  return requireCodexSession(parloThreadId).removeFileSystemPath(params)
 }
 
 export async function copyCodexFileSystemPath(
-  janThreadId: string,
+  parloThreadId: string,
   params: CodexFileSystemCopyParams
 ) {
-  return requireCodexSession(janThreadId).copyFileSystemPath(params)
+  return requireCodexSession(parloThreadId).copyFileSystemPath(params)
 }
 
 export async function watchCodexFileSystem(
-  janThreadId: string,
+  parloThreadId: string,
   watchId: string,
   path: string
 ) {
-  return requireCodexSession(janThreadId).watchFileSystem(watchId, path)
+  return requireCodexSession(parloThreadId).watchFileSystem(watchId, path)
 }
 
 export async function unwatchCodexFileSystem(
-  janThreadId: string,
+  parloThreadId: string,
   watchId: string
 ) {
-  return requireCodexSession(janThreadId).unwatchFileSystem(watchId)
+  return requireCodexSession(parloThreadId).unwatchFileSystem(watchId)
 }
 
 export async function listCodexModels(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listModels(params)
+  return requireCodexSession(parloThreadId).listModels(params)
 }
 
 export async function readCodexModelProviderCapabilities(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).readModelProviderCapabilities(params)
+  return requireCodexSession(parloThreadId).readModelProviderCapabilities(params)
 }
 
 export async function listCodexExperimentalFeatures(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listExperimentalFeatures(params)
+  return requireCodexSession(parloThreadId).listExperimentalFeatures(params)
 }
 
-export async function startCodexMcpOauthLogin(janThreadId: string, server: string) {
-  return requireCodexSession(janThreadId).startMcpOauthLogin(server)
+export async function startCodexMcpOauthLogin(parloThreadId: string, server: string) {
+  return requireCodexSession(parloThreadId).startMcpOauthLogin(server)
 }
 
-export async function listCodexMcpServerStatus(janThreadId: string, params: Record<string, unknown> = {}) {
+export async function listCodexMcpServerStatus(parloThreadId: string, params: Record<string, unknown> = {}) {
   return requestCodexAppServerMethodWithFallback(
-    janThreadId,
+    parloThreadId,
     'mcpServerStatus/list',
     params
   )
 }
 
 export async function readCodexAccount(
-  janThreadId: string,
+  parloThreadId: string,
   refreshToken = false
 ) {
-  return requireCodexSession(janThreadId).readAccount(refreshToken)
+  return requireCodexSession(parloThreadId).readAccount(refreshToken)
 }
 
 export async function startCodexAccountLogin(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).startAccountLogin(params)
+  return requireCodexSession(parloThreadId).startAccountLogin(params)
 }
 
 export async function cancelCodexAccountLogin(
-  janThreadId: string,
+  parloThreadId: string,
   loginId: string
 ) {
-  return requireCodexSession(janThreadId).cancelAccountLogin(loginId)
+  return requireCodexSession(parloThreadId).cancelAccountLogin(loginId)
 }
 
-export async function logoutCodexAccount(janThreadId: string) {
-  return requireCodexSession(janThreadId).logoutAccount()
+export async function logoutCodexAccount(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).logoutAccount()
 }
 
-export async function readCodexAccountRateLimits(janThreadId: string) {
-  return requireCodexSession(janThreadId).readAccountRateLimits()
+export async function readCodexAccountRateLimits(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).readAccountRateLimits()
 }
 
 export async function readCodexAccountUsage(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).readAccountUsage(params)
+  return requireCodexSession(parloThreadId).readAccountUsage(params)
 }
 
 export async function sendCodexAddCreditsNudgeEmail(
-  janThreadId: string,
+  parloThreadId: string,
   creditType: 'credits' | 'usage_limit'
 ) {
-  return requireCodexSession(janThreadId).sendAddCreditsNudgeEmail(creditType)
+  return requireCodexSession(parloThreadId).sendAddCreditsNudgeEmail(creditType)
 }
 
 export async function listCodexPermissionProfiles(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listPermissionProfiles(params)
+  return requireCodexSession(parloThreadId).listPermissionProfiles(params)
 }
 
-export async function listCodexCollaborationModes(janThreadId: string) {
-  return requireCodexSession(janThreadId).listCollaborationModes()
+export async function listCodexCollaborationModes(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).listCollaborationModes()
 }
 
 export async function listCodexThreads(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listThreads(params)
+  return requireCodexSession(parloThreadId).listThreads(params)
 }
 
 export async function searchCodexThreads(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/search',
     params
   )
 }
 
 export async function startCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer('thread/start', params)
+  return requireCodexSession(parloThreadId).requestAppServer('thread/start', params)
 }
 
 export async function resumeCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/resume',
     params
   )
 }
 
-export async function listLoadedCodexThreads(janThreadId: string) {
-  return requireCodexSession(janThreadId).listLoadedThreads()
+export async function listLoadedCodexThreads(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).listLoadedThreads()
 }
 
 export async function readCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).readThread(codexThreadId, params)
+  return requireCodexSession(parloThreadId).readThread(codexThreadId, params)
 }
 
 export async function listCodexThreadTurns(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listThreadTurns(codexThreadId, params)
+  return requireCodexSession(parloThreadId).listThreadTurns(codexThreadId, params)
 }
 
 export async function listCodexThreadTurnItems(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listThreadTurnItems({
+  return requireCodexSession(parloThreadId).listThreadTurnItems({
     threadId: codexThreadId,
     ...params,
   })
 }
 
 export async function startCodexTurn(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer('turn/start', params)
+  return requireCodexSession(parloThreadId).requestAppServer('turn/start', params)
 }
 
 export async function forkCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).forkThread(codexThreadId, params)
+  return requireCodexSession(parloThreadId).forkThread(codexThreadId, params)
 }
 
 export async function archiveCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).archiveThread(codexThreadId)
+  return requireCodexSession(parloThreadId).archiveThread(codexThreadId)
 }
 
 export async function unarchiveCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).unarchiveThread(codexThreadId)
+  return requireCodexSession(parloThreadId).unarchiveThread(codexThreadId)
 }
 
 export async function setCodexThreadName(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   name: string
 ) {
-  return requireCodexSession(janThreadId).setThreadName(codexThreadId, name)
+  return requireCodexSession(parloThreadId).setThreadName(codexThreadId, name)
 }
 
 export async function setCodexThreadGoal(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   goal: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).setThreadGoal(codexThreadId, goal)
+  return requireCodexSession(parloThreadId).setThreadGoal(codexThreadId, goal)
 }
 
 export async function getCodexThreadGoal(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).getThreadGoal(codexThreadId)
+  return requireCodexSession(parloThreadId).getThreadGoal(codexThreadId)
 }
 
 export async function clearCodexThreadGoal(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).clearThreadGoal(codexThreadId)
+  return requireCodexSession(parloThreadId).clearThreadGoal(codexThreadId)
 }
 
 export async function setCodexThreadMemoryMode(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   memoryMode: 'enabled' | 'disabled'
 ) {
-  return requireCodexSession(janThreadId).setThreadMemoryMode(codexThreadId, memoryMode)
+  return requireCodexSession(parloThreadId).setThreadMemoryMode(codexThreadId, memoryMode)
 }
 
 export async function updateCodexThreadMetadata(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   metadata: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).updateThreadMetadata(codexThreadId, {
+  return requireCodexSession(parloThreadId).updateThreadMetadata(codexThreadId, {
     metadata,
   })
 }
 
 export async function updateCodexThreadSettings(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   settings: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).updateThreadSettings(codexThreadId, {
+  return requireCodexSession(parloThreadId).updateThreadSettings(codexThreadId, {
     settings,
   })
 }
 
 export async function unsubscribeCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).unsubscribeThread(codexThreadId)
+  return requireCodexSession(parloThreadId).unsubscribeThread(codexThreadId)
 }
 
 export async function interruptCodexThreadTurn(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer('turn/interrupt', {
+  return requireCodexSession(parloThreadId).requestAppServer('turn/interrupt', {
     threadId: codexThreadId,
     ...params,
   })
 }
 
 export async function compactCodexThreadById(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
   return requestCodexAppServerMethodWithFallback(
-    janThreadId,
+    parloThreadId,
     'thread/compact/start',
     {
       threadId: codexThreadId,
@@ -1202,30 +1202,30 @@ export async function compactCodexThreadById(
 }
 
 export async function reloadCodexThread(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return readCodexThread(janThreadId, codexThreadId)
+  return readCodexThread(parloThreadId, codexThreadId)
 }
 
 export async function rollbackCodexThreadById(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer('thread/rollback', {
+  return requireCodexSession(parloThreadId).requestAppServer('thread/rollback', {
     threadId: codexThreadId,
     ...params,
   })
 }
 
 export async function startCodexThreadReview(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
   return requestCodexAppServerMethodWithFallback(
-    janThreadId,
+    parloThreadId,
     'review/start',
     {
       threadId: codexThreadId,
@@ -1235,352 +1235,352 @@ export async function startCodexThreadReview(
 }
 
 export async function injectCodexThreadItems(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   items: unknown[]
 ) {
-  return requireCodexSession(janThreadId).injectThreadItems(
+  return requireCodexSession(parloThreadId).injectThreadItems(
     codexThreadId,
     items
   )
 }
 
 export async function cleanCodexBackgroundTerminals(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).cleanBackgroundTerminals(
+  return requireCodexSession(parloThreadId).cleanBackgroundTerminals(
     codexThreadId
   )
 }
 
 export async function startCodexThreadRealtime(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).startThreadRealtime(
+  return requireCodexSession(parloThreadId).startThreadRealtime(
     codexThreadId,
     params
   )
 }
 
 export async function appendCodexThreadRealtimeAudio(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   audioBase64: string
 ) {
-  return requireCodexSession(janThreadId).appendThreadRealtimeAudio(
+  return requireCodexSession(parloThreadId).appendThreadRealtimeAudio(
     codexThreadId,
     audioBase64
   )
 }
 
 export async function appendCodexThreadRealtimeText(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string,
   text: string
 ) {
-  return requireCodexSession(janThreadId).appendThreadRealtimeText(
+  return requireCodexSession(parloThreadId).appendThreadRealtimeText(
     codexThreadId,
     text
   )
 }
 
 export async function stopCodexThreadRealtime(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).stopThreadRealtime(codexThreadId)
+  return requireCodexSession(parloThreadId).stopThreadRealtime(codexThreadId)
 }
 
 export async function listCodexThreadRealtimeVoices(
-  janThreadId: string,
+  parloThreadId: string,
   codexThreadId: string
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/realtime/listVoices',
     { threadId: codexThreadId }
   )
 }
 
 export async function approveCodexGuardianDeniedAction(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/approveGuardianDeniedAction',
     params
   )
 }
 
 export async function incrementCodexThreadElicitation(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/increment_elicitation',
     params
   )
 }
 
 export async function decrementCodexThreadElicitation(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'thread/decrement_elicitation',
     params
   )
 }
 
 export async function resetCodexMemory(
-  janThreadId: string
+  parloThreadId: string
 ) {
-  return requireCodexSession(janThreadId).resetMemory()
+  return requireCodexSession(parloThreadId).resetMemory()
 }
 
 export async function readCodexConversationSummary(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'getConversationSummary',
     params
   )
 }
 
 export async function readCodexGitDiffToRemote(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'gitDiffToRemote',
     params
   )
 }
 
 export async function readCodexAuthStatus(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'getAuthStatus',
     params
   )
 }
 
-export async function enableCodexRemoteControl(janThreadId: string) {
-  return requireCodexSession(janThreadId).enableRemoteControl()
+export async function enableCodexRemoteControl(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).enableRemoteControl()
 }
 
-export async function disableCodexRemoteControl(janThreadId: string) {
-  return requireCodexSession(janThreadId).disableRemoteControl()
+export async function disableCodexRemoteControl(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).disableRemoteControl()
 }
 
-export async function readCodexRemoteControlStatus(janThreadId: string) {
-  return requireCodexSession(janThreadId).readRemoteControlStatus()
+export async function readCodexRemoteControlStatus(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).readRemoteControlStatus()
 }
 
 export async function startCodexRemoteControlPairing(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).startRemoteControlPairing(params)
+  return requireCodexSession(parloThreadId).startRemoteControlPairing(params)
 }
 
 export async function readCodexRemoteControlPairingStatus(
-  janThreadId: string,
+  parloThreadId: string,
   params: { pairingCode?: string; manualPairingCode?: string }
 ) {
-  return requireCodexSession(janThreadId).readRemoteControlPairingStatus(params)
+  return requireCodexSession(parloThreadId).readRemoteControlPairingStatus(params)
 }
 
 export async function listCodexRemoteControlClients(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).listRemoteControlClients(params)
+  return requireCodexSession(parloThreadId).listRemoteControlClients(params)
 }
 
 export async function revokeCodexRemoteControlClient(
-  janThreadId: string,
+  parloThreadId: string,
   clientId: string
 ) {
-  return requireCodexSession(janThreadId).revokeRemoteControlClient({
+  return requireCodexSession(parloThreadId).revokeRemoteControlClient({
     clientId,
   })
 }
 
-export async function readCodexConfig(janThreadId: string) {
-  return requireCodexSession(janThreadId).readConfig()
+export async function readCodexConfig(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).readConfig()
 }
 
-export async function readCodexConfigRequirements(janThreadId: string) {
-  return requireCodexSession(janThreadId).readConfigRequirements()
+export async function readCodexConfigRequirements(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).readConfigRequirements()
 }
 
 export async function detectCodexExternalAgentConfig(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).detectExternalAgentConfig(params)
+  return requireCodexSession(parloThreadId).detectExternalAgentConfig(params)
 }
 
 export async function importCodexExternalAgentConfig(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).importExternalAgentConfig(params)
+  return requireCodexSession(parloThreadId).importExternalAgentConfig(params)
 }
 
 export async function writeCodexConfigValue(
-  janThreadId: string,
+  parloThreadId: string,
   keyPath: string | string[],
   value: unknown
 ) {
-  return callCodexAppServer(janThreadId, 'config/value/write', {
+  return callCodexAppServer(parloThreadId, 'config/value/write', {
     keyPath,
     value,
   })
 }
 
 export async function writeCodexConfigBatch(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).batchWriteConfig(params)
+  return requireCodexSession(parloThreadId).batchWriteConfig(params)
 }
 
 export async function startCodexWindowsSandbox(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).startWindowsSandboxSetup(params)
+  return requireCodexSession(parloThreadId).startWindowsSandboxSetup(params)
 }
 
-export async function readCodexWindowsSandboxReadiness(janThreadId: string) {
-  return requireCodexSession(janThreadId).requestAppServer(
+export async function readCodexWindowsSandboxReadiness(parloThreadId: string) {
+  return requireCodexSession(parloThreadId).requestAppServer(
     'windowsSandbox/readiness'
   )
 }
 
 export async function startCodexFuzzyFileSearchSession(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'fuzzyFileSearch/sessionStart',
     params
   )
 }
 
 export async function updateCodexFuzzyFileSearchSession(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'fuzzyFileSearch/sessionUpdate',
     params
   )
 }
 
 export async function stopCodexFuzzyFileSearchSession(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'fuzzyFileSearch/sessionStop',
     params
   )
 }
 
 export async function listCodexPluginShares(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'plugin/share/list',
     params
   )
 }
 
 export async function checkoutCodexPluginShare(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'plugin/share/checkout',
     params
   )
 }
 
 export async function updateCodexPluginShareTargets(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'plugin/share/updateTargets',
     params
   )
 }
 
 export async function deleteCodexPluginShare(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'plugin/share/delete',
     params
   )
 }
 
 export async function saveCodexPluginShare(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'plugin/share/save',
     params
   )
 }
 
 export async function runCodexMockExperimentalMethod(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return requireCodexSession(janThreadId).requestAppServer(
+  return requireCodexSession(parloThreadId).requestAppServer(
     'mock/experimentalMethod',
     params
   )
 }
 
 export async function uploadCodexFeedback(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).uploadFeedback(params)
+  return requireCodexSession(parloThreadId).uploadFeedback(params)
 }
 
 export async function readCodexMcpResource(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown>
 ) {
-  return requireCodexSession(janThreadId).readMcpResource(params)
+  return requireCodexSession(parloThreadId).readMcpResource(params)
 }
 
 export async function callCodexMcpTool(
-  janThreadId: string,
+  parloThreadId: string,
   params: CodexMcpToolCallParams
 ) {
-  return requireCodexSession(janThreadId).callMcpTool(params)
+  return requireCodexSession(parloThreadId).callMcpTool(params)
 }
 
 export async function reloadCodexMcpConfig(
-  janThreadId: string,
+  parloThreadId: string,
   params: Record<string, unknown> = {}
 ) {
-  return callCodexAppServer(janThreadId, 'config/mcpServer/reload', params)
+  return callCodexAppServer(parloThreadId, 'config/mcpServer/reload', params)
 }
 
 export type CodexCliRunResult = {
@@ -1598,7 +1598,7 @@ type CodexCliSubcommandInput = {
 
 /**
  * Run a Codex CLI subcommand against a profile's CODEX_HOME.
- * Bridges non-interactive / diagnostic CLI features into Jan Studio.
+ * Bridges non-interactive / diagnostic CLI features into Parlo Studio.
  */
 export async function runCodexCliSubcommand(input: {
   command: string
@@ -1727,19 +1727,6 @@ export async function runCodexCliFeatures(input?: {
   return runCodexCliNamedCommand({
     command: input?.command,
     subcommand: 'features',
-    args: input?.args,
-    codexHome: input?.codexHome,
-    cwd: input?.cwd,
-    env: input?.env,
-  })
-}
-
-export async function runCodexCliProto(input?: {
-  args?: string[]
-} & CodexCliSubcommandInput) {
-  return runCodexCliNamedCommand({
-    command: input?.command,
-    subcommand: 'proto',
     args: input?.args,
     codexHome: input?.codexHome,
     cwd: input?.cwd,
@@ -2085,19 +2072,19 @@ function looksLikeMissingMethodError(error: unknown) {
 }
 
 async function requestCodexAppServerMethodWithFallback<T>(
-  janThreadId: string,
+  parloThreadId: string,
   primaryMethod: string,
   params: Record<string, unknown> = {}
 ) {
   const fallbackMethod = CODEX_APP_SERVER_METHOD_FALLBACKS[primaryMethod]
   if (!fallbackMethod) {
-    return requireCodexSession(janThreadId).requestAppServer(
+    return requireCodexSession(parloThreadId).requestAppServer(
       primaryMethod,
       params
     ) as T
   }
   return requestAppServerMethodWithFallback(
-    janThreadId,
+    parloThreadId,
     primaryMethod,
     fallbackMethod,
     params
@@ -2105,19 +2092,19 @@ async function requestCodexAppServerMethodWithFallback<T>(
 }
 
 async function requestAppServerMethodWithFallback<T>(
-  janThreadId: string,
+  parloThreadId: string,
   primaryMethod: string,
   fallbackMethod: string,
   params: Record<string, unknown> = {}
 ) {
   try {
-    return (await requireCodexSession(janThreadId).requestAppServer(
+    return (await requireCodexSession(parloThreadId).requestAppServer(
       primaryMethod,
       params
     )) as T
   } catch (error) {
     if (looksLikeMissingMethodError(error)) {
-      return (await requireCodexSession(janThreadId).requestAppServer(
+      return (await requireCodexSession(parloThreadId).requestAppServer(
         fallbackMethod,
         params
       )) as T
@@ -2128,9 +2115,9 @@ async function requestAppServerMethodWithFallback<T>(
 
 // Generic escape hatch for other advanced app-server calls surfaced in the client
 // (remoteControl/*, marketplace/*, collaborationMode, environment, apps, config read/write, etc.)
-export async function callCodexAppServer(janThreadId: string, method: string, params?: Record<string, unknown>) {
+export async function callCodexAppServer(parloThreadId: string, method: string, params?: Record<string, unknown>) {
   return requestCodexAppServerMethodWithFallback(
-    janThreadId,
+    parloThreadId,
     method,
     params ?? {}
   )
@@ -2299,9 +2286,7 @@ export function buildCodexSessionOptions(
         settingValue(codexSettingsProvider, 'codex-binary-path') ||
         defaultCodexBinaryPath(),
       codexHome: resolveAppCodexHome(),
-      transport: normalizeCodexTransport(
-        settingValue(codexSettingsProvider, 'codex-transport')
-      ),
+      transport: 'app-server',
       cwd: resolveCodexWorkspaceDir(threadId),
       approvalPolicy: 'on-request',
       sandbox: 'workspace-write',
@@ -2311,7 +2296,7 @@ export function buildCodexSessionOptions(
         }),
         mcp_oauth_credentials_store_mode: 'auto',
       },
-      ...buildJanGatewayCodexConfig(resolveCodexStartupModelId(provider, model.id)),
+      ...buildParloGatewayCodexConfig(resolveCodexStartupModelId(provider, model.id)),
     }
   }
   const codexConfigProvider = codexManagedProviderId(targetProvider)
@@ -2334,11 +2319,11 @@ export function buildCodexSessionOptions(
       const mappedProviderName = mapProfileProviderType(
         activeProfile.providerType
       )
-      const janProvider =
+      const parloProvider =
         modelProviderState.getProviderByName(mappedProviderName)
       apiKey =
-        janProvider?.api_key ||
-        (janProvider ? settingValue(janProvider, 'api-key') : '')
+        parloProvider?.api_key ||
+        (parloProvider ? settingValue(parloProvider, 'api-key') : '')
     } else {
       const authProvider = resolveCodexAuthProvider(
         targetProvider,
@@ -2353,15 +2338,12 @@ export function buildCodexSessionOptions(
   const codexBinaryPath =
     settingValue(codexSettingsProvider, 'codex-binary-path') ||
     defaultCodexBinaryPath()
-  const transport = normalizeCodexTransport(
-    activeProfile?.transport ||
-      settingValue(codexSettingsProvider, 'codex-transport')
-  )
+  const transport = 'app-server'
   const cwd = resolveCodexWorkspaceDir(threadId)
   const codexHome = resolveAppCodexHome(activeProfile?.codexHome)
   const configuredApiKeyEnv = activeProfile?.apiKeyEnv?.trim() || undefined
   const envKey =
-    configuredApiKeyEnv || (apiKey ? 'JAN_CODEX_PROVIDER_API_KEY' : undefined)
+    configuredApiKeyEnv || (apiKey ? 'PARLO_CODEX_PROVIDER_API_KEY' : undefined)
   const { mcpServers, settings: mcpSettings } = useMCPServers.getState()
   const rawTargetModel =
     (activeProfile && activeProfile.model.trim()) || model.id
@@ -2435,7 +2417,7 @@ export function buildCodexSessionOptions(
   }
 }
 
-function buildJanGatewayCodexConfig(
+function buildParloGatewayCodexConfig(
   modelId: string
 ): {
   model: string
@@ -2453,24 +2435,24 @@ function buildJanGatewayCodexConfig(
 
   return {
     model: modelId,
-    modelProvider: CODEX_JAN_GATEWAY_PROVIDER_ID,
+    modelProvider: CODEX_PARLO_GATEWAY_PROVIDER_ID,
     configToml: buildCodexConfigToml({
       model: modelId,
-      modelProvider: CODEX_JAN_GATEWAY_PROVIDER_ID,
+      modelProvider: CODEX_PARLO_GATEWAY_PROVIDER_ID,
       modelContextWindow: codexModelContextWindowForModel(modelId),
       providers: [
         {
-          id: CODEX_JAN_GATEWAY_PROVIDER_ID,
-          name: 'Jan Gateway',
+          id: CODEX_PARLO_GATEWAY_PROVIDER_ID,
+          name: 'Parlo Gateway',
           baseUrl,
-          apiKeyEnvVar: apiKey ? CODEX_JAN_GATEWAY_API_KEY_ENV : undefined,
+          apiKeyEnvVar: apiKey ? CODEX_PARLO_GATEWAY_API_KEY_ENV : undefined,
           wireApi: 'responses',
         },
       ],
       mcpServers: useMCPServers.getState().mcpServers,
       mcpToolTimeoutSeconds: useMCPServers.getState().settings.toolCallTimeoutSeconds,
     }),
-    env: apiKey ? { [CODEX_JAN_GATEWAY_API_KEY_ENV]: apiKey } : {},
+    env: apiKey ? { [CODEX_PARLO_GATEWAY_API_KEY_ENV]: apiKey } : {},
   }
 }
 
@@ -2569,14 +2551,8 @@ const CODEX_RESERVED_PROVIDER_IDS = new Set([
 
 function codexManagedProviderId(providerId: string): string {
   return CODEX_RESERVED_PROVIDER_IDS.has(providerId)
-    ? `jan-${providerId}`
+    ? `Parlo-${providerId}`
     : providerId
-}
-
-function normalizeCodexTransport(
-  value?: string
-): 'app-server' | 'proto' {
-  return value === 'proto' ? 'proto' : 'app-server'
 }
 
 function resolveCodexWorkspaceDir(threadId: string) {
@@ -2602,7 +2578,7 @@ function resolveCodexWorkspaceDir(threadId: string) {
 
 function resolveAppCodexHome(profileCodexHome?: string) {
   const trimmed = profileCodexHome?.trim()
-  return trimmed || './.jan/codex-home'
+  return trimmed || './.Parlo/codex-home'
 }
 
 function settingValue(provider: ModelProvider, key: string) {
@@ -2621,7 +2597,7 @@ function defaultBaseUrlForProvider(providerId: string) {
   if (providerId === 'openrouter') return 'https://openrouter.ai/api/v1'
   if (providerId === 'ollama') return 'http://127.0.0.1:11434/v1'
   if (providerId === 'vllm') return 'http://127.0.0.1:8000/v1'
-  if (JAN_HOSTED_LOCAL_PROVIDERS.has(providerId)) {
+  if (PARLO_HOSTED_LOCAL_PROVIDERS.has(providerId)) {
     const { serverHost, serverPort, apiPrefix } = useLocalApiServer.getState()
     return `http://${serverHost}:${serverPort}${apiPrefix}`
   }

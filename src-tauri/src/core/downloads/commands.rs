@@ -1,7 +1,7 @@
 use super::helpers::{_download_files_internal, err_to_string};
 use super::models::DownloadItem;
-use crate::core::app::commands::get_jan_data_folder_path;
-use crate::core::filesystem::helpers::resolve_path_within_jan_data_folder;
+use crate::core::app::commands::get_parlo_data_folder_path;
+use crate::core::filesystem::helpers::resolve_path_within_parlo_data_folder;
 use crate::core::state::AppState;
 use std::collections::HashMap;
 use tauri::{Runtime, State};
@@ -47,10 +47,10 @@ pub async fn download_files<R: Runtime>(
     // A paused task keeps its partial .tmp/.url so it can be resumed; a true
     // cancel discards the partial along with the (possibly absent) final file.
     if cancel_token.is_cancelled() && !paused {
-        let jan_data_folder = get_jan_data_folder_path(app.clone());
+        let parlo_data_folder = get_parlo_data_folder_path(app.clone());
         for item in items {
             if let Ok((_, save_path)) =
-                resolve_path_within_jan_data_folder(&jan_data_folder, &item.save_path)
+                resolve_path_within_parlo_data_folder(&parlo_data_folder, &item.save_path)
             {
                 let _ = std::fs::remove_file(&save_path);
                 let _ = std::fs::remove_file(with_appended_ext(&save_path, "tmp"));

@@ -267,7 +267,6 @@ type RuntimeFsProcessPanelState = {
   currentThreadIdForCaps: string | null | undefined
   cwd: string
   filteredCodexProcessTerminalLines: string[]
-  isCodexProtoTransport?: boolean
   runtimeBusy: boolean
   selectableCodexProcessHandles: string[]
   selectedCodexProcessTerminal: CodexProcessTerminalSession | null
@@ -333,7 +332,6 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
     currentThreadIdForCaps,
     cwd,
     filteredCodexProcessTerminalLines,
-    isCodexProtoTransport,
     runtimeBusy,
     selectableCodexProcessHandles,
     selectedCodexProcessTerminal,
@@ -621,7 +619,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!currentThreadIdForCaps || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!currentThreadIdForCaps || runtimeBusy}
           onClick={() =>
             onSetCodexRuntimeSnapshot((previous: unknown) => ({
               ...((previous as Record<string, unknown> | null) ?? {}),
@@ -647,7 +645,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() => void onReadCodexRuntimeFile()}
         >
           Read
@@ -655,7 +653,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() => void onWriteCodexRuntimeFile()}
         >
           Write
@@ -808,7 +806,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() =>
             void onRunCodexRuntimeAction(
               'fs/readDirectory',
@@ -822,7 +820,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() =>
             void onRunCodexRuntimeAction(
               'fs/getMetadata',
@@ -836,7 +834,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() =>
             void onRunCodexRuntimeAction(
               'fs/createDirectory',
@@ -850,7 +848,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={!codexRuntimePath.trim() || runtimeBusy || !!isCodexProtoTransport}
+          disabled={!codexRuntimePath.trim() || runtimeBusy}
           onClick={() => {
             const confirmed = window.confirm(
               `Remove ${codexRuntimePath.trim()} through Codex app-server?`
@@ -928,7 +926,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={runtimeBusy || !spawnCommand.trim() || !!isCodexProtoTransport}
+          disabled={runtimeBusy || !spawnCommand.trim()}
           onClick={() => {
             const payload = composeSpawnPayload()
             if (!payload) return
@@ -941,7 +939,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
         <button
           type="button"
           className="text-[9px] underline disabled:opacity-50"
-          disabled={runtimeBusy || !commandExecCommand.trim() || !!isCodexProtoTransport}
+          disabled={runtimeBusy || !commandExecCommand.trim()}
           onClick={() => {
             const payload = composeCommandExecPayload()
             if (!payload) return
@@ -1150,7 +1148,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={!selectedCodexProcessTerminal || runtimeBusy || !!isCodexProtoTransport}
+              disabled={!selectedCodexProcessTerminal || runtimeBusy}
               onClick={runSelectedTerminalResize}
             >
               Apply size
@@ -1212,7 +1210,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={!selectedCodexProcessTerminal || runtimeBusy || !!isCodexProtoTransport}
+              disabled={!selectedCodexProcessTerminal || runtimeBusy}
               onClick={runSelectedTerminalStdin}
             >
               Send stdin to selected
@@ -1220,7 +1218,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={!selectedCodexProcessTerminal || runtimeBusy || !!isCodexProtoTransport}
+              disabled={!selectedCodexProcessTerminal || runtimeBusy}
               onClick={runSelectedTerminalResize}
             >
               Resize selected
@@ -1228,7 +1226,7 @@ export function RuntimeFsProcessPanel({ state, actions }: RuntimeFsProcessPanelP
             <button
               type="button"
               className="text-[9px] underline disabled:opacity-50"
-              disabled={!selectedCodexProcessTerminal || runtimeBusy || !!isCodexProtoTransport}
+              disabled={!selectedCodexProcessTerminal || runtimeBusy}
               onClick={runSelectedTerminalStop}
             >
               Stop selected

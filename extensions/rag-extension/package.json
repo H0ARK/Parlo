@@ -1,11 +1,11 @@
 {
-  "name": "@janhq/rag-extension",
+  "name": "@parlo-lab/rag-extension",
   "productName": "RAG Tools",
   "version": "0.1.0",
   "description": "Registers RAG tools and orchestrates retrieval across parser, embeddings, and vector DB",
   "main": "dist/index.js",
   "module": "dist/module.js",
-  "author": "Jan <service@jan.ai>",
+  "author": "Parlo <service@parlo.ai>",
   "license": "AGPL-3.0",
   "scripts": {
     "build": "rolldown -c rolldown.config.mjs",
@@ -18,9 +18,9 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@janhq/core": "../../core/package.tgz",
-    "@janhq/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag",
-    "@janhq/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
+    "@parlo-lab/core": "../../core/package.tgz",
+    "@parlo-lab/tauri-plugin-rag-api": "link:../../src-tauri/plugins/tauri-plugin-rag",
+    "@parlo-lab/tauri-plugin-vector-db-api": "link:../../src-tauri/plugins/tauri-plugin-vector-db"
   },
   "files": [
     "dist/*",

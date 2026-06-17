@@ -15,7 +15,6 @@ type CodexReviewPanelProps = {
     target?: CodexReviewTarget,
     options?: { userFacingHint?: string }
   ) => Promise<unknown>
-  isCodexProtoTransport?: boolean
 }
 
 type ReviewTargetMode = CodexReviewTarget['type']

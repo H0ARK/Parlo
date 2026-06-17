@@ -18,8 +18,8 @@ export interface AppService {
   factoryReset(options?: FactoryResetOptions): Promise<void>
   readLogs(): Promise<LogEntry[]>
   parseLogLine(line: string): LogEntry
-  getJanDataFolder(): Promise<string | undefined>
-  relocateJanDataFolder(path: string): Promise<void>
+  getParloDataFolder(): Promise<string | undefined>
+  relocateParloDataFolder(path: string): Promise<void>
   getServerStatus(): Promise<boolean>
   readYaml<T = unknown>(path: string): Promise<T>
 }

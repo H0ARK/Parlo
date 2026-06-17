@@ -14,7 +14,7 @@ describe('migrateLegacyModels', () => {
       main: 'index.js',
     })
     // Set up provider path to avoid issues with getProviderPath() calls
-    extension['providerPath'] = '/path/to/jan/llamacpp'
+    extension['providerPath'] = '/path/to/Parlo/llamacpp'
   })
 
   afterEach(() => {
@@ -23,27 +23,27 @@ describe('migrateLegacyModels', () => {
 
   describe('migrateLegacyModels method', () => {
     it('should return early if legacy models directory does not exist', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-      vi.mocked(joinPath).mockResolvedValue('/path/to/jan/models')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+      vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/models')
       vi.mocked(fs.existsSync).mockResolvedValue(false)
 
       // Call the private method via reflection
       await extension['migrateLegacyModels']()
 
-      expect(fs.existsSync).toHaveBeenCalledWith('/path/to/jan/models')
+      expect(fs.existsSync).toHaveBeenCalledWith('/path/to/Parlo/models')
       expect(fs.readdirSync).not.toHaveBeenCalled()
     })
 
     it('should skip non-yml files during migration', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/test-file.txt') // childPath
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/test-file.txt') // childPath
 
       vi.mocked(fs.existsSync).mockResolvedValue(true)
       vi.mocked(fs.readdirSync).mockResolvedValue(['test-file.txt'])
@@ -59,14 +59,14 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should skip yml files when model.yml already exists in directory', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/model.yml') // childPath for model.yml
-        .mockResolvedValueOnce('/path/to/jan/models/legacy-model.yml') // childPath for legacy-model.yml
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/model.yml') // childPath for model.yml
+        .mockResolvedValueOnce('/path/to/Parlo/models/legacy-model.yml') // childPath for legacy-model.yml
 
       vi.mocked(fs.existsSync).mockResolvedValue(true)
       vi.mocked(fs.readdirSync).mockResolvedValue([
@@ -97,17 +97,17 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should migrate legacy model with valid configuration', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
       const { basename } = await import('@tauri-apps/api/path')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
 
       // Mock specific joinPath calls in the order they will be made
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/test') // childPath
-        .mockResolvedValueOnce('/path/to/jan/models/test/model.yml') // legacy model file
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/test') // childPath
+        .mockResolvedValueOnce('/path/to/Parlo/models/test/model.yml') // legacy model file
 
       vi.mocked(fs.existsSync).mockResolvedValue(true)
 
@@ -128,7 +128,7 @@ describe('migrateLegacyModels', () => {
       // Mock reading legacy config
       vi.mocked(invoke)
         .mockResolvedValueOnce({
-          files: ['/path/to/jan/models/test/path.gguf'],
+          files: ['/path/to/Parlo/models/test/path.gguf'],
           model: 'Legacy Test Model',
         })
         .mockResolvedValueOnce(undefined) // write_yaml call
@@ -143,13 +143,13 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should skip migration if legacy model file does not exist', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/legacy-model.yml') // childPath
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/legacy-model.yml') // childPath
 
       vi.mocked(fs.existsSync)
         .mockResolvedValueOnce(true) // models dir exists
@@ -175,17 +175,17 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should skip migration if new model config already exists', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
       const { basename } = await import('@tauri-apps/api/path')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/legacy-model.yml') // childPath
-        .mockResolvedValueOnce('/path/to/jan/legacy/model/path.gguf') // legacy model file path
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/legacy-model.yml') // childPath
+        .mockResolvedValueOnce('/path/to/Parlo/legacy/model/path.gguf') // legacy model file path
         .mockResolvedValueOnce(
-          '/path/to/jan/llamacpp/models/legacy-model/model.yml'
+          '/path/to/Parlo/llamacpp/models/legacy-model/model.yml'
         ) // config path
 
       vi.mocked(fs.existsSync)
@@ -214,12 +214,12 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should explore subdirectories when no yml files found in current directory', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath)
-        .mockResolvedValueOnce('/path/to/jan/models') // initial modelsDir
-        .mockResolvedValueOnce('/path/to/jan/models/subdir') // child directory
+        .mockResolvedValueOnce('/path/to/Parlo/models') // initial modelsDir
+        .mockResolvedValueOnce('/path/to/Parlo/models/subdir') // child directory
 
       vi.mocked(fs.existsSync).mockResolvedValue(true)
       vi.mocked(fs.readdirSync)
@@ -233,16 +233,16 @@ describe('migrateLegacyModels', () => {
       await extension['migrateLegacyModels']()
 
       expect(fs.readdirSync).toHaveBeenCalledTimes(2)
-      expect(fs.readdirSync).toHaveBeenCalledWith('/path/to/jan/models')
+      expect(fs.readdirSync).toHaveBeenCalledWith('/path/to/Parlo/models')
       // Note: The original code has a bug where it pushes just 'child' instead of the full path
       // so it would call fs.readdirSync('subdir') instead of the full path
-      expect(fs.readdirSync).toHaveBeenCalledWith('/path/to/jan/models')
+      expect(fs.readdirSync).toHaveBeenCalledWith('/path/to/Parlo/models')
     })
   })
 
   describe('list method integration with migrateLegacyModels', () => {
     it('should call migrateLegacyModels during list operation', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
       const { invoke } = await import('@tauri-apps/api/core')
 
       // Mock the migrateLegacyModels method
@@ -250,7 +250,7 @@ describe('migrateLegacyModels', () => {
         .spyOn(extension as any, 'migrateLegacyModels')
         .mockResolvedValue(undefined)
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
       vi.mocked(joinPath).mockImplementation((paths) =>
         Promise.resolve(paths.join('/'))
       )
@@ -274,21 +274,21 @@ describe('migrateLegacyModels', () => {
     })
 
     it('should create models directory if it does not exist before migration', async () => {
-      const { getJanDataFolderPath, joinPath, fs } = await import('@janhq/core')
+      const { getParloDataFolderPath, joinPath, fs } = await import('@parlo-lab/core')
 
       const migrateSpy = vi
         .spyOn(extension as any, 'migrateLegacyModels')
         .mockResolvedValue(undefined)
 
-      vi.mocked(getJanDataFolderPath).mockResolvedValue('/path/to/jan')
-      vi.mocked(joinPath).mockResolvedValue('/path/to/jan/llamacpp/models')
+      vi.mocked(getParloDataFolderPath).mockResolvedValue('/path/to/Parlo')
+      vi.mocked(joinPath).mockResolvedValue('/path/to/Parlo/llamacpp/models')
       vi.mocked(fs.existsSync).mockResolvedValue(false) // models dir doesn't exist
       vi.mocked(fs.mkdir).mockResolvedValue(undefined)
       vi.mocked(fs.readdirSync).mockResolvedValue([])
 
       await extension.list()
 
-      expect(fs.mkdir).toHaveBeenCalledWith('/path/to/jan/llamacpp/models')
+      expect(fs.mkdir).toHaveBeenCalledWith('/path/to/Parlo/llamacpp/models')
       expect(migrateSpy).toHaveBeenCalledOnce()
     })
   })

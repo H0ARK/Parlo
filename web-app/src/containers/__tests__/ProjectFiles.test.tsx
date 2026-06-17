@@ -61,7 +61,7 @@ vi.mock('@/lib/extension', () => ({
   },
 }))
 
-vi.mock('@janhq/core', () => ({
+vi.mock('@parlo-lab/core', () => ({
   ExtensionTypeEnum: { VectorDB: 'vectordb' },
   VectorDBExtension: class {},
   fs: {
