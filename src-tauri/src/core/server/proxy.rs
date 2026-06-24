@@ -177,6 +177,40 @@ pub(crate) fn normalize_openai_tools_in_chat_body(body: &mut serde_json::Value) 
     }
 }
 
+pub(crate) fn sanitize_xai_responses_body(body: &mut serde_json::Value) {
+    let Some(tools) = body.get_mut("tools") else {
+        return;
+    };
+    let Some(tools_arr) = tools.as_array_mut() else {
+        return;
+    };
+
+    tools_arr.retain_mut(|tool| {
+        let tool_type = tool.get("type").and_then(|v| v.as_str());
+        if tool_type != Some("function") {
+            return false;
+        }
+
+        if let Some(parameters) = tool.get_mut("parameters") {
+            normalize_openai_tool_parameters_schema(parameters);
+        }
+        if let Some(parameters) = tool
+            .get_mut("function")
+            .and_then(|function| function.get_mut("parameters"))
+        {
+            normalize_openai_tool_parameters_schema(parameters);
+        }
+
+        true
+    });
+
+    if tools_arr.is_empty() {
+        if let Some(map) = body.as_object_mut() {
+            map.remove("tools");
+        }
+    }
+}
+
 pub(crate) fn http_status_indicates_api_key_retry(status: StatusCode) -> bool {
     matches!(
         status,
@@ -737,6 +771,7 @@ pub(crate) fn transform_openai_chat_to_responses(
         ] {
             map.remove(key);
         }
+        sanitize_xai_responses_body(body);
     }
 }
 

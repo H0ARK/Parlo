@@ -1011,6 +1011,23 @@ mod server_tests {
     }
 
     #[test]
+    fn sanitize_xai_responses_body_drops_unsupported_namespace_tools() {
+        let mut body = json!({
+            "model": "grok-4.3",
+            "input": [{"role": "user", "content": "hi"}],
+            "tools": [
+                {"type": "namespace", "name": "functions", "tools": []},
+                {"type": "function", "name": "shell", "parameters": {"type": "object"}}
+            ]
+        });
+
+        proxy::sanitize_xai_responses_body(&mut body);
+
+        assert_eq!(body["tools"].as_array().unwrap().len(), 1);
+        assert_eq!(body["tools"][0]["type"], json!("function"));
+    }
+
+    #[test]
     fn transform_responses_json_to_chat_completion() {
         let responses = json!({
             "id": "resp_1",
