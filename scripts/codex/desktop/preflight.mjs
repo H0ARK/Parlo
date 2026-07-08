@@ -132,8 +132,8 @@ const requiredScripts = [
   'codex:desktop:ready',
   'codex:desktop:focus-dev',
   'codex:desktop:capture-dev',
-  'jan:debug:mcp:self-test',
-  'jan:debug:mcp:smoke',
+  'parlo:debug:mcp:self-test',
+  'parlo:debug:mcp:smoke',
 ]
 
 const codexVersion = run(codexBinary, ['-V'])
@@ -152,9 +152,9 @@ const smokeReportValidatorSelfTest = run(
   [join(root, 'scripts/codex/desktop/validate-smoke-report.mjs'), '--self-test'],
   20_000
 )
-const janDebugMcpSelfTest = run('yarn', ['jan:debug:mcp:self-test'], 10_000)
+const janDebugMcpSelfTest = run('yarn', ['parlo:debug:mcp:self-test'], 10_000)
 const janDebugMcpLiveSmoke = requireJanDebugBridge
-  ? run('yarn', ['jan:debug:mcp:smoke'], 10_000)
+  ? run('yarn', ['parlo:debug:mcp:smoke'], 10_000)
   : null
 const janDebugMcpLiveReport = janDebugMcpLiveSmoke
   ? parseJsonReport(janDebugMcpLiveSmoke.stdout)
@@ -224,8 +224,8 @@ const checks = [
   checkFile('scripts/codex/desktop/ready.mjs'),
   checkFile('scripts/codex/desktop/focus-dev.mjs'),
   checkFile('scripts/codex/desktop/capture-dev.mjs'),
-  checkFile('scripts/jan-debug-mcp.mjs'),
-  checkFile('scripts/jan-debug-mcp-smoke.mjs'),
+  checkFile('scripts/parlo-debug-mcp.mjs'),
+  checkFile('scripts/parlo-debug-mcp-smoke.mjs'),
   checkFile('src-tauri/tauri.conf.json'),
   checkFile('src-tauri/capabilities/default.json'),
   checkFile('src-tauri/capabilities/desktop.json'),
@@ -248,7 +248,9 @@ const checks = [
   },
   {
     label: 'Desktop checklist references Jan debug bridge smoke',
-    ok: /jan:debug:mcp:smoke|Jan debug bridge/.test(checklistText),
+    ok: /parlo:debug:mcp:smoke|jan:debug:mcp:smoke|Parlo debug bridge|Jan debug bridge/.test(
+      checklistText
+    ),
     detail: 'DESKTOP_SMOKE_CHECKLIST.md',
   },
   {
@@ -362,7 +364,7 @@ const checks = [
           : `Jan debug bridge reported clientErrors=${janDebugMcpLiveReport?.clientErrors ?? 'unknown'}. Fix webview client errors before desktop smoke.`
         : janDebugMcpLiveSmoke?.stderr ||
           janDebugMcpLiveSmoke?.stdout.trim() ||
-          'Run yarn dev:tauri for the repo-local app, then yarn jan:debug:mcp:smoke.'
+          'Run yarn dev:tauri for the repo-local app, then yarn parlo:debug:mcp:smoke.'
       : 'Optional live bridge gate (set REQUIRE_JAN_DEBUG_BRIDGE=1)',
   },
   {

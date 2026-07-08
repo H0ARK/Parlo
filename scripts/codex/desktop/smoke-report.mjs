@@ -196,7 +196,7 @@ const screenshotCapture =
   process.env.SMOKE_CAPTURE_SCREEN === '1'
     ? run('yarn', ['codex:desktop:capture-dev'], 15_000)
     : null
-const janDebugBridge = run('yarn', ['jan:debug:mcp:smoke'], 15_000)
+const janDebugBridge = run('yarn', ['parlo:debug:mcp:smoke'], 15_000)
 const checklistText = existsSync(checklistPath) ? readFileSync(checklistPath, 'utf8') : ''
 const sections = extractChecklistSections(checklistText)
 const reportPath = join(reportsDir, `${timestamp}-${branch.replace(/[^a-zA-Z0-9._-]+/g, '-')}-${commit}.md`)
@@ -220,7 +220,7 @@ const janDebugBridgeEvidence = janDebugBridge.ok
   ? janDebugBridgeReport?.clientErrors === 0
     ? `captured automatically; clientErrors=0\n\n\`\`\`json\n${safeMultiline(janDebugBridge.stdout)}\n\`\`\``
     : `TODO fix Jan debug bridge client errors before marking desktop smoke ready; clientErrors=${janDebugBridgeReport?.clientErrors ?? 'unknown'}\n\n\`\`\`json\n${safeMultiline(janDebugBridge.stdout)}\n\`\`\``
-  : `TODO run yarn jan:debug:mcp:smoke against the repo-local desktop app\n\n\`\`\`text\n${safeMultiline(janDebugBridge.stdout || janDebugBridge.stderr)}\n\`\`\``
+  : `TODO run yarn parlo:debug:mcp:smoke against the repo-local desktop app\n\n\`\`\`text\n${safeMultiline(janDebugBridge.stdout || janDebugBridge.stderr)}\n\`\`\``
 const processEventEvidence = launchEvidence
   ? `\n\n\n\`\`\`text\n${launchEvidence}\n\`\`\``
   : 'TODO'

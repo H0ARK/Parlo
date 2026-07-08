@@ -1,118 +1,89 @@
--lab#-lab -labJ-laba-labn-lab -labC-labo-labd-labe-labx-lab -labR-labu-labn-labt-labi-labm-labe-lab -labâ-lab€-lab”-lab -labD-labe-labs-labk-labt-labo-labp-lab -labS-labm-labo-labk-labe-lab -labC-labh-labe-labc-labk-labl-labi-labs-labt-lab
--lab
--lab*-lab*-labD-laba-labt-labe-lab -laba-labn-labc-labh-labo-labr-lab*-lab*-lab:-lab -lab2-lab0-lab2-lab6-lab--lab0-lab6-lab--lab1-lab2-lab -lab -lab
--lab*-lab*-labS-labo-labu-labr-labc-labe-lab*-lab*-lab:-lab -labr-labu-labn-lab -labf-labr-labo-labm-lab -labt-labh-labe-lab -labc-labu-labr-labr-labe-labn-labt-lab -labr-labe-labp-labo-lab -labw-labo-labr-labk-labt-labr-labe-labe-lab;-lab -labd-labo-lab -labn-labo-labt-lab -labu-labs-labe-lab -labt-labh-labe-lab -labi-labn-labs-labt-laba-labl-labl-labe-labd-lab -lab`-lab/-labA-labp-labp-labl-labi-labc-laba-labt-labi-labo-labn-labs-lab/-labJ-laba-labn-lab.-laba-labp-labp-lab`-lab -laba-labs-lab -labe-labv-labi-labd-labe-labn-labc-labe-lab.-lab -lab -lab
--lab*-lab*-labP-labu-labr-labp-labo-labs-labe-lab*-lab*-lab:-lab -labV-labe-labr-labi-labf-laby-lab -labr-labe-laba-labl-lab -labe-labn-labd-lab--labt-labo-lab--labe-labn-labd-lab -labC-labo-labd-labe-labx-lab -laba-labp-labp-lab--labs-labe-labr-labv-labe-labr-lab -labb-labe-labh-laba-labv-labi-labo-labr-lab -labi-labn-lab -labt-labh-labe-lab -labb-labu-labi-labl-labt-lab -labT-laba-labu-labr-labi-lab -labd-labe-labs-labk-labt-labo-labp-lab -laba-labp-labp-lab -lab(-labt-labh-labi-labn-labg-labs-lab -labb-labr-labo-labw-labs-labe-labr-lab -labp-labr-labe-labv-labi-labe-labw-lab -laba-labn-labd-lab -labu-labn-labi-labt-lab -labt-labe-labs-labt-labs-lab -labc-laba-labn-labn-labo-labt-lab -labc-labo-labv-labe-labr-lab)-lab.-lab
--lab
--lab#-lab#-lab -labP-labr-labe-labr-labe-labq-labu-labi-labs-labi-labt-labe-labs-lab -lab(-labr-labu-labn-lab -labo-labn-labc-labe-lab)-lab
--lab--lab -labE-labn-labs-labu-labr-labe-lab -labC-labo-labd-labe-labx-lab -labd-labe-labs-labk-labt-labo-labp-lab -labb-labi-labn-laba-labr-laby-lab -labi-labs-lab -laba-labt-lab -lab`-lab/-labA-labp-labp-labl-labi-labc-laba-labt-labi-labo-labn-labs-lab/-labC-labo-labd-labe-labx-lab.-laba-labp-labp-lab/-labC-labo-labn-labt-labe-labn-labt-labs-lab/-labR-labe-labs-labo-labu-labr-labc-labe-labs-lab/-labc-labo-labd-labe-labx-lab`-lab -lab(-labo-labr-lab -labu-labp-labd-laba-labt-labe-lab -laby-labo-labu-labr-lab -labp-labr-labo-labf-labi-labl-labe-lab)-lab
--lab--lab -labR-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labi-labn-labs-labt-laba-labl-labl-lab`-lab -laba-labn-labd-lab -laba-labn-laby-lab -lab`-labd-labo-labw-labn-labl-labo-laba-labd-lab:-labb-labi-labn-lab`-lab -lab/-lab -lab`-labb-labu-labi-labl-labd-lab:-labc-labl-labi-lab`-lab -lab/-lab -lab`-labb-labu-labi-labl-labd-lab:-labm-labl-labx-lab--labs-labe-labr-labv-labe-labr-lab`-lab -labi-labf-lab -labn-labe-labe-labd-labe-labd-lab -labf-labo-labr-lab -labt-labh-labe-lab -labT-laba-labu-labr-labi-lab -labs-labi-labd-labe-lab
--lab--lab -labR-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labp-labr-labe-labf-labl-labi-labg-labh-labt-lab`-lab
--lab--lab -labS-labt-laba-labr-labt-lab -laba-lab -labs-labt-labr-labu-labc-labt-labu-labr-labe-labd-lab -labr-labe-labp-labo-labr-labt-lab -labw-labi-labt-labh-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labs-labm-labo-labk-labe-lab:-labr-labe-labp-labo-labr-labt-lab`-lab;-lab -labf-labi-labl-labl-lab -labt-labh-labe-lab -labg-labe-labn-labe-labr-laba-labt-labe-labd-lab -labf-labi-labl-labe-lab -labi-labn-lab -lab`-labr-labe-labp-labo-labr-labt-labs-lab/-labc-labo-labd-labe-labx-lab--labd-labe-labs-labk-labt-labo-labp-lab--labs-labm-labo-labk-labe-lab/-lab`-lab -laba-labs-lab -labt-labh-labi-labs-lab -labc-labh-labe-labc-labk-labl-labi-labs-labt-lab -labi-labs-lab -labe-labx-labe-labc-labu-labt-labe-labd-lab
--lab--lab -labA-labf-labt-labe-labr-lab -labf-labi-labl-labl-labi-labn-labg-lab -labt-labh-labe-lab -labr-labe-labp-labo-labr-labt-lab,-lab -labr-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labs-labm-labo-labk-labe-lab:-labv-laba-labl-labi-labd-laba-labt-labe-lab`-lab;-lab -labt-labh-labe-lab -labg-labo-laba-labl-lab -labi-labs-lab -labn-labo-labt-lab -labv-lab1-lab--labc-labo-labm-labp-labl-labe-labt-labe-lab -labu-labn-labt-labi-labl-lab -labt-labh-labi-labs-lab -labv-laba-labl-labi-labd-laba-labt-labo-labr-lab -labp-laba-labs-labs-labe-labs-lab -labo-labn-lab -labt-labh-labe-lab -labf-labi-labl-labl-labe-labd-lab -labr-labe-labp-labo-labr-labt-lab.-lab -labI-labf-lab -labm-labu-labl-labt-labi-labp-labl-labe-lab -labr-labe-labp-labo-labr-labt-lab -labt-labe-labm-labp-labl-laba-labt-labe-labs-lab -labe-labx-labi-labs-labt-lab,-lab -labp-laba-labs-labs-lab -labt-labh-labe-lab -labs-labp-labe-labc-labi-labf-labi-labc-lab -labr-labe-labp-labo-labr-labt-lab -labp-laba-labt-labh-lab -labd-labi-labr-labe-labc-labt-labl-laby-lab -labt-labo-lab -labt-labh-labe-lab -labv-laba-labl-labi-labd-laba-labt-labo-labr-lab.-lab
--lab--lab -labF-labi-labn-laba-labl-lab -labv-lab1-lab -labr-labe-laba-labd-labi-labn-labe-labs-labs-lab -labg-laba-labt-labe-lab:-lab -labr-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labr-labe-laba-labd-laby-lab`-lab;-lab -labt-labh-labi-labs-lab -labe-labn-labf-labo-labr-labc-labe-labs-lab -labp-labr-labe-labf-labl-labi-labg-labh-labt-lab,-lab -laba-lab -labv-laba-labl-labi-labd-laba-labt-labe-labd-lab -labf-labi-labl-labl-labe-labd-lab -labd-labe-labs-labk-labt-labo-labp-lab--labs-labm-labo-labk-labe-lab -labr-labe-labp-labo-labr-labt-lab,-lab -laba-labn-labd-lab -laba-lab -labl-labi-labv-labe-lab -labJ-laba-labn-lab -labd-labe-labb-labu-labg-lab -labb-labr-labi-labd-labg-labe-lab -labs-labn-laba-labp-labs-labh-labo-labt-lab -labw-labi-labt-labh-lab -lab`-labc-labl-labi-labe-labn-labt-labE-labr-labr-labo-labr-labs-lab=-lab0-lab`-lab.-lab -labT-labo-lab -laba-labv-labo-labi-labd-lab -labv-laba-labl-labi-labd-laba-labt-labi-labn-labg-lab -labt-labh-labe-lab -labw-labr-labo-labn-labg-lab -labl-laba-labt-labe-labs-labt-lab -labt-labe-labm-labp-labl-laba-labt-labe-lab,-lab -labr-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labr-labe-laba-labd-laby-lab -labr-labe-labp-labo-labr-labt-labs-lab/-labc-labo-labd-labe-labx-lab--labd-labe-labs-labk-labt-labo-labp-lab--labs-labm-labo-labk-labe-lab/-lab<-labf-labi-labl-labl-labe-labd-lab--labr-labe-labp-labo-labr-labt-lab>-lab.-labm-labd-lab`-lab.-lab
--lab--lab -labB-labu-labi-labl-labd-lab -labo-labr-lab -labl-laba-labu-labn-labc-labh-lab -labt-labh-labe-lab -labd-labe-labs-labk-labt-labo-labp-lab -laba-labp-labp-lab:-lab
--lab -lab -lab--lab -labD-labe-labv-lab:-lab -lab`-laby-laba-labr-labn-lab -labd-labe-labv-lab:-labt-laba-labu-labr-labi-lab`-lab
--lab -lab -lab--lab -labO-labr-lab -labf-labu-labl-labl-lab -labb-labu-labi-labl-labd-lab:-lab -lab`-laby-laba-labr-labn-lab -labb-labu-labi-labl-labd-lab:-labt-laba-labu-labr-labi-lab:-labd-laba-labr-labw-labi-labn-lab`-lab -lab(-labu-labn-labi-labv-labe-labr-labs-laba-labl-lab)-lab -labt-labh-labe-labn-lab -labr-labu-labn-lab -labt-labh-labe-lab -lab.-laba-labp-labp-lab
--lab--lab -labA-labf-labt-labe-labr-lab -labt-labh-labe-lab -labr-labe-labp-labo-lab--labl-labo-labc-laba-labl-lab -labd-labe-labs-labk-labt-labo-labp-lab -laba-labp-labp-lab -labi-labs-lab -labr-labu-labn-labn-labi-labn-labg-lab,-lab -labr-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labj-laba-labn-lab:-labd-labe-labb-labu-labg-lab:-labm-labc-labp-lab:-labs-labm-labo-labk-labe-lab`-lab -laba-labn-labd-lab -labp-laba-labs-labt-labe-lab -labt-labh-labe-lab -labf-labr-labe-labs-labh-lab -labo-labu-labt-labp-labu-labt-lab -labi-labn-labt-labo-lab -labt-labh-labe-lab -labr-labe-labp-labo-labr-labt-lab.-lab -labT-labh-labi-labs-lab -labi-labs-lab -labt-labh-labe-lab -laba-labp-labp-lab--labs-labt-laba-labt-labe-lab -labs-labo-labu-labr-labc-labe-lab -labo-labf-lab -labt-labr-labu-labt-labh-lab -labf-labo-labr-lab -laba-labv-labo-labi-labd-labi-labn-labg-lab -laba-labc-labc-labi-labd-labe-labn-labt-laba-labl-lab -labv-laba-labl-labi-labd-laba-labt-labi-labo-labn-lab -laba-labg-laba-labi-labn-labs-labt-lab -labt-labh-labe-lab -labi-labn-labs-labt-laba-labl-labl-labe-labd-lab -lab`-lab/-labA-labp-labp-labl-labi-labc-laba-labt-labi-labo-labn-labs-lab`-lab -labJ-laba-labn-lab -laba-labp-labp-lab -labo-labr-lab -laba-lab -labs-labt-laba-labl-labe-lab -labw-labi-labn-labd-labo-labw-lab.-lab
--lab--lab -labF-labo-labr-lab -laba-labn-lab -labe-labn-labf-labo-labr-labc-labe-labd-lab -labl-labi-labv-labe-lab -labb-labr-labi-labd-labg-labe-lab -labp-labr-labe-labf-labl-labi-labg-labh-labt-lab -labd-labu-labr-labi-labn-labg-lab -labt-labh-labe-lab -labi-labn-labt-labe-labr-laba-labc-labt-labi-labv-labe-lab -labp-laba-labs-labs-lab,-lab -labr-labu-labn-lab -lab`-labR-labE-labQ-labU-labI-labR-labE-lab_-labJ-labA-labN-lab_-labD-labE-labB-labU-labG-lab_-labB-labR-labI-labD-labG-labE-lab=-lab1-lab -laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labp-labr-labe-labf-labl-labi-labg-labh-labt-lab`-lab;-lab -labt-labh-labi-labs-lab -labm-labu-labs-labt-lab -labp-laba-labs-labs-lab -labw-labi-labt-labh-lab -lab`-labc-labl-labi-labe-labn-labt-labE-labr-labr-labo-labr-labs-lab=-lab0-lab`-lab -labb-labe-labf-labo-labr-labe-lab -labt-labh-labe-lab -labm-laba-labn-labu-laba-labl-lab -labs-labm-labo-labk-labe-lab -labr-labe-labs-labu-labl-labt-lab -labc-laba-labn-lab -labc-labo-labu-labn-labt-lab -labt-labo-labw-laba-labr-labd-lab -labv-lab1-lab.-lab
--lab--lab -labI-labn-lab -labt-labh-labe-lab -laba-labp-labp-lab,-lab -labm-laba-labk-labe-lab -labs-labu-labr-labe-lab -laby-labo-labu-lab -labh-laba-labv-labe-lab -laba-labt-lab -labl-labe-laba-labs-labt-lab -labo-labn-labe-lab -labC-labo-labd-labe-labx-lab--labc-laba-labp-laba-labb-labl-labe-lab -labm-labo-labd-labe-labl-lab/-labp-labr-labo-labf-labi-labl-labe-lab -labc-labo-labn-labf-labi-labg-labu-labr-labe-labd-lab -lab(-labo-labr-lab -labl-labe-labt-lab -labi-labt-lab -labd-labe-labf-laba-labu-labl-labt-lab -labt-labo-lab -labt-labh-labe-lab -labb-labu-labi-labl-labt-lab--labi-labn-lab -labc-labo-labd-labe-labx-lab -labp-laba-labt-labh-lab)-lab.-lab
--lab--lab -labH-laba-labv-labe-lab -laba-lab -labg-labi-labt-lab -labr-labe-labp-labo-lab -labo-labp-labe-labn-lab -labf-labo-labr-lab -labr-labe-labv-labi-labe-labw-lab -labt-labe-labs-labt-labi-labn-labg-lab -lab(-labt-labh-labe-lab -lab/-labr-labe-labv-labi-labe-labw-lab -labp-laba-labn-labe-labl-lab)-lab.-lab
--lab
--lab#-lab#-lab -labT-labe-labs-labt-lab -labM-laba-labt-labr-labi-labx-lab -lab(-labd-labo-lab -labi-labn-lab -labo-labr-labd-labe-labr-lab,-lab -labn-labo-labt-labe-lab -labr-labe-labs-labu-labl-labt-labs-lab)-lab
--lab
--lab#-lab#-lab#-lab -lab1-lab.-lab -labB-laba-labs-labi-labc-lab -labL-laba-labu-labn-labc-labh-lab -lab&-lab -labR-labu-labn-labt-labi-labm-labe-lab -labB-labo-labo-labt-lab
--lab--lab -lab[-lab -lab]-lab -labA-labp-labp-lab -labl-laba-labu-labn-labc-labh-labe-labs-lab -labc-labl-labe-laba-labn-labl-laby-lab
--lab--lab -lab[-lab -lab]-lab -labN-labe-labw-lab -labc-labh-laba-labt-lab -labd-labe-labf-laba-labu-labl-labt-labs-lab -labt-labo-lab -labC-labo-labd-labe-labx-lab -labr-labu-labn-labt-labi-labm-labe-lab -labp-laba-labt-labh-lab -lab(-labn-labo-lab -labd-labi-labr-labe-labc-labt-lab -labA-labI-lab -labS-labD-labK-lab -labb-laby-labp-laba-labs-labs-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labC-labo-labd-labe-labx-lab -laba-labp-labp-lab--labs-labe-labr-labv-labe-labr-lab -labp-labr-labo-labc-labe-labs-labs-lab -labs-labt-laba-labr-labt-labs-lab -lab(-labv-labi-labs-labi-labb-labl-labe-lab -labi-labn-lab -labl-labo-labg-labs-lab -labo-labr-lab -labr-labu-labn-labt-labi-labm-labe-lab -labp-laba-labn-labe-labl-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labM-labo-labd-labe-labl-lab -labp-labr-labo-labv-labi-labd-labe-labr-lab -labp-labr-labo-labj-labe-labc-labt-labi-labo-labn-lab -labw-labo-labr-labk-labs-lab -lab(-labe-lab.-labg-lab.-lab -labl-labo-labc-laba-labl-lab -labJ-laba-labn-lab -labp-labr-labo-labv-labi-labd-labe-labr-lab -labo-labr-lab -labr-labe-labm-labo-labt-labe-lab -laba-labp-labp-labe-laba-labr-labs-lab -labi-labn-lab -labC-labo-labd-labe-labx-lab -labc-labo-labn-labf-labi-labg-lab)-lab
--lab
--lab#-lab#-lab#-lab -lab2-lab.-lab -labS-labt-labr-labe-laba-labm-labi-labn-labg-lab -labC-labh-laba-labt-lab -lab(-labh-laba-labp-labp-laby-lab -labp-laba-labt-labh-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labS-labe-labn-labd-lab -laba-lab -labs-labi-labm-labp-labl-labe-lab -labp-labr-labo-labm-labp-labt-lab
--lab--lab -lab[-lab -lab]-lab -labA-labs-labs-labi-labs-labt-laba-labn-labt-lab -labt-labe-labx-labt-lab -labs-labt-labr-labe-laba-labm-labs-lab -labl-labi-labv-labe-lab
--lab--lab -lab[-lab -lab]-lab -labR-labe-laba-labs-labo-labn-labi-labn-labg-lab -lab/-lab -labp-labl-laba-labn-lab -lab/-lab -laba-labc-labt-labi-labv-labi-labt-laby-lab -labe-labv-labe-labn-labt-labs-lab -laba-labp-labp-labe-laba-labr-lab -labi-labf-lab -labm-labo-labd-labe-labl-lab -labe-labm-labi-labt-labs-lab -labt-labh-labe-labm-lab
--lab--lab -lab[-lab -lab]-lab -labT-labo-labk-labe-labn-lab -labu-labs-laba-labg-labe-lab -labu-labp-labd-laba-labt-labe-labs-lab
--lab--lab -lab[-lab -lab]-lab -labT-labu-labr-labn-lab -labc-labo-labm-labp-labl-labe-labt-labe-labs-lab -labw-labi-labt-labh-labo-labu-labt-lab -labc-labr-laba-labs-labh-lab
--lab
--lab#-lab#-lab#-lab -lab3-lab.-lab -labC-labo-labm-labm-laba-labn-labd-lab -lab/-lab -labF-labi-labl-labe-lab -labA-labc-labt-labi-labo-labn-lab -lab+-lab -labA-labp-labp-labr-labo-labv-laba-labl-lab -labF-labl-labo-labw-lab -lab(-labc-labr-labi-labt-labi-labc-laba-labl-lab)-lab
--lab--lab -labA-labs-labk-lab -labt-labh-labe-lab -labm-labo-labd-labe-labl-lab -labt-labo-lab -labd-labo-lab -labs-labo-labm-labe-labt-labh-labi-labn-labg-lab -labt-labh-laba-labt-lab -labt-labr-labi-labg-labg-labe-labr-labs-lab -laba-lab -labc-labo-labm-labm-laba-labn-labd-lab -lab(-labe-lab.-labg-lab.-lab -lab"-labl-labi-labs-labt-lab -labf-labi-labl-labe-labs-lab -labi-labn-lab -labc-labu-labr-labr-labe-labn-labt-lab -labd-labi-labr-lab"-lab,-lab -lab"-labw-labr-labi-labt-labe-lab -laba-lab -labt-labe-labs-labt-lab -labf-labi-labl-labe-lab"-lab,-lab -lab"-labr-labu-labn-lab -labl-labs-lab -lab--labl-laba-lab"-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labA-labp-labp-labr-labo-labv-laba-labl-lab -labd-labi-laba-labl-labo-labg-lab -labo-labr-lab -labi-labn-labl-labi-labn-labe-lab -laba-labp-labp-labr-labo-labv-laba-labl-lab -labU-labI-lab -laba-labp-labp-labe-laba-labr-labs-lab
--lab--lab -lab[-lab -lab]-lab -labY-labo-labu-lab -labc-laba-labn-lab -lab*-lab*-labA-labp-labp-labr-labo-labv-labe-lab*-lab*-lab -labâ-lab€-lab”-lab -labc-labo-labm-labm-laba-labn-labd-lab -labe-labx-labe-labc-labu-labt-labe-labs-lab,-lab -labo-labu-labt-labp-labu-labt-lab -labs-labt-labr-labe-laba-labm-labs-lab -labb-laba-labc-labk-lab -labi-labn-labt-labo-lab -labc-labh-laba-labt-lab -lab+-lab -labr-labu-labn-labt-labi-labm-labe-lab -labp-laba-labn-labe-labl-lab
--lab--lab -lab[-lab -lab]-lab -labY-labo-labu-lab -labc-laba-labn-lab -lab*-lab*-labA-labp-labp-labr-labo-labv-labe-lab -labf-labo-labr-lab -labs-labe-labs-labs-labi-labo-labn-lab*-lab*-lab -labâ-lab€-lab”-lab -labs-labu-labb-labs-labe-labq-labu-labe-labn-labt-lab -labs-labi-labm-labi-labl-laba-labr-lab -laba-labc-labt-labi-labo-labn-labs-lab -laba-labu-labt-labo-lab--laba-labp-labp-labr-labo-labv-labe-lab -labi-labn-lab -labt-labh-labi-labs-lab -labc-labh-laba-labt-lab
--lab--lab -lab[-lab -lab]-lab -labY-labo-labu-lab -labc-laba-labn-lab -lab*-lab*-labD-labe-labn-laby-lab*-lab*-lab -labâ-lab€-lab”-lab -laba-labc-labt-labi-labo-labn-lab -labi-labs-lab -labr-labe-labj-labe-labc-labt-labe-labd-lab -labc-labl-labe-laba-labn-labl-laby-lab,-lab -labm-labo-labd-labe-labl-lab -labi-labs-lab -labn-labo-labt-labi-labf-labi-labe-labd-lab,-lab -labc-labh-laba-labt-lab -labc-labo-labn-labt-labi-labn-labu-labe-labs-lab
--lab--lab -lab[-lab -lab]-lab -labC-labo-labm-labm-laba-labn-labd-lab -labo-labu-labt-labp-labu-labt-lab -laba-labp-labp-labe-laba-labr-labs-lab -labb-labo-labt-labh-lab -labi-labn-lab -labc-labh-laba-labt-lab -labb-labu-labb-labb-labl-labe-labs-lab -laba-labn-labd-lab -labi-labn-lab -labt-labh-labe-lab -labR-labu-labn-labt-labi-labm-labe-lab -labF-labS-lab/-labP-labr-labo-labc-labe-labs-labs-lab -labp-laba-labn-labe-labl-lab -lab(-labt-labe-labr-labm-labi-labn-laba-labl-lab--labs-labt-laby-labl-labe-lab -labi-labf-lab -labi-labm-labp-labl-labe-labm-labe-labn-labt-labe-labd-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labF-labi-labl-labe-lab -labc-labh-laba-labn-labg-labe-labs-lab -lab(-labi-labf-lab -laba-labn-laby-lab)-lab -labs-labh-labo-labw-lab -labi-labn-lab -labc-labh-laba-labt-lab -laba-labn-labd-lab -labd-labo-lab -labn-labo-labt-lab -labc-labo-labr-labr-labu-labp-labt-lab -labt-labh-labe-lab -labr-labe-labv-labi-labe-labw-lab -labd-labi-labf-labf-lab -labp-laba-labn-labe-labl-lab
--lab
--lab#-lab#-lab#-lab -lab4-lab.-lab -labR-labe-labv-labi-labe-labw-lab -labP-laba-labn-labe-labl-lab -labI-labn-labt-labe-labg-labr-laba-labt-labi-labo-labn-lab
--lab--lab -labM-laba-labk-labe-lab -laba-lab -labc-labh-laba-labn-labg-labe-lab -labv-labi-laba-lab -labC-labo-labd-labe-labx-lab -lab(-labe-lab.-labg-lab.-lab -laba-labs-labk-lab -labi-labt-lab -labt-labo-lab -labe-labd-labi-labt-lab -laba-lab -labf-labi-labl-labe-lab)-lab
--lab--lab -labO-labp-labe-labn-lab -labt-labh-labe-lab -labR-labe-labv-labi-labe-labw-lab -labp-laba-labn-labe-labl-lab -lab(-labo-labr-lab -lab/-labr-labe-labv-labi-labe-labw-lab -labr-labo-labu-labt-labe-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labD-labe-labt-laba-labc-labh-labe-labd-lab -labr-labe-labv-labi-labe-labw-lab -labd-labo-labe-labs-lab -lab*-lab*-labn-labo-labt-lab*-lab*-lab -labo-labv-labe-labr-labw-labr-labi-labt-labe-lab -labt-labh-labe-lab -laba-labu-labt-labh-labo-labr-labi-labt-laba-labt-labi-labv-labe-lab -labg-labi-labt-lab -labd-labi-labf-labf-lab
--lab--lab -lab[-lab -lab]-lab -labY-labo-labu-lab -labc-laba-labn-lab -labc-labo-labm-labm-labi-labt-lab -lab/-lab -labc-labr-labe-laba-labt-labe-lab -labP-labR-lab -labf-labr-labo-labm-lab -labt-labh-labe-lab -labp-laba-labn-labe-labl-lab -laba-labf-labt-labe-labr-lab -labC-labo-labd-labe-labx-lab -labc-labh-laba-labn-labg-labe-labs-lab
--lab--lab -lab[-lab -lab]-lab -labD-labi-labf-labf-labs-lab -labl-labo-labo-labk-lab -labc-labo-labr-labr-labe-labc-labt-lab
--lab
--lab#-lab#-lab#-lab -lab5-lab.-lab -labR-labu-labn-labt-labi-labm-labe-lab -lab/-lab -labP-labr-labo-labc-labe-labs-labs-lab -lab/-lab -labF-labS-lab -labP-laba-labn-labe-labl-lab
--lab--lab -labW-labh-labi-labl-labe-lab -labr-labu-labn-labn-labi-labn-labg-lab -labc-labo-labm-labm-laba-labn-labd-labs-lab -labo-labr-lab -labf-labi-labl-labe-lab -labo-labp-labs-lab:-lab
--lab--lab -lab[-lab -lab]-lab -labR-labu-labn-labt-labi-labm-labe-lab -labF-labS-lab/-labP-labr-labo-labc-labe-labs-labs-lab -labp-laba-labn-labe-labl-lab -labs-labh-labo-labw-labs-lab -laba-labc-labt-labi-labv-labe-lab -labh-laba-labn-labd-labl-labe-labs-lab
--lab--lab -lab[-lab -lab]-lab -labY-labo-labu-lab -labc-laba-labn-lab -labi-labn-labt-labe-labr-laba-labc-labt-lab -lab(-labs-labt-labd-labi-labn-lab,-lab -labk-labi-labl-labl-lab,-lab -labr-labe-labs-labi-labz-labe-lab -labi-labf-lab -labt-labe-labr-labm-labi-labn-laba-labl-lab -labU-labI-lab -labi-labs-lab -labt-labh-labe-labr-labe-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labE-labv-labe-labn-labt-labs-lab -lab(-labs-labp-laba-labw-labn-lab,-lab -labo-labu-labt-labp-labu-labt-labD-labe-labl-labt-laba-lab,-lab -labe-labx-labi-labt-labe-labd-lab)-lab -laba-labr-labe-lab -labv-labi-labs-labi-labb-labl-labe-lab -laba-labn-labd-lab -labu-labs-labe-labf-labu-labl-lab
--lab
--lab#-lab#-lab#-lab -lab6-lab.-lab -labM-labC-labP-lab -lab/-lab -labA-labc-labc-labo-labu-labn-labt-lab -lab/-lab -labU-labn-labs-labu-labp-labp-labo-labr-labt-labe-labd-lab -labS-labt-laba-labt-labe-labs-lab
--lab--lab -labO-labp-labe-labn-lab -labt-labh-labe-lab -labM-labC-labP-lab -labb-labl-labo-labc-labk-lab
--lab--lab -lab[-lab -lab]-lab -labS-labt-laba-labt-labu-labs-lab -labl-labo-laba-labd-labs-lab -labo-labr-lab -labs-labh-labo-labw-labs-lab -labc-labl-labe-laba-labr-lab -labe-labr-labr-labo-labr-lab
--lab--lab -labT-labr-laby-lab -laba-lab -labt-labo-labo-labl-lab -labc-laba-labl-labl-lab -labi-labf-lab -labp-labo-labs-labs-labi-labb-labl-labe-lab
--lab--lab -lab[-lab -lab]-lab -labA-labc-labc-labo-labu-labn-labt-lab -labp-laba-labn-labe-labl-lab -labs-labh-labo-labw-labs-lab -labu-labn-laba-labu-labt-labh-lab/-laba-labu-labt-labh-lab -labs-labt-laba-labt-labe-lab -labw-labi-labt-labh-labo-labu-labt-lab -labb-labr-labe-laba-labk-labi-labn-labg-lab -labc-labh-laba-labt-lab
--lab--lab -lab[-lab -lab]-lab -labP-labr-labo-labt-labo-lab -labf-laba-labl-labl-labb-laba-labc-labk-lab -lab(-labi-labf-lab -laba-labn-laby-lab -labp-labr-labo-labf-labi-labl-labe-lab -labu-labs-labe-labs-lab -labi-labt-lab)-lab -labs-labh-labo-labw-labs-lab -labe-labx-labp-labl-labi-labc-labi-labt-lab -lab"-labu-labn-labs-labu-labp-labp-labo-labr-labt-labe-labd-lab"-lab -labm-labe-labs-labs-laba-labg-labi-labn-labg-lab -labf-labo-labr-lab -laba-labp-labp-lab--labs-labe-labr-labv-labe-labr-lab--labo-labn-labl-laby-lab -labc-labo-labn-labt-labr-labo-labl-labs-lab
--lab
--lab#-lab#-lab#-lab -lab7-lab.-lab -labP-labl-labu-labg-labi-labn-labs-lab -lab/-lab -labS-labk-labi-labl-labl-labs-lab -lab/-lab -labM-laba-labr-labk-labe-labt-labp-labl-laba-labc-labe-lab -lab(-labi-labf-lab -labm-labo-labd-labu-labl-laba-labr-labi-labz-labe-labd-lab)-lab
--lab--lab -labB-labr-labo-labw-labs-labe-lab -labp-labl-labu-labg-labi-labn-labs-lab/-labs-labk-labi-labl-labl-labs-lab
--lab--lab -lab[-lab -lab]-lab -labI-labn-labs-labt-laba-labl-labl-lab/-labu-labn-labi-labn-labs-labt-laba-labl-labl-lab -labo-labr-lab -labc-labo-labn-labf-labi-labg-lab -laba-labc-labt-labi-labo-labn-labs-lab -labw-labo-labr-labk-lab -labo-labr-lab -labg-labi-labv-labe-lab -laba-labc-labt-labi-labo-labn-laba-labb-labl-labe-lab -labf-labe-labe-labd-labb-laba-labc-labk-lab
--lab--lab -labM-laba-labr-labk-labe-labt-labp-labl-laba-labc-labe-lab -labc-laba-labr-labd-labs-lab -labl-labo-laba-labd-lab
--lab
--lab#-lab#-lab#-lab -lab8-lab.-lab -labT-labh-labr-labe-laba-labd-lab -labP-labe-labr-labs-labi-labs-labt-labe-labn-labc-labe-lab -lab&-lab -labR-labe-labs-labu-labm-labe-lab
--lab--lab -labS-labt-laba-labr-labt-lab -laba-lab -labc-labh-laba-labt-lab,-lab -labd-labo-lab -labs-labo-labm-labe-lab -labw-labo-labr-labk-lab
--lab--lab -labC-labl-labo-labs-labe-lab/-labr-labe-labo-labp-labe-labn-lab -labt-labh-labe-lab -laba-labp-labp-lab -labo-labr-lab -labs-labw-labi-labt-labc-labh-lab -labt-labh-labr-labe-laba-labd-labs-lab
--lab--lab -lab[-lab -lab]-lab -labC-laba-labn-lab -labr-labe-labs-labu-labm-labe-lab -labt-labh-labe-lab -labC-labo-labd-labe-labx-lab -labt-labh-labr-labe-laba-labd-lab -lab(-labm-laba-labp-labp-labe-labd-lab -labi-labd-lab -labi-labs-lab -labr-labe-labm-labe-labm-labb-labe-labr-labe-labd-lab)-lab
--lab--lab -labH-labi-labs-labt-labo-labr-laby-lab -labr-labe-labp-labl-laba-laby-labs-lab -labc-labo-labr-labr-labe-labc-labt-labl-laby-lab
--lab
--lab#-lab#-lab#-lab -lab9-lab.-lab -labC-labl-labe-laba-labn-lab -labS-labh-labu-labt-labd-labo-labw-labn-lab
--lab--lab -labC-labl-labo-labs-labe-lab -labt-labh-labe-lab -labc-labh-laba-labt-lab -lab/-lab -laba-labp-labp-lab
--lab--lab -lab[-lab -lab]-lab -labC-labo-labd-labe-labx-lab -laba-labp-labp-lab--labs-labe-labr-labv-labe-labr-lab -labp-labr-labo-labc-labe-labs-labs-lab -labi-labs-lab -labt-labe-labr-labm-labi-labn-laba-labt-labe-labd-lab -labc-labl-labe-laba-labn-labl-laby-lab -lab(-labn-labo-lab -labz-labo-labm-labb-labi-labe-lab)-lab
--lab--lab -lab[-lab -lab]-lab -labN-labo-lab -labc-labr-laba-labs-labh-labe-labs-lab -labo-labr-lab -labl-labe-laba-labk-labe-labd-lab -labs-labt-laba-labt-labe-lab -labi-labn-lab -labl-labo-labg-labs-lab
--lab--lab -lab[-lab -lab]-lab -labN-labe-labx-labt-lab -labl-laba-labu-labn-labc-labh-lab -labi-labs-lab -labf-labr-labe-labs-labh-lab
--lab
--lab#-lab#-lab#-lab -lab1-lab0-lab.-lab -labR-labe-labg-labr-labe-labs-labs-labi-labo-labn-lab -lab/-lab -labE-labd-labg-labe-lab
--lab--lab -labT-labr-laby-lab -laba-lab -labl-labo-labc-laba-labl-lab -labm-labo-labd-labe-labl-lab -labt-labh-laba-labt-lab -labm-laba-laby-lab -labn-labo-labt-lab -labs-labu-labp-labp-labo-labr-labt-lab -labt-labo-labo-labl-labs-lab -lab(-labs-labh-labo-labu-labl-labd-lab -labf-laba-labi-labl-lab -labe-laba-labr-labl-laby-lab -labw-labi-labt-labh-lab -labg-labo-labo-labd-lab -labm-labe-labs-labs-laba-labg-labe-lab)-lab
--lab--lab -labM-labu-labl-labt-labi-labp-labl-labe-lab -labr-laba-labp-labi-labd-lab -labt-labu-labr-labn-labs-lab
--lab--lab -labI-labn-labt-labe-labr-labr-labu-labp-labt-lab -laba-lab -labr-labu-labn-labn-labi-labn-labg-lab -labt-labu-labr-labn-lab
--lab--lab -labR-laba-labw-lab -labR-labP-labC-lab -labp-laba-labn-labe-labl-lab -lab(-labe-labx-labp-labe-labr-labt-lab -labm-labo-labd-labe-lab)-lab -labâ-lab€-lab”-lab -labc-laba-labl-labl-lab -laba-lab -labc-labo-labu-labp-labl-labe-lab -labm-labe-labt-labh-labo-labd-labs-lab -labm-laba-labn-labu-laba-labl-labl-laby-lab
--lab
--lab#-lab#-lab -labE-labv-labi-labd-labe-labn-labc-labe-lab -labt-labo-lab -labC-laba-labp-labt-labu-labr-labe-lab
--lab--lab -labS-labc-labr-labe-labe-labn-labs-labh-labo-labt-labs-lab -labo-labf-lab:-lab
--lab -lab -lab--lab -labA-labp-labp-labr-labo-labv-laba-labl-lab -labd-labi-laba-labl-labo-labg-lab -labi-labn-lab -laba-labc-labt-labi-labo-labn-lab
--lab -lab -lab--lab -labS-labt-labr-labe-laba-labm-labi-labn-labg-lab -labc-labh-laba-labt-lab -labw-labi-labt-labh-lab -labc-labo-labm-labm-laba-labn-labd-lab -labo-labu-labt-labp-labu-labt-lab
--lab -lab -lab--lab -labR-labe-labv-labi-labe-labw-lab -labp-laba-labn-labe-labl-lab -laba-labf-labt-labe-labr-lab -labC-labo-labd-labe-labx-lab -labe-labd-labi-labt-lab
--lab -lab -lab--lab -labR-labu-labn-labt-labi-labm-labe-lab -labt-labe-labr-labm-labi-labn-laba-labl-lab/-labp-labr-labo-labc-labe-labs-labs-lab -labp-laba-labn-labe-labl-lab
--lab--lab -labC-labo-labn-labs-labo-labl-labe-lab -lab/-lab -labl-labo-labg-lab -labe-labx-labc-labe-labr-labp-labt-labs-lab -labf-labo-labr-lab -labp-labr-labo-labc-labe-labs-labs-lab -labs-labt-laba-labr-labt-lab -lab+-lab -labe-labv-labe-labn-labt-labs-lab
--lab--lab -labF-labr-labe-labs-labh-lab -lab`-laby-laba-labr-labn-lab -labj-laba-labn-lab:-labd-labe-labb-labu-labg-lab:-labm-labc-labp-lab:-labs-labm-labo-labk-labe-lab`-lab -labo-labu-labt-labp-labu-labt-lab -labs-labh-labo-labw-labi-labn-labg-lab -labt-labh-labe-lab -labr-labo-labu-labt-labe-lab -laba-labn-labd-lab -labs-labe-labl-labe-labc-labt-labe-labd-lab -labp-labr-labo-labv-labi-labd-labe-labr-lab/-labm-labo-labd-labe-labl-lab
--lab--lab -labT-labh-labe-lab -labs-laba-labm-labe-lab -labb-labr-labi-labd-labg-labe-lab -labo-labu-labt-labp-labu-labt-lab -labm-labu-labs-labt-lab -labs-labh-labo-labw-lab -lab`-labc-labl-labi-labe-labn-labt-labE-labr-labr-labo-labr-labs-lab=-lab0-lab`-lab
--lab--lab -labA-labn-laby-lab -labe-labr-labr-labo-labr-lab -labm-labe-labs-labs-laba-labg-labe-labs-lab -labo-labr-lab -labu-labn-labe-labx-labp-labe-labc-labt-labe-labd-lab -labb-labe-labh-laba-labv-labi-labo-labr-labs-lab
--lab--lab -labT-labh-labe-lab -labe-labx-laba-labc-labt-lab -labC-labo-labd-labe-labx-lab -labb-labi-labn-laba-labr-laby-lab -labv-labe-labr-labs-labi-labo-labn-lab -labs-labh-labo-labw-labn-lab -lab(-lab`-lab--labV-lab`-lab)-lab
--lab
--lab#-lab#-lab -labH-labo-labw-lab -labt-labo-lab -labR-labe-labc-labo-labr-labd-lab
--labW-labh-labe-labn-lab -labd-labo-labn-labe-lab,-lab -labr-labe-labp-labl-laby-lab -labw-labi-labt-labh-lab:-lab
--lab--lab -labP-laba-labs-labs-lab -lab/-lab -labF-laba-labi-labl-lab -labp-labe-labr-lab -labi-labt-labe-labm-lab -laba-labb-labo-labv-labe-lab
--lab--lab -labK-labe-laby-lab -labs-labc-labr-labe-labe-labn-labs-labh-labo-labt-labs-lab -lab(-labo-labr-lab -labd-labe-labs-labc-labr-labi-labb-labe-lab -labt-labh-labe-labm-lab)-lab
--lab--lab -labA-labn-laby-lab -labn-labe-labw-lab -labb-labu-labg-labs-lab -labf-labo-labu-labn-labd-lab
--lab--lab -labT-labh-labe-labn-lab -labw-labe-lab -labw-labi-labl-labl-lab:-lab
--lab -lab -lab--lab -labU-labp-labd-laba-labt-labe-lab -lab`-labC-labO-labD-labE-labX-lab_-labC-labL-labO-labN-labE-lab_-labP-labA-labR-labI-labT-labY-lab.-labm-labd-lab`-lab -labw-labi-labt-labh-lab -labt-labh-labe-lab -labr-labe-laba-labl-lab -labd-labe-labs-labk-labt-labo-labp-lab -labe-labv-labi-labd-labe-labn-labc-labe-lab
--lab -lab -lab--lab -labR-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labs-labm-labo-labk-labe-lab:-labv-laba-labl-labi-labd-laba-labt-labe-lab`-lab -laba-labg-laba-labi-labn-labs-labt-lab -labt-labh-labe-lab -labf-labi-labl-labl-labe-labd-lab -labr-labe-labp-labo-labr-labt-lab
--lab -lab -lab--lab -labR-labu-labn-lab -lab`-laby-laba-labr-labn-lab -labc-labo-labd-labe-labx-lab:-labd-labe-labs-labk-labt-labo-labp-lab:-labr-labe-laba-labd-laby-lab -labr-labe-labp-labo-labr-labt-labs-lab/-labc-labo-labd-labe-labx-lab--labd-labe-labs-labk-labt-labo-labp-lab--labs-labm-labo-labk-labe-lab/-lab<-labf-labi-labl-labl-labe-labd-lab--labr-labe-labp-labo-labr-labt-lab>-lab.-labm-labd-lab`-lab -laba-labs-lab -labt-labh-labe-lab -labf-labi-labn-laba-labl-lab -labv-lab1-lab -labg-laba-labt-labe-lab
--lab -lab -lab--lab -labA-labd-labv-laba-labn-labc-labe-lab -labt-labo-lab -labp-labr-labo-labd-labu-labc-labt-lab -labp-labo-labl-labi-labs-labh-lab -lab(-labM-labi-labl-labe-labs-labt-labo-labn-labe-lab -lab2-lab -lab+-lab -lab4-lab+-lab)-lab
--lab
--lab#-lab#-lab -labN-labo-labt-labe-labs-lab -labf-labo-labr-lab -labt-labh-labi-labs-lab -labp-laba-labs-labs-lab
--lab--lab -labF-labo-labc-labu-labs-lab -labo-labn-lab -lab*-lab*-labh-laba-labp-labp-laby-lab -labp-laba-labt-labh-lab -lab+-lab -laba-labp-labp-labr-labo-labv-laba-labl-lab*-lab*-lab -labf-labi-labr-labs-labt-lab -labâ-lab€-lab”-lab -labt-labh-laba-labt-lab'-labs-lab -labt-labh-labe-lab -labb-labi-labg-labg-labe-labs-labt-lab -labd-labe-labl-labt-laba-lab -labf-labr-labo-labm-lab -labm-labo-labc-labk-lab -labs-labm-labo-labk-labe-lab.-lab
--lab--lab -labB-labr-labo-labw-labs-labe-labr-lab -labp-labr-labe-labv-labi-labe-labw-lab -lab(-lab`-laby-laba-labr-labn-lab -labw-labo-labr-labk-labs-labp-laba-labc-labe-lab -lab@-labj-laba-labn-labh-labq-lab/-labw-labe-labb-lab--laba-labp-labp-lab -labp-labr-labe-labv-labi-labe-labw-lab`-lab)-lab -labi-labs-lab -labu-labs-labe-labf-labu-labl-lab -labf-labo-labr-lab -labU-labI-lab -labl-laba-laby-labo-labu-labt-lab -labb-labu-labt-lab -lab*-lab*-labw-labi-labl-labl-lab*-lab*-lab -labs-labh-labo-labw-lab -labT-laba-labu-labr-labi-lab -labi-labn-labv-labo-labk-labe-lab -labe-labr-labr-labo-labr-labs-lab -labâ-lab€-lab”-lab -labi-labg-labn-labo-labr-labe-lab -labt-labh-labo-labs-labe-lab.-lab
--lab--lab -labU-labs-labe-lab -labt-labh-labe-lab -labm-labo-labd-labu-labl-laba-labr-lab -labp-laba-labn-labe-labl-labs-lab -lab(-labA-labc-labc-labo-labu-labn-labt-labP-laba-labn-labe-labl-lab,-lab -labM-labc-labp-labP-laba-labn-labe-labl-lab,-lab -labe-labt-labc-lab.-lab)-lab -labt-labh-laba-labt-lab -labw-labe-labr-labe-lab -labj-labu-labs-labt-lab -laba-labd-labd-labe-labd-lab;-lab -labt-labe-labs-labt-lab -labt-labh-laba-labt-lab -labt-labh-labe-lab -labs-labp-labl-labi-labt-lab -labd-labi-labd-labn-lab'-labt-lab -labb-labr-labe-laba-labk-lab -laba-labn-laby-labt-labh-labi-labn-labg-lab.-lab
--lab
--labG-labo-labo-labd-lab -labl-labu-labc-labk-lab -labâ-lab€-lab”-lab -labt-labh-labi-labs-lab -labi-labs-lab -labt-labh-labe-lab -labp-laba-labs-labs-lab -labt-labh-laba-labt-lab -labt-labu-labr-labn-labs-lab -lab"-labp-labr-labe-labv-labi-labe-labw-lab"-lab -labi-labn-labt-labo-lab -labs-labo-labm-labe-labt-labh-labi-labn-labg-lab -labw-labe-lab -labc-laba-labn-lab -laba-labc-labt-labu-laba-labl-labl-laby-lab -labs-labh-labi-labp-lab -laba-lab -labd-labe-labm-labo-lab -labo-labf-lab.-lab
--lab
+# Parlo Codex Runtime â€” Desktop Smoke Checklist
+
+**Purpose:** Verify real end-to-end Codex app-server behavior in the built Tauri desktop app (things browser preview and unit tests cannot cover).
+
+## Automated prerequisites (run once)
+
+- Ensure Codex desktop binary is at `/Applications/Codex.app/Contents/Resources/codex` (or set `CODEX_BINARY`)
+- Run `yarn install` and any `download:bin` / `build:cli` / `build:mlx-server` needed for Tauri
+- Run `yarn codex:desktop:preflight`
+- Start a structured report with `yarn codex:desktop:smoke:report`; fill the generated file under `reports/codex-desktop-smoke/`
+- After filling the report, run `yarn codex:desktop:smoke:validate` (or pass the report path)
+- Final v1 readiness gate: `yarn codex:desktop:ready`
+- Build or launch the desktop app:
+  - Dev: `yarn dev:tauri`
+  - Or full build: `yarn build:tauri:darwin` (universal) then run the .app
+- After the repo-local desktop app is running, run `yarn parlo:debug:mcp:smoke` and paste the fresh output into the report. This is the app-state source of truth.
+- For an enforced live bridge preflight during the interactive pass, run `REQUIRE_PARLO_DEBUG_BRIDGE=1 yarn codex:desktop:preflight` (or legacy `REQUIRE_JAN_DEBUG_BRIDGE=1`); this must pass with `clientErrors=0`.
+- In the app, make sure you have at least one Codex-capable model/profile configured (or let it default to the built-in codex path).
+- Have a git repo open for review testing (the /review panel).
+
+## Test Matrix (do in order, note results)
+
+### 1. Basic Launch & Runtime Boot
+- [ ] App launches cleanly
+- [ ] New chat defaults to Codex runtime path (no direct AI SDK bypass)
+- [ ] Codex app-server process starts (visible in logs or runtime panel)
+- [ ] Model provider projection works (e.g. local Parlo provider or remote appears in Codex config)
+
+### 2. Streaming Chat (happy path)
+- [ ] Send a simple prompt
+- [ ] Assistant text streams live
+- [ ] Reasoning / plan / activity events appear if model emits them
+- [ ] Token usage updates
+- [ ] Turn completes without crash
+
+### 3. Command / File Action + Approval Flow (critical)
+- Ask the model to do something that triggers a command (e.g. "list files in current dir", "write a test file", "run ls -la")
+- [ ] Approval dialog or inline approval UI appears
+- [ ] You can **Approve** â†’ command executes, output streams back into chat + runtime panel
+- [ ] You can **Approve for session** â†’ subsequent similar actions auto-approve in this chat
+- [ ] You can **Deny** â†’ action is rejected cleanly, model is notified, chat continues
+- [ ] Command output appears both in chat bubbles and in the Runtime FS/Process panel (terminal-style if implemented)
+- [ ] File changes (if any) show in chat and do not corrupt the review diff panel
+
+### 4. Review Panel Integration
+- Make a change via Codex (e.g. ask it to edit a file)
+- Open the Review panel (or /review route)
+- [ ] Detached review does **not** overwrite the authoritative git diff
+- [ ] You can commit / create PR from the panel after Codex changes
+- [ ] Diffs look correct
+
+### 5. Runtime / Process / FS Panel
+- While running commands or file ops:
+- [ ] Runtime FS/Process panel shows active handles
+- [ ] You can interact (stdin, kill, resize if terminal UI is there)
+- [ ] Events (spawn, outputDelta, exited) are visible and useful
+
+### 6. MCP / Account / Unsupported States
+- Open the MCP block
+- [ ] Status loads or shows clear error
+- Try a tool call if possible
+- [ ] Account panel shows unauth/auth state without breaking chat
+- [ ] Proto fallback (if any profile uses it) shows explicit "unsupported" messaging for app-server-only controls
+
+### 7. Plugins / Skills / Marketplace (if modularized)
+- Browse plugins/skills
+- [ ] Install/uninstall or config actions work or give actionable feedback
+- Marketplace cards load
+
+### 8. Thread Persistence & Resume
+- Start a chat, do some work
+- Close/reopen the app or switch threads
+- [ ] Can resume the Codex thread (mapped id is remembered)
+- History replays correctly
+
+### 9. Clean Shutdown
+- Close the chat / app
+- [ ] Codex app-server process is terminated cleanly (no zombie)
+- [ ] No crashes or leaked state in logs
+
+## Report workflow
+
+1. `yarn codex:desktop:smoke:report`
+2. Fill checkboxes and evidence in `reports/codex-desktop-smoke/`
+3. `yarn codex:desktop:smoke:validate --latest`
+4. `yarn codex:desktop:ready`
+5. Paste `yarn parlo:debug:mcp:smoke` output (Parlo debug bridge / Jan debug bridge snapshot)
+
+Also see `MULTI_PROVIDER_SMOKE.md` for multi-provider automated gates.
