@@ -40,6 +40,9 @@ export {
   buildCodexSessionOptions,
   resolveCodexSessionOptions,
 } from './chat-backend'
+/** Organizational barrels — full facade still re-exported from chat-backend below. */
+export * as codexProduct from './chat-backend-product'
+export * as codexAdvanced from './chat-backend-advanced'
 export {
   buildCodexMcpServersConfig,
   buildCodexMcpServersToml,
