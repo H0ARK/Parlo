@@ -1,21 +1,33 @@
 import { invoke } from '@tauri-apps/api/core'
 import { CodexAppServerClient } from './api'
 import { TauriCodexProcessSpawner } from './tauri-process'
+import { getConfigLeaseRegistry } from './config-lease'
 import type { CodexInitializeResult, CodexSessionOptions } from './types'
 
 export const GLOBAL_CODEX_APP_SERVER_SESSION_ID = 'Parlo-global-codex-app-server'
+
+/** Error code / message for in-flight turns aborted by process restart (KD25). */
+export const CODEX_RESTART_ERROR =
+  'Codex app-server restarted; regenerate the last message to continue.'
 
 type GlobalCodexRuntimeState = {
   client: CodexAppServerClient
   processSignature: string
   initPromise: Promise<CodexInitializeResult>
+  lastConfigHash?: string
 }
 
 let globalRuntime: GlobalCodexRuntimeState | null = null
 const threadRuntimeSignatures = new Map<string, string>()
-let ensureChain: Promise<CodexAppServerClient> = Promise.resolve(
-  null as unknown as CodexAppServerClient
-)
+
+/**
+ * Single exclusive chain for write/reload/spawn/shutdown (DESIGN_CODEX_HOST §3.2.1).
+ * Replaces dual ensureChain + unguarded apply.
+ */
+let runtimeMutationChain: Promise<unknown> = Promise.resolve()
+
+/** Active turn abort controllers — aborted before process restart. */
+const activeTurnControllers = new Map<string, AbortController>()
 
 export function buildCodexProcessSignature(options: CodexSessionOptions): string {
   // The Codex app-server reads provider env vars from its process environment.
@@ -79,6 +91,46 @@ export function getGlobalCodexClientOrNull(): CodexAppServerClient | null {
   return globalRuntime?.client ?? null
 }
 
+/**
+ * Run exclusive runtime mutation (spawn, config write, reload, shutdown).
+ */
+export function runExclusiveRuntimeMutation<T>(fn: () => Promise<T>): Promise<T> {
+  const run = runtimeMutationChain.then(fn, fn)
+  runtimeMutationChain = run.then(
+    () => undefined,
+    () => undefined
+  )
+  return run
+}
+
+export function registerActiveTurnController(
+  threadId: string,
+  controller: AbortController
+): void {
+  activeTurnControllers.set(threadId, controller)
+  getConfigLeaseRegistry().markActiveTurn(threadId, true)
+}
+
+export function clearActiveTurnController(threadId: string): void {
+  activeTurnControllers.delete(threadId)
+  getConfigLeaseRegistry().markActiveTurn(threadId, false)
+}
+
+async function failInflightTurnsBeforeRestart(): Promise<void> {
+  for (const [threadId, controller] of activeTurnControllers) {
+    try {
+      controller.abort(CODEX_RESTART_ERROR)
+    } catch {
+      // ignore
+    }
+    const client = globalRuntime?.client
+    if (client) {
+      await client.interruptTurn(threadId).catch(() => {})
+    }
+  }
+  activeTurnControllers.clear()
+}
+
 async function ensureGlobalCodexAppServerInternal(
   spawnOptions: CodexSessionOptions
 ): Promise<CodexAppServerClient> {
@@ -95,12 +147,14 @@ async function ensureGlobalCodexAppServerInternal(
     if (globalRuntime.client.isRunning()) {
       return globalRuntime.client
     }
+    await failInflightTurnsBeforeRestart()
     await globalRuntime.client.shutdownCodex().catch(() => {})
     globalRuntime = null
     threadRuntimeSignatures.clear()
   }
 
   if (globalRuntime) {
+    await failInflightTurnsBeforeRestart()
     await globalRuntime.client.shutdownCodex()
     globalRuntime = null
     threadRuntimeSignatures.clear()
@@ -127,14 +181,9 @@ async function ensureGlobalCodexAppServerInternal(
 export async function ensureGlobalCodexAppServer(
   spawnOptions: CodexSessionOptions
 ): Promise<CodexAppServerClient> {
-  const next = ensureChain.then(
-    () => ensureGlobalCodexAppServerInternal(spawnOptions),
-    () => ensureGlobalCodexAppServerInternal(spawnOptions)
+  return runExclusiveRuntimeMutation(() =>
+    ensureGlobalCodexAppServerInternal(spawnOptions)
   )
-  ensureChain = next.catch(
-    () => null as unknown as CodexAppServerClient
-  )
-  return next
 }
 
 export async function applyCodexRuntimeOptions(
@@ -145,28 +194,58 @@ export async function applyCodexRuntimeOptions(
   const runtimeSignature = buildCodexRuntimeSignature(options)
   if (threadRuntimeSignatures.get(threadId) === runtimeSignature) return
 
-  await writeCodexConfigToDisk(options)
-  await client.refreshMcpServers().catch(() => {})
-  await client.reloadUserConfig().catch(() => {})
-  threadRuntimeSignatures.set(threadId, runtimeSignature)
+  await runExclusiveRuntimeMutation(async () => {
+    // Re-check after waiting for the chain — another apply may have landed.
+    if (threadRuntimeSignatures.get(threadId) === runtimeSignature) return
+    await writeCodexConfigToDisk(options)
+    await client.refreshMcpServers().catch(() => {})
+    await client.reloadUserConfig().catch(() => {})
+    threadRuntimeSignatures.set(threadId, runtimeSignature)
+  })
+}
+
+/**
+ * Apply lease config + ensure process under a single exclusive mutation.
+ */
+export async function applyLeaseAndEnsureProcess(
+  threadId: string,
+  options: CodexSessionOptions
+): Promise<CodexAppServerClient> {
+  return runExclusiveRuntimeMutation(async () => {
+    const client = await ensureGlobalCodexAppServerInternal(options)
+    const runtimeSignature = buildCodexRuntimeSignature(options)
+    if (threadRuntimeSignatures.get(threadId) !== runtimeSignature) {
+      await writeCodexConfigToDisk(options)
+      await client.refreshMcpServers().catch(() => {})
+      await client.reloadUserConfig().catch(() => {})
+      threadRuntimeSignatures.set(threadId, runtimeSignature)
+    }
+    return client
+  })
 }
 
 export async function shutdownGlobalCodexAppServer(): Promise<void> {
-  if (!globalRuntime) return
-  await globalRuntime.client.shutdownCodex()
-  globalRuntime = null
-  threadRuntimeSignatures.clear()
+  await runExclusiveRuntimeMutation(async () => {
+    if (!globalRuntime) return
+    await failInflightTurnsBeforeRestart()
+    await globalRuntime.client.shutdownCodex()
+    globalRuntime = null
+    threadRuntimeSignatures.clear()
+  })
 }
 
 export function clearGlobalCodexThreadBinding(threadId: string): void {
   threadRuntimeSignatures.delete(threadId)
+  clearActiveTurnController(threadId)
+  getConfigLeaseRegistry().release(threadId)
   globalRuntime?.client.clearThreadBinding(threadId)
 }
 
 export function resetGlobalCodexRuntimeForTests(): void {
   globalRuntime = null
   threadRuntimeSignatures.clear()
-  ensureChain = Promise.resolve(null as unknown as CodexAppServerClient)
+  activeTurnControllers.clear()
+  runtimeMutationChain = Promise.resolve()
 }
 
 async function writeCodexConfigToDisk(options: CodexSessionOptions) {
