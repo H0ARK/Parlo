@@ -292,6 +292,21 @@ async function ensureCodexTargetProviderReady(
       proxyTimeout: localApi.proxyTimeout,
     })
     appState.setServerStatus('running')
+
+    // Probe the exact projected Local API base URL before Codex starts a turn.
+    const { buildLocalApiBaseUrl } = await import('@/lib/local-api-gateway')
+    const { assertEngineEndpointReady } = await import('./engine-readiness')
+    const projectedBaseUrl = buildLocalApiBaseUrl({
+      host: localApi.serverHost,
+      port: localApi.serverPort,
+      prefix: localApi.apiPrefix,
+    })
+    await assertEngineEndpointReady({
+      baseUrl: projectedBaseUrl,
+      apiKey: localApi.apiKey.trim() || undefined,
+      timeoutMs: 15_000,
+      retries: 3,
+    })
   } catch (error) {
     appState.setServerStatus('stopped')
     throw new Error(
