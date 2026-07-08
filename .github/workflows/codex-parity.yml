@@ -1,0 +1,50 @@
+# Codex CLI / app-server parity checks (DESIGN_CODEX_HOST PR7).
+# Skips gracefully when a Codex binary is not available on the runner.
+name: Codex parity
+
+on:
+  push:
+    paths:
+      - 'web-app/src/lib/codex-app-server/**'
+      - 'scripts/codex/**'
+      - 'package.json'
+      - '.github/workflows/codex-parity.yml'
+  pull_request:
+    paths:
+      - 'web-app/src/lib/codex-app-server/**'
+      - 'scripts/codex/**'
+      - 'package.json'
+      - '.github/workflows/codex-parity.yml'
+  workflow_dispatch:
+
+jobs:
+  codex-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable || yarn install
+
+      - name: Multi-provider pure spike
+        run: yarn codex:spike:multi-provider
+
+      - name: Codex CLI / method-surface parity (skip if binary missing)
+        shell: bash
+        run: |
+          set +e
+          CODEX_BIN="${CODEX_BINARY:-codex}"
+          if ! command -v "$CODEX_BIN" >/dev/null 2>&1 && [[ ! -x "$CODEX_BIN" ]]; then
+            echo "Codex binary not found ($CODEX_BIN); skipping live parity scripts."
+            echo "skip-with-note: no-codex-binary" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          yarn codex:parity:cli
+          yarn codex:parity:cli:commands
+          yarn codex:parity:appserver:methods
