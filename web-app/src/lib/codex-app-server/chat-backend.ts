@@ -1,10 +1,8 @@
 import type { UIMessage } from '@ai-sdk/react'
 import type { UIMessageChunk } from 'ai'
 import { invoke } from '@tauri-apps/api/core'
-import { useThreads } from '@/hooks/useThreads'
 import { useAppState } from '@/hooks/useAppState'
 import { useMCPServers } from '@/hooks/useMCPServers'
-import { useWorkspaceDirectories } from '@/stores/workspace-directory-store'
 import { useCodexProviderProfiles } from '@/stores/codex-provider-profile-store'
 import { useCodexAppServerRuntime } from '@/stores/codex-app-server-runtime-store'
 import { useRuntimePermission } from '@/stores/runtime-permission-store'
@@ -32,7 +30,6 @@ import {
   getConfigLeaseRegistry,
 } from './config-lease'
 import { useCodexHostFlags } from '@/stores/codex-host-flags-store'
-import { buildCodexMcpServersConfig } from './mcp-config-bridge'
 import type {
   CodexAppServerClient,
   CodexCommandExecParams,
