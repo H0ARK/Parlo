@@ -196,7 +196,9 @@ else
 endif
 
 # Build Parlo CLI (release, platform-aware) → src-tauri/resources/bin/Parlo[.exe]
-build-cli:
+# On macOS this produces a universal binary (arm64 + x86_64), so the Intel
+# std target must be present. install-rust-targets is a dependency for that.
+build-cli: install-rust-targets
 ifeq ($(DETECTED_OS),Darwin)
 	cd src-tauri && cargo build --release --features cli --bin Parlo-cli --target aarch64-apple-darwin
 	cd src-tauri && cargo build --release --features cli --bin Parlo-cli --target x86_64-apple-darwin
