@@ -172,6 +172,20 @@ export async function sendCodexAppServerChatMessage({
     throw new Error('Cannot send an empty message to Codex app-server.')
   }
 
+  // Step 0: binary health (soft-warn default; hard-block only when flag on)
+  const { probeCodexBinary, assertCodexBinaryHealthForChat } = await import(
+    './binary-health'
+  )
+  const binaryPath =
+    defaultCodexBinaryPath() ||
+    provider.settings?.find((s) => s.key === 'codex-binary-path')
+      ?.controller_props?.value ||
+    'codex'
+  const binaryHealth = await probeCodexBinary({
+    command: typeof binaryPath === 'string' ? binaryPath : 'codex',
+  })
+  await assertCodexBinaryHealthForChat(binaryHealth)
+
   // Validate that the workspace directory exists before spawning
   const cwd = resolveCodexWorkspaceDir(threadId)
   if (cwd && cwd !== './') {

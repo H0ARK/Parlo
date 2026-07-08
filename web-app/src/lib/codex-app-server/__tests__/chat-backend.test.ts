@@ -1120,6 +1120,12 @@ describe('Codex chat backend approval bridge', () => {
 
   it('starts Parlo-hosted local models and the local API server before Codex chat', async () => {
     mockServiceHubState.getServerStatus.mockResolvedValue(false)
+    const fetchMock = vi.fn(async () =>
+      new Response(JSON.stringify({ data: [{ id: 'Parlo-v1-4B-Q4_K_M' }] }), {
+        status: 200,
+      })
+    )
+    vi.stubGlobal('fetch', fetchMock)
     const llamacppProvider: ModelProvider = {
       active: true,
       provider: 'llamacpp',
@@ -1129,30 +1135,38 @@ describe('Codex chat backend approval bridge', () => {
       models: [{ id: 'Parlo-v1-4B-Q4_K_M' }],
     }
 
-    const stream = await sendCodexAppServerChatMessage({
-      threadId: 'thread-1',
-      messages,
-      provider: llamacppProvider,
-      model: { id: 'Parlo-v1-4B-Q4_K_M' },
-    })
-    await collect(stream)
+    try {
+      const stream = await sendCodexAppServerChatMessage({
+        threadId: 'thread-1',
+        messages,
+        provider: llamacppProvider,
+        model: { id: 'Parlo-v1-4B-Q4_K_M' },
+      })
+      await collect(stream)
 
-    expect(mockServiceHubState.startModel).toHaveBeenCalledWith(
-      llamacppProvider,
-      'Parlo-v1-4B-Q4_K_M',
-      true
-    )
-    expect(mockServiceHubState.startServer).toHaveBeenCalledWith({
-      host: '127.0.0.1',
-      port: 1337,
-      prefix: '/v1',
-      apiKey: 'Parlo-local-api-key',
-      trustedHosts: ['localhost'],
-      isCorsEnabled: true,
-      isVerboseEnabled: true,
-      proxyTimeout: 600,
-    })
-    expect(mockSessionState.instances).toHaveLength(1)
+      expect(mockServiceHubState.startModel).toHaveBeenCalledWith(
+        llamacppProvider,
+        'Parlo-v1-4B-Q4_K_M',
+        true
+      )
+      expect(mockServiceHubState.startServer).toHaveBeenCalledWith({
+        host: '127.0.0.1',
+        port: 1337,
+        prefix: '/v1',
+        apiKey: 'Parlo-local-api-key',
+        trustedHosts: ['localhost'],
+        isCorsEnabled: true,
+        isVerboseEnabled: true,
+        proxyTimeout: 600,
+      })
+      expect(fetchMock).toHaveBeenCalledWith(
+        'http://127.0.0.1:1337/v1/models',
+        expect.objectContaining({ method: 'GET' })
+      )
+      expect(mockSessionState.instances).toHaveLength(1)
+    } finally {
+      vi.unstubAllGlobals()
+    }
   })
 
   it('uses chat-bound workspace directories and falls back to current directory', () => {
