@@ -4,14 +4,13 @@ export {
   buildThreadStartParams,
 } from './config'
 export {
-  buildCodexSessionOptions,
   buildCodexSessionOptionsFromRoute,
   buildModelRoute,
   buildSessionPolicy,
+  buildRouteAndPolicy,
   codexManagedProviderId,
   modelRouteToEnv,
   perProviderEnvName,
-  resolveCodexSessionOptions,
   resolveCodexStartupModel,
   resolveCodexStartupModelId,
   resolveCodexTargetProvider,
@@ -23,12 +22,24 @@ export {
   type BuildCodexSessionOptionsOverrides,
 } from './model-route'
 export {
+  getConfigLeaseRegistry,
+  mergeLeasesToConfig,
+  hashConfigContent,
+  resetConfigLeaseRegistryForTests,
+  type ConfigLease,
+  type MergedConfig,
+} from './config-lease'
+export {
   GLOBAL_CODEX_APP_SERVER_SESSION_ID,
   ensureGlobalCodexAppServer,
   getGlobalCodexClientOrNull,
   shutdownGlobalCodexAppServer,
 } from './global-codex-runtime'
-export { buildGlobalCodexSpawnOptions } from './chat-backend'
+export {
+  buildGlobalCodexSpawnOptions,
+  buildCodexSessionOptions,
+  resolveCodexSessionOptions,
+} from './chat-backend'
 export {
   buildCodexMcpServersConfig,
   buildCodexMcpServersToml,

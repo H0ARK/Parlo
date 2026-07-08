@@ -616,6 +616,7 @@ export type BuildCodexSessionOptionsOverrides = {
 /**
  * Primary entry used by chat-backend: build session options from selection.
  * Behavior matches pre-extraction buildCodexSessionOptions at product defaults.
+ * Lease / union-env / multi-provider merge is applied by chat-backend via config-lease.
  */
 export function buildCodexSessionOptions(
   threadId: string,
@@ -626,6 +627,18 @@ export function buildCodexSessionOptions(
   const route = buildModelRoute(provider, model, overrides)
   const policy = buildSessionPolicy(provider, overrides)
   return buildCodexSessionOptionsFromRoute(threadId, route, policy)
+}
+
+/** Build route + policy without composing session options (for lease registration). */
+export function buildRouteAndPolicy(
+  provider: ModelProvider,
+  model: Model,
+  overrides: BuildCodexSessionOptionsOverrides = {}
+): { route: ModelRoute; policy: SessionPolicy } {
+  return {
+    route: buildModelRoute(provider, model, overrides),
+    policy: buildSessionPolicy(provider, overrides),
+  }
 }
 
 export async function resolveCodexSessionOptions(

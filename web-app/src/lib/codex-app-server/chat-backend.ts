@@ -12,7 +12,8 @@ import { useModelProvider } from '@/hooks/useModelProvider'
 import { useLocalApiServer } from '@/hooks/useLocalApiServer'
 import { getServiceHub } from '@/hooks/useServiceHub'
 import {
-  buildCodexSessionOptions as buildCodexSessionOptionsFromRouteModule,
+  buildCodexSessionOptions as buildCodexSessionOptionsLegacy,
+  buildRouteAndPolicy,
   buildSessionPolicy,
   buildModelRoute,
   CODEX_APP_SERVER_PROVIDER_ID as CODEX_PROVIDER_ID,
@@ -20,11 +21,18 @@ import {
   defaultCodexBinaryPath,
   PARLO_HOSTED_LOCAL_PROVIDERS,
   resolveAppCodexHome,
-  resolveCodexSessionOptions as resolveCodexSessionOptionsFromRouteModule,
   resolveCodexStartupModel,
+  resolveCodexTargetProvider,
+  resolveCodexAuthProvider,
+  resolveCodexProviderApiKey,
   resolveCodexWorkspaceDir,
   type BuildCodexSessionOptionsOverrides,
 } from './model-route'
+import {
+  applyLeaseAndBuildSessionOptions,
+  getConfigLeaseRegistry,
+} from './config-lease'
+import { useCodexHostFlags } from '@/stores/codex-host-flags-store'
 import { buildCodexMcpServersConfig } from './mcp-config-bridge'
 import type {
   CodexAppServerClient,
@@ -80,10 +88,74 @@ export const isCodexAppServerProvider = (providerId: string | undefined) =>
 
 export type { BuildCodexSessionOptionsOverrides }
 
-/** Re-export projection entry points (implementation lives in model-route.ts). */
-export const buildCodexSessionOptions = buildCodexSessionOptionsFromRouteModule
-export const resolveCodexSessionOptions =
-  resolveCodexSessionOptionsFromRouteModule
+/**
+ * Build Codex session options, registering a ConfigLease and applying
+ * multi-provider / union-env flags when enabled (defaults = legacy single route).
+ */
+export function buildCodexSessionOptions(
+  threadId: string,
+  provider: ModelProvider,
+  model: Model,
+  overrides: BuildCodexSessionOptionsOverrides = {}
+): CodexSessionOptions {
+  const { route, policy } = buildRouteAndPolicy(provider, model, overrides)
+  const flags = useCodexHostFlags.getState()
+
+  getConfigLeaseRegistry().upsert({
+    threadId,
+    route,
+    policy,
+    activeTurn: false,
+  })
+
+  if (flags.perProviderEnvKeys || flags.multiProviderMerge) {
+    const { mcpServers, settings } = useMCPServers.getState()
+    return applyLeaseAndBuildSessionOptions(threadId, route, policy, {
+      unionEnv: flags.perProviderEnvKeys,
+      multiProviderMerge: flags.multiProviderMerge,
+      mcpServers,
+      mcpToolTimeoutSeconds: settings.toolCallTimeoutSeconds,
+    })
+  }
+
+  return buildCodexSessionOptionsLegacy(threadId, provider, model, overrides)
+}
+
+export async function resolveCodexSessionOptions(
+  threadId: string,
+  provider: ModelProvider,
+  model: Model,
+  overrides: BuildCodexSessionOptionsOverrides = {}
+): Promise<CodexSessionOptions> {
+  const modelProviderState = useModelProvider.getState()
+  const activeProfileId = useCodexProviderProfiles.getState().activeProfileId
+  const activeProfile = activeProfileId
+    ? useCodexProviderProfiles.getState().profiles[activeProfileId]
+    : undefined
+  if (provider.provider === CODEX_APP_SERVER_PROVIDER_ID && !activeProfile) {
+    return buildCodexSessionOptions(threadId, provider, model, overrides)
+  }
+  const targetProvider = resolveCodexTargetProvider(
+    provider,
+    model,
+    activeProfile
+  )
+  const authProvider = resolveCodexAuthProvider(
+    targetProvider,
+    provider,
+    modelProviderState
+  )
+  const apiKey =
+    overrides.apiKeyOverride ??
+    (await resolveCodexProviderApiKey(authProvider))
+  return buildCodexSessionOptions(threadId, provider, model, {
+    ...overrides,
+    apiKeyOverride: apiKey,
+    targetProvider,
+    activeProfile,
+  })
+}
+
 export { buildModelRoute, buildSessionPolicy, resolveCodexStartupModel }
 
 export async function sendCodexAppServerChatMessage({
