@@ -4,6 +4,25 @@ export {
   buildThreadStartParams,
 } from './config'
 export {
+  buildCodexSessionOptions,
+  buildCodexSessionOptionsFromRoute,
+  buildModelRoute,
+  buildSessionPolicy,
+  codexManagedProviderId,
+  modelRouteToEnv,
+  perProviderEnvName,
+  resolveCodexSessionOptions,
+  resolveCodexStartupModel,
+  resolveCodexStartupModelId,
+  resolveCodexTargetProvider,
+  CODEX_LEGACY_PROVIDER_API_KEY_ENV,
+  CODEX_PARLO_GATEWAY_API_KEY_ENV,
+  CODEX_PARLO_GATEWAY_PROVIDER_ID,
+  type ModelRoute,
+  type SessionPolicy,
+  type BuildCodexSessionOptionsOverrides,
+} from './model-route'
+export {
   GLOBAL_CODEX_APP_SERVER_SESSION_ID,
   ensureGlobalCodexAppServer,
   getGlobalCodexClientOrNull,

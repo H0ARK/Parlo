@@ -2179,7 +2179,7 @@ function providerWithSettings({
   baseUrl?: string
   codexProvider?: string
   codexBinaryPath?: string
-}): ModelProvider {
+} = {}): ModelProvider {
   return {
     active: true,
     provider: 'codex',

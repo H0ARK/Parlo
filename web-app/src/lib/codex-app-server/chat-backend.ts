@@ -10,15 +10,21 @@ import { useCodexAppServerRuntime } from '@/stores/codex-app-server-runtime-stor
 import { useRuntimePermission } from '@/stores/runtime-permission-store'
 import { useModelProvider } from '@/hooks/useModelProvider'
 import { useLocalApiServer } from '@/hooks/useLocalApiServer'
-import { buildLocalApiBaseUrl } from '@/lib/local-api-gateway'
 import { getServiceHub } from '@/hooks/useServiceHub'
-import { providerRemoteAuthKeyChain } from '@/lib/provider-api-keys'
 import {
-  gatewayWireApiForProvider as codexWireApiForProvider,
-  resolveXaiRuntimeModelId,
-  xaiModelSupportsReasoningEffort,
-} from '@/lib/provider-gateway'
-import { buildCodexConfigToml } from './config'
+  buildCodexSessionOptions as buildCodexSessionOptionsFromRouteModule,
+  buildSessionPolicy,
+  buildModelRoute,
+  CODEX_APP_SERVER_PROVIDER_ID as CODEX_PROVIDER_ID,
+  CODEX_FALLBACK_MODEL_ID,
+  defaultCodexBinaryPath,
+  PARLO_HOSTED_LOCAL_PROVIDERS,
+  resolveAppCodexHome,
+  resolveCodexSessionOptions as resolveCodexSessionOptionsFromRouteModule,
+  resolveCodexStartupModel,
+  resolveCodexWorkspaceDir,
+  type BuildCodexSessionOptionsOverrides,
+} from './model-route'
 import { buildCodexMcpServersConfig } from './mcp-config-bridge'
 import type {
   CodexAppServerClient,
@@ -53,7 +59,7 @@ import type {
   CodexWireServerRequest,
 } from './types'
 
-export const CODEX_APP_SERVER_PROVIDER_ID = 'codex'
+export const CODEX_APP_SERVER_PROVIDER_ID = CODEX_PROVIDER_ID
 
 type CodexChatBackendRequest = {
   threadId: string
@@ -64,17 +70,21 @@ type CodexChatBackendRequest = {
   abortSignal?: AbortSignal
 }
 
-const PARLO_HOSTED_LOCAL_PROVIDERS = new Set(['llamacpp', 'mlx'])
 const GLOBAL_CODEX_THREAD_PLACEHOLDER = '__global__'
-const CODEX_FALLBACK_MODEL_ID = 'gpt-5.5'
-const CODEX_PARLO_GATEWAY_PROVIDER_ID = 'Parlo-gateway'
-const CODEX_PARLO_GATEWAY_API_KEY_ENV = 'PARLO_LOCAL_API_SERVER_API_KEY'
 
 const CODEX_NOT_RUNNING_ERROR =
   'Codex app-server is not running yet. Wait for app startup to finish.'
 
 export const isCodexAppServerProvider = (providerId: string | undefined) =>
   providerId === CODEX_APP_SERVER_PROVIDER_ID
+
+export type { BuildCodexSessionOptionsOverrides }
+
+/** Re-export projection entry points (implementation lives in model-route.ts). */
+export const buildCodexSessionOptions = buildCodexSessionOptionsFromRouteModule
+export const resolveCodexSessionOptions =
+  resolveCodexSessionOptionsFromRouteModule
+export { buildModelRoute, buildSessionPolicy, resolveCodexStartupModel }
 
 export async function sendCodexAppServerChatMessage({
   threadId,
@@ -279,24 +289,29 @@ export function buildGlobalCodexSpawnOptions(): CodexSessionOptions {
 
   if (provider) {
     return toGlobalSpawnOptions(
-      buildCodexSessionOptions(GLOBAL_CODEX_THREAD_PLACEHOLDER, provider, selectedModel)
+      buildCodexSessionOptions(
+        GLOBAL_CODEX_THREAD_PLACEHOLDER,
+        provider,
+        selectedModel
+      )
     )
   }
 
-  return toGlobalSpawnOptions({
-    codexBinaryPath: defaultCodexBinaryPath(),
-    codexHome: resolveAppCodexHome(),
-    transport: 'app-server',
-    cwd: './',
-    approvalPolicy: 'on-request',
-    sandbox: 'workspace-write',
-    ...buildParloGatewayCodexConfig(selectedModel.id),
-    mcpRefreshConfig: {
-      mcp_servers: {},
-      mcp_oauth_credentials_store_mode: 'auto',
-    },
-    env: {},
-  })
+  // No registered codex provider: still project gateway defaults for bootstrap.
+  const bootstrapProvider: ModelProvider = {
+    active: true,
+    provider: CODEX_APP_SERVER_PROVIDER_ID,
+    settings: [],
+    models: [selectedModel],
+    persist: true,
+  }
+  return toGlobalSpawnOptions(
+    buildCodexSessionOptions(
+      GLOBAL_CODEX_THREAD_PLACEHOLDER,
+      bootstrapProvider,
+      selectedModel
+    )
+  )
 }
 
 export async function compactCodexThread(parloThreadId: string) {
@@ -2161,447 +2176,6 @@ export async function prepareCodexCapabilitySession(
     { id: CODEX_FALLBACK_MODEL_ID }
 
   await prepareThreadCodexRuntime(threadId, provider, model, options)
-}
-
-function resolveCodexStartupModel(
-  provider: ModelProvider,
-  requestedModel: Model
-): Model {
-  const available = provider.models ?? []
-  if (available.some((candidate) => candidate.id === requestedModel.id)) {
-    return requestedModel
-  }
-
-  const fallback =
-    available.find((candidate) => candidate.id === CODEX_FALLBACK_MODEL_ID) ??
-    available.find((candidate) => candidate.active) ??
-    available[0]
-
-  if (!fallback) {
-    return requestedModel
-  }
-
-  if (requestedModel.id !== fallback.id) {
-    console.warn(
-      `[Codex] Selected model '${requestedModel.id}' is not available for provider '${provider.provider}'; falling back to '${fallback.id}'.`
-    )
-  }
-
-  return fallback
-}
-
-function resolveCodexStartupModelId(
-  provider: ModelProvider,
-  requestedModelId: string
-): string {
-  const available = provider.models ?? []
-  const requested = requestedModelId.trim()
-  if (available.some((candidate) => candidate.id === requested)) return requested
-
-  const fallback =
-    available.find((candidate) => candidate.id === CODEX_FALLBACK_MODEL_ID) ??
-    available.find((candidate) => candidate.active) ??
-    available[0]
-
-  if (!fallback) return requestedModelId
-
-  if (requested !== fallback.id) {
-    console.warn(
-      `[Codex] Requested model '${requested}' is not available for provider '${provider.provider}'; using '${fallback.id}'.`
-    )
-  }
-
-  return fallback.id
-}
-
-
-export type BuildCodexSessionOptionsOverrides = {
-  apiKeyOverride?: string
-}
-
-export async function resolveCodexSessionOptions(
-  threadId: string,
-  provider: ModelProvider,
-  model: Model,
-  overrides: BuildCodexSessionOptionsOverrides = {}
-): Promise<CodexSessionOptions> {
-  const modelProviderState = useModelProvider.getState()
-  const activeProfileId = useCodexProviderProfiles.getState().activeProfileId
-  const activeProfile = activeProfileId
-    ? useCodexProviderProfiles.getState().profiles[activeProfileId]
-    : undefined
-  if (provider.provider === CODEX_APP_SERVER_PROVIDER_ID && !activeProfile) {
-    return buildCodexSessionOptions(threadId, provider, model, overrides)
-  }
-  const targetProvider = resolveCodexTargetProvider(provider, model, activeProfile)
-  const authProvider = resolveCodexAuthProvider(
-    targetProvider,
-    provider,
-    modelProviderState
-  )
-  const apiKey =
-    overrides.apiKeyOverride ??
-    (await resolveCodexProviderApiKey(authProvider))
-  return buildCodexSessionOptions(threadId, provider, model, {
-    ...overrides,
-    apiKeyOverride: apiKey,
-    targetProvider,
-    activeProfile,
-  })
-}
-
-export function buildCodexSessionOptions(
-  threadId: string,
-  provider: ModelProvider,
-  model: Model,
-  overrides: BuildCodexSessionOptionsOverrides & {
-    targetProvider?: string
-    activeProfile?: ReturnType<
-      typeof useCodexProviderProfiles.getState
-    >['profiles'][string]
-  } = {}
-): CodexSessionOptions {
-  const modelProviderState = useModelProvider.getState()
-  const activeProfile =
-    overrides.activeProfile ??
-    (useCodexProviderProfiles.getState().activeProfileId
-      ? useCodexProviderProfiles.getState().profiles[
-          useCodexProviderProfiles.getState().activeProfileId!
-        ]
-      : undefined)
-  const codexSettingsProvider =
-    provider.provider === CODEX_APP_SERVER_PROVIDER_ID
-      ? provider
-      : modelProviderState.getProviderByName(CODEX_APP_SERVER_PROVIDER_ID) ??
-        provider
-  const usesCodexSettingsProvider =
-    provider.provider === CODEX_APP_SERVER_PROVIDER_ID
-
-  const targetProvider =
-    overrides.targetProvider ??
-    resolveCodexTargetProvider(provider, model, activeProfile)
-  if (provider.provider === CODEX_APP_SERVER_PROVIDER_ID && !activeProfile) {
-    return {
-      codexBinaryPath:
-        settingValue(codexSettingsProvider, 'codex-binary-path') ||
-        defaultCodexBinaryPath(),
-      codexHome: resolveAppCodexHome(),
-      transport: 'app-server',
-      cwd: resolveCodexWorkspaceDir(threadId),
-      approvalPolicy: 'on-request',
-      sandbox: 'workspace-write',
-      mcpRefreshConfig: {
-        mcp_servers: buildCodexMcpServersConfig(useMCPServers.getState().mcpServers, {
-          toolTimeoutSeconds: useMCPServers.getState().settings.toolCallTimeoutSeconds,
-        }),
-        mcp_oauth_credentials_store_mode: 'auto',
-      },
-      ...buildParloGatewayCodexConfig(resolveCodexStartupModelId(provider, model.id)),
-    }
-  }
-  const codexConfigProvider = codexManagedProviderId(targetProvider)
-
-  const baseUrl = activeProfile
-    ? activeProfile.baseUrl
-    : usesCodexSettingsProvider && !isGrokModelId(model.id)
-      ? settingValue(provider, 'base-url') ||
-        provider.base_url ||
-        defaultBaseUrlForProvider(targetProvider)
-      : targetProvider === 'xai'
-        ? resolveXaiBaseUrl(provider, modelProviderState)
-        : provider.base_url ||
-          settingValue(provider, 'base-url') ||
-          defaultBaseUrlForProvider(targetProvider)
-
-  let apiKey = overrides.apiKeyOverride
-  if (apiKey === undefined) {
-    if (activeProfile) {
-      const mappedProviderName = mapProfileProviderType(
-        activeProfile.providerType
-      )
-      const parloProvider =
-        modelProviderState.getProviderByName(mappedProviderName)
-      apiKey =
-        parloProvider?.api_key ||
-        (parloProvider ? settingValue(parloProvider, 'api-key') : '')
-    } else {
-      const authProvider = resolveCodexAuthProvider(
-        targetProvider,
-        provider,
-        modelProviderState
-      )
-      apiKey =
-        authProvider.api_key || settingValue(authProvider, 'api-key')
-    }
-  }
-
-  const codexBinaryPath =
-    settingValue(codexSettingsProvider, 'codex-binary-path') ||
-    defaultCodexBinaryPath()
-  const transport = 'app-server'
-  const cwd = resolveCodexWorkspaceDir(threadId)
-  const codexHome = resolveAppCodexHome(activeProfile?.codexHome)
-  const configuredApiKeyEnv = activeProfile?.apiKeyEnv?.trim() || undefined
-  const envKey =
-    configuredApiKeyEnv || (apiKey ? 'PARLO_CODEX_PROVIDER_API_KEY' : undefined)
-  const { mcpServers, settings: mcpSettings } = useMCPServers.getState()
-  const rawTargetModel =
-    (activeProfile && activeProfile.model.trim()) || model.id
-  const modelId = resolveCodexStartupModelId(provider, rawTargetModel)
-  const targetModel =
-    targetProvider === 'xai'
-      ? resolveXaiRuntimeModelId(modelId)
-      : modelId
-  const approvalPolicy: CodexSessionOptions['approvalPolicy'] =
-    activeProfile?.approvalPolicy || 'on-request'
-  const sandbox: CodexSessionOptions['sandbox'] =
-    activeProfile?.sandbox || 'workspace-write'
-  const agentsMd = activeProfile?.agentsMd
-  const subagentMaxThreads = activeProfile?.subagentMaxThreads
-  const subagentMaxDepth = activeProfile?.subagentMaxDepth
-  const permissionProfile = activeProfile?.permissionProfile
-  const addDirs = activeProfile?.addDirs
-  const customAgents = activeProfile?.customAgents
-  const advancedConfigSnippet = activeProfile?.advancedConfigSnippet
-
-  return {
-    codexBinaryPath,
-    codexHome,
-    transport,
-    cwd,
-    model: targetModel,
-    modelProvider: codexConfigProvider,
-    approvalPolicy,
-    sandbox,
-    agentsMd,
-    subagentMaxThreads,
-    subagentMaxDepth,
-    permissionProfile,
-    addDirs,
-    customAgents,
-    advancedConfigSnippet,
-    configToml: buildCodexConfigToml({
-      model: targetModel,
-      modelProvider: codexConfigProvider,
-      modelContextWindow: codexModelContextWindowForModel(targetModel),
-      modelReasoningEffort:
-        targetProvider === 'xai' &&
-        !xaiModelSupportsReasoningEffort(modelId)
-          ? 'none'
-          : undefined,
-      providers: [
-        {
-          id: codexConfigProvider,
-          name: targetProvider,
-          baseUrl,
-          apiKeyEnvVar: envKey,
-          wireApi: codexWireApiForProvider(targetProvider),
-        },
-      ],
-      mcpServers,
-      mcpToolTimeoutSeconds: mcpSettings.toolCallTimeoutSeconds,
-      agents:
-        subagentMaxThreads || subagentMaxDepth
-          ? { max_threads: subagentMaxThreads, max_depth: subagentMaxDepth }
-          : undefined,
-      defaultPermissions: permissionProfile,
-      advancedConfigSnippet: activeProfile?.advancedConfigSnippet,
-    } as import('./config').CodexConfigTomlOptions),
-    mcpRefreshConfig: {
-      mcp_servers: buildCodexMcpServersConfig(mcpServers, {
-        toolTimeoutSeconds: mcpSettings.toolCallTimeoutSeconds,
-      }),
-      mcp_oauth_credentials_store_mode: 'auto',
-    },
-    env: apiKey && envKey ? { [envKey]: apiKey } : {},
-  }
-}
-
-function buildParloGatewayCodexConfig(
-  modelId: string
-): {
-  model: string
-  modelProvider: string
-  configToml: string
-  env: Record<string, string | undefined>
-} {
-  const localApi = useLocalApiServer.getState()
-  const baseUrl = buildLocalApiBaseUrl({
-    host: localApi.serverHost,
-    port: localApi.serverPort,
-    prefix: localApi.apiPrefix,
-  })
-  const apiKey = localApi.apiKey.trim()
-
-  return {
-    model: modelId,
-    modelProvider: CODEX_PARLO_GATEWAY_PROVIDER_ID,
-    configToml: buildCodexConfigToml({
-      model: modelId,
-      modelProvider: CODEX_PARLO_GATEWAY_PROVIDER_ID,
-      modelContextWindow: codexModelContextWindowForModel(modelId),
-      providers: [
-        {
-          id: CODEX_PARLO_GATEWAY_PROVIDER_ID,
-          name: 'Parlo Gateway',
-          baseUrl,
-          apiKeyEnvVar: apiKey ? CODEX_PARLO_GATEWAY_API_KEY_ENV : undefined,
-          wireApi: 'responses',
-        },
-      ],
-      mcpServers: useMCPServers.getState().mcpServers,
-      mcpToolTimeoutSeconds: useMCPServers.getState().settings.toolCallTimeoutSeconds,
-    }),
-    env: apiKey ? { [CODEX_PARLO_GATEWAY_API_KEY_ENV]: apiKey } : {},
-  }
-}
-
-function mapProfileProviderType(type: string): string {
-  if (type === 'openai-compatible') return 'openai'
-  if (type === 'llama-cpp') return 'llamacpp'
-  if (type === 'xai') return 'xai'
-  return type
-}
-
-function isGrokModelId(modelId: string): boolean {
-  return /^grok(?:-|$)/i.test(modelId.trim())
-}
-
-function resolveCodexTargetProvider(
-  provider: ModelProvider,
-  model: Model,
-  activeProfile?: {
-    providerType: string
-    model: string
-  }
-): string {
-  const profileModel = activeProfile?.model.trim()
-  if (activeProfile) {
-    const mapped = mapProfileProviderType(activeProfile.providerType)
-    if (
-      isGrokModelId(profileModel || model.id) &&
-      mapped === 'openai'
-    ) {
-      return 'xai'
-    }
-    return mapped
-  }
-
-  if (isGrokModelId(model.id) || provider.provider === 'xai') {
-    return 'xai'
-  }
-
-  if (provider.provider === CODEX_APP_SERVER_PROVIDER_ID) {
-    return settingValue(provider, 'codex-provider') || 'openai'
-  }
-
-  return provider.provider
-}
-
-function resolveCodexAuthProvider(
-  targetProvider: string,
-  selectedProvider: ModelProvider,
-  modelProviderState: ReturnType<typeof useModelProvider.getState>
-): ModelProvider {
-  if (selectedProvider.provider === targetProvider) {
-    return selectedProvider
-  }
-  return (
-    modelProviderState.getProviderByName(targetProvider) ?? selectedProvider
-  )
-}
-
-async function resolveCodexProviderApiKey(
-  provider: ModelProvider
-): Promise<string> {
-  const keys = await providerRemoteAuthKeyChain(provider)
-  if (keys[0]) return keys[0]
-  return provider.api_key || settingValue(provider, 'api-key')
-}
-
-function resolveXaiBaseUrl(
-  provider: ModelProvider,
-  modelProviderState: ReturnType<typeof useModelProvider.getState>
-): string {
-  const xaiProvider =
-    provider.provider === 'xai'
-      ? provider
-      : modelProviderState.getProviderByName('xai')
-  if (xaiProvider) {
-    return (
-      xaiProvider.base_url ||
-      settingValue(xaiProvider, 'base-url') ||
-      'https://api.x.ai/v1'
-    )
-  }
-  return 'https://api.x.ai/v1'
-}
-
-function codexModelContextWindowForModel(modelId: string): number | undefined {
-  if (modelId === 'grok-4.3') return 1_000_000
-  return undefined
-}
-
-const CODEX_RESERVED_PROVIDER_IDS = new Set([
-  'openai',
-  'openrouter',
-  'ollama',
-  'lmstudio',
-])
-
-function codexManagedProviderId(providerId: string): string {
-  return CODEX_RESERVED_PROVIDER_IDS.has(providerId)
-    ? `Parlo-${providerId}`
-    : providerId
-}
-
-function resolveCodexWorkspaceDir(threadId: string) {
-  const thread = useThreads.getState().threads[threadId]
-  const projectId = thread?.metadata?.project?.id
-  const directories = useWorkspaceDirectories.getState()
-  if (projectId) {
-    const projectDir = directories.getDirectory({
-      type: 'project',
-      id: projectId,
-      label: thread?.metadata?.project?.name ?? 'Project',
-    })
-    if (projectDir) return projectDir
-  }
-  return (
-    directories.getDirectory({
-      type: 'chat',
-      id: threadId,
-      label: thread?.title ?? 'Chat',
-    }) ?? './'
-  )
-}
-
-function resolveAppCodexHome(profileCodexHome?: string) {
-  const trimmed = profileCodexHome?.trim()
-  return trimmed || './.Parlo/codex-home'
-}
-
-function settingValue(provider: ModelProvider, key: string) {
-  const value = provider.settings.find((setting) => setting.key === key)
-    ?.controller_props.value
-  return typeof value === 'string' ? value.trim() : ''
-}
-
-function defaultCodexBinaryPath() {
-  return IS_MACOS ? '/Applications/Codex.app/Contents/Resources/codex' : 'codex'
-}
-
-function defaultBaseUrlForProvider(providerId: string) {
-  if (providerId === 'openai') return 'https://api.openai.com/v1'
-  if (providerId === 'xai') return 'https://api.x.ai/v1'
-  if (providerId === 'openrouter') return 'https://openrouter.ai/api/v1'
-  if (providerId === 'ollama') return 'http://127.0.0.1:11434/v1'
-  if (providerId === 'vllm') return 'http://127.0.0.1:8000/v1'
-  if (PARLO_HOSTED_LOCAL_PROVIDERS.has(providerId)) {
-    const { serverHost, serverPort, apiPrefix } = useLocalApiServer.getState()
-    return `http://${serverHost}:${serverPort}${apiPrefix}`
-  }
-  return 'https://api.openai.com/v1'
 }
 
 type CodexImageInput = {

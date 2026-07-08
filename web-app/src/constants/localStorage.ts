@@ -37,6 +37,7 @@ export const localStorageKey = {
   chatSessionState: 'chat-session-state',
   runtimePermissions: 'runtime-permissions',
   codexProviderProfiles: 'codex-provider-profiles',
+  codexHostFlags: 'codex-host-flags',
   terminalRuntime: 'terminal-runtime',
 }
 
