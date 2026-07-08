@@ -17,10 +17,25 @@ export function persistCodexThreadId(
   codexThreadId: string
 ): void {
   const trimmed = codexThreadId.trim()
-  if (!trimmed) return
-
   const thread = useThreads.getState().threads[parloThreadId]
   if (!thread) return
+
+  if (!trimmed) {
+    // Clear binding (provider rebind)
+    const existingMeta =
+      typeof thread.metadata?.codex === 'object' && thread.metadata.codex
+        ? { ...(thread.metadata.codex as Record<string, unknown>) }
+        : {}
+    delete existingMeta.threadId
+    useThreads.getState().updateThread(parloThreadId, {
+      metadata: {
+        ...thread.metadata,
+        codex:
+          Object.keys(existingMeta).length > 0 ? existingMeta : undefined,
+      },
+    })
+    return
+  }
 
   const existing = readPersistedCodexThreadId(parloThreadId)
   if (existing === trimmed) return

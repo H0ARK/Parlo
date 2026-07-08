@@ -18,7 +18,6 @@ import {
   buildModelRoute,
   CODEX_APP_SERVER_PROVIDER_ID as CODEX_PROVIDER_ID,
   CODEX_FALLBACK_MODEL_ID,
-  defaultCodexBinaryPath,
   PARLO_HOSTED_LOCAL_PROVIDERS,
   resolveAppCodexHome,
   resolveCodexStartupModel,
@@ -45,10 +44,11 @@ import type {
 import { CODEX_APP_SERVER_METHOD_FALLBACKS } from './method-aliases'
 import {
   GLOBAL_CODEX_APP_SERVER_SESSION_ID,
-  applyCodexRuntimeOptions,
+  applyLeaseAndEnsureProcess,
+  clearActiveTurnController,
   clearGlobalCodexThreadBinding,
-  ensureGlobalCodexAppServer,
   getGlobalCodexClientOrNull,
+  registerActiveTurnController,
   resetGlobalCodexRuntimeForTests,
   shutdownGlobalCodexAppServer,
 } from './global-codex-runtime'
@@ -82,6 +82,9 @@ const GLOBAL_CODEX_THREAD_PLACEHOLDER = '__global__'
 
 const CODEX_NOT_RUNNING_ERROR =
   'Codex app-server is not running yet. Wait for app startup to finish.'
+
+/** Last codexProviderId bound per Parlo thread — used for mid-chat provider rebind. */
+const threadBoundCodexProviderIds = new Map<string, string>()
 
 export const isCodexAppServerProvider = (providerId: string | undefined) =>
   providerId === CODEX_APP_SERVER_PROVIDER_ID
@@ -172,18 +175,12 @@ export async function sendCodexAppServerChatMessage({
     throw new Error('Cannot send an empty message to Codex app-server.')
   }
 
-  // Step 0: binary health (soft-warn default; hard-block only when flag on)
+  // Step 0: binary health using the same path session policy will spawn.
   const { probeCodexBinary, assertCodexBinaryHealthForChat } = await import(
     './binary-health'
   )
-  const binaryPath =
-    defaultCodexBinaryPath() ||
-    provider.settings?.find((s) => s.key === 'codex-binary-path')
-      ?.controller_props?.value ||
-    'codex'
-  const binaryHealth = await probeCodexBinary({
-    command: typeof binaryPath === 'string' ? binaryPath : 'codex',
-  })
+  const binaryPath = resolveCodexBinaryPathForProvider(provider)
+  const binaryHealth = await probeCodexBinary({ command: binaryPath })
   await assertCodexBinaryHealthForChat(binaryHealth)
 
   // Validate that the workspace directory exists before spawning
@@ -203,7 +200,16 @@ export async function sendCodexAppServerChatMessage({
 
   await ensureCodexTargetProviderReady(threadId, provider, resolvedModel)
 
-  const client = await prepareThreadCodexRuntime(threadId, provider, resolvedModel)
+  const client = await prepareThreadCodexRuntime(
+    threadId,
+    provider,
+    resolvedModel
+  )
+
+  // Register active-turn controller so process restarts fail this inflight turn.
+  const turnController = new AbortController()
+  registerActiveTurnController(threadId, turnController)
+
   const events = bridgeCodexApprovalRequests(
     client.sendToCodex(threadId, messageText, {
       clientUserMessageId: messageId,
@@ -214,15 +220,27 @@ export async function sendCodexAppServerChatMessage({
   )
 
   let removeAbortListener: (() => void) | undefined
-  if (abortSignal?.aborted) {
+  const abortTurn = () => {
+    turnController.abort()
+    void client.interruptTurn(threadId)
+  }
+
+  if (abortSignal?.aborted || turnController.signal.aborted) {
     await client.interruptTurn(threadId)
-  } else if (abortSignal) {
-    const interruptOnAbort = () => {
+  } else {
+    const onUserAbort = () => abortTurn()
+    const onRestartAbort = () => {
       void client.interruptTurn(threadId)
     }
-    abortSignal.addEventListener('abort', interruptOnAbort, { once: true })
+    if (abortSignal) {
+      abortSignal.addEventListener('abort', onUserAbort, { once: true })
+    }
+    turnController.signal.addEventListener('abort', onRestartAbort, {
+      once: true,
+    })
     removeAbortListener = () => {
-      abortSignal.removeEventListener('abort', interruptOnAbort)
+      abortSignal?.removeEventListener('abort', onUserAbort)
+      turnController.signal.removeEventListener('abort', onRestartAbort)
     }
   }
 
@@ -234,8 +252,18 @@ export async function sendCodexAppServerChatMessage({
       },
     }),
     threadId,
-    removeAbortListener
+    () => {
+      removeAbortListener?.()
+      clearActiveTurnController(threadId)
+    }
   )
+}
+
+/** Same binary path resolution as SessionPolicy / spawn (settings override default). */
+export function resolveCodexBinaryPathForProvider(
+  provider: ModelProvider
+): string {
+  return buildSessionPolicy(provider).codexBinaryPath
 }
 
 export function approveCodexAppServerAction(
@@ -272,6 +300,8 @@ export function approveCodexAppServerAction(
 }
 
 export async function shutdownCodexAppServerChatSession(threadId: string) {
+  threadBoundCodexProviderIds.delete(threadId)
+  clearActiveTurnController(threadId)
   clearGlobalCodexThreadBinding(threadId)
 }
 
@@ -353,21 +383,37 @@ async function prepareThreadCodexRuntime(
   model: Model,
   runtimeOverrides: { cwd?: string } = {}
 ): Promise<CodexAppServerClient> {
-  const resolvedOptions = await resolveCodexSessionOptions(threadId, provider, model)
+  const resolvedOptions = await resolveCodexSessionOptions(
+    threadId,
+    provider,
+    model
+  )
   const options = {
     ...resolvedOptions,
     ...(runtimeOverrides.cwd ? { cwd: runtimeOverrides.cwd } : {}),
   }
   const spawnOptions = toGlobalSpawnOptions(options)
-  const client = await ensureGlobalCodexAppServer(spawnOptions)
+  const nextProviderId = options.modelProvider ?? ''
+  const previousProviderId = threadBoundCodexProviderIds.get(threadId)
+  const providerChanged =
+    Boolean(previousProviderId) && previousProviderId !== nextProviderId
+
+  // Single exclusive critical section: write/reload + ensure process.
+  const client = await applyLeaseAndEnsureProcess(threadId, spawnOptions)
   client.setThreadOptions(threadId, options)
 
-  const persistedCodexThreadId = readPersistedCodexThreadId(threadId)
-  if (persistedCodexThreadId) {
-    client.seedCodexThreadBinding(threadId, persistedCodexThreadId)
+  if (providerChanged) {
+    // Same Parlo thread, different Codex model_provider → drop stale thread id.
+    client.clearThreadBinding(threadId)
+    persistCodexThreadId(threadId, '')
+  } else {
+    const persistedCodexThreadId = readPersistedCodexThreadId(threadId)
+    if (persistedCodexThreadId) {
+      client.seedCodexThreadBinding(threadId, persistedCodexThreadId)
+    }
   }
 
-  await applyCodexRuntimeOptions(client, threadId, spawnOptions)
+  threadBoundCodexProviderIds.set(threadId, nextProviderId)
   return client
 }
 
@@ -753,6 +799,7 @@ function codexApprovalDetails(request: CodexWireServerRequest) {
 }
 
 export function clearCodexAppServerChatSessionsForTests() {
+  threadBoundCodexProviderIds.clear()
   resetGlobalCodexRuntimeForTests()
 }
 

@@ -7,6 +7,7 @@ import {
   buildCodexSessionOptions,
   clearCodexAppServerChatSessionsForTests,
   getCodexAppServerRuntimeLogs,
+  resolveCodexBinaryPathForProvider,
   runCodexExec,
   runCodexCliDebug,
   runCodexCliCloud,
@@ -35,6 +36,11 @@ import {
   steerCodexSubThread,
   steerCodexSubThreadEvents,
 } from '../chat-backend'
+import {
+  applyLeaseAndEnsureProcess,
+  registerActiveTurnController,
+  clearActiveTurnController,
+} from '../global-codex-runtime'
 
 const mockRuntimePermission = vi.hoisted(() => ({
   requestPermission: vi.fn(),
@@ -245,14 +251,41 @@ vi.mock('@/stores/workspace-directory-store', () => ({
 }))
 
 vi.mock('@tauri-apps/api/core', () => ({
-  invoke: vi.fn(async (command: string) => {
+  invoke: vi.fn(async (command: string, args?: Record<string, unknown>) => {
     if (command === 'exists_sync') return true
+    if (command === 'run_codex_cli_subcommand') {
+      const cliArgs = (args?.args as string[] | undefined) ?? []
+      if (cliArgs[0] === 'app-server' && cliArgs.includes('--help')) {
+        return {
+          stdout: 'Usage: codex app-server --stdio\n',
+          stderr: '',
+          exit_code: 0,
+        }
+      }
+      if (cliArgs[0] === '-V' || cliArgs.includes('-V')) {
+        return {
+          stdout: 'codex-cli 0.140.0-test\n',
+          stderr: '',
+          exit_code: 0,
+        }
+      }
+      return { stdout: '', stderr: '', exit_code: 0 }
+    }
     return {}
   }),
 }))
 
+vi.mock('@/lib/platform/utils', () => ({
+  isPlatformTauri: () => true,
+}))
+
 vi.mock('../tauri-process', () => ({
   TauriCodexProcessSpawner: class {},
+}))
+
+const mockActiveTurnControllers = vi.hoisted(() => ({
+  register: vi.fn(),
+  clear: vi.fn(),
 }))
 
 vi.mock('../global-codex-runtime', async () => {
@@ -261,33 +294,50 @@ vi.mock('../global-codex-runtime', async () => {
       '../global-codex-runtime'
     )
 
+  const ensureClient = async (spawnOptions: CodexSessionOptions) => {
+    const processSignature = buildCodexProcessSignature(spawnOptions)
+    if (
+      mockGlobalRuntime.client &&
+      mockGlobalRuntime.processSignature === processSignature
+    ) {
+      return mockGlobalRuntime.client
+    }
+
+    if (mockGlobalRuntime.client) {
+      await mockGlobalRuntime.client.shutdownCodex()
+    }
+
+    const { CodexAppServerClient } = await import('../api')
+    mockGlobalRuntime.client = new CodexAppServerClient({
+      spawner: {},
+      options: spawnOptions,
+    })
+    mockGlobalRuntime.processSignature = processSignature
+    return mockGlobalRuntime.client
+  }
+
   return {
     GLOBAL_CODEX_APP_SERVER_SESSION_ID: 'Parlo-global-codex-app-server',
     buildCodexProcessSignature,
     buildCodexRuntimeSignature,
     getGlobalCodexClientOrNull: () => mockGlobalRuntime.client,
-    ensureGlobalCodexAppServer: vi.fn(async (spawnOptions: CodexSessionOptions) => {
-      const processSignature = buildCodexProcessSignature(spawnOptions)
-      if (
-        mockGlobalRuntime.client &&
-        mockGlobalRuntime.processSignature === processSignature
-      ) {
-        return mockGlobalRuntime.client
+    ensureGlobalCodexAppServer: vi.fn(async (spawnOptions: CodexSessionOptions) =>
+      ensureClient(spawnOptions)
+    ),
+    applyLeaseAndEnsureProcess: vi.fn(
+      async (_threadId: string, spawnOptions: CodexSessionOptions) => {
+        const client = await ensureClient(spawnOptions)
+        await mockGlobalRuntime.applyCodexRuntimeOptions(
+          client,
+          _threadId,
+          spawnOptions
+        )
+        return client
       }
-
-      if (mockGlobalRuntime.client) {
-        await mockGlobalRuntime.client.shutdownCodex()
-      }
-
-      const { CodexAppServerClient } = await import('../api')
-      mockGlobalRuntime.client = new CodexAppServerClient({
-        spawner: {},
-        options: spawnOptions,
-      })
-      mockGlobalRuntime.processSignature = processSignature
-      return mockGlobalRuntime.client
-    }),
+    ),
     applyCodexRuntimeOptions: mockGlobalRuntime.applyCodexRuntimeOptions,
+    registerActiveTurnController: mockActiveTurnControllers.register,
+    clearActiveTurnController: mockActiveTurnControllers.clear,
     shutdownGlobalCodexAppServer: vi.fn(async () => {
       mockGlobalRuntime.client = null
       mockGlobalRuntime.processSignature = ''
@@ -297,6 +347,8 @@ vi.mock('../global-codex-runtime', async () => {
       mockGlobalRuntime.client = null
       mockGlobalRuntime.processSignature = ''
       mockGlobalRuntime.applyCodexRuntimeOptions.mockClear()
+      mockActiveTurnControllers.register.mockClear()
+      mockActiveTurnControllers.clear.mockClear()
     }),
   }
 })
@@ -329,6 +381,7 @@ vi.mock('../api', () => ({
     shutdownCodex = vi.fn()
     setThreadOptions = vi.fn()
     seedCodexThreadBinding = vi.fn()
+    clearThreadBinding = vi.fn()
     startCodexSession = vi.fn().mockResolvedValue({ userAgent: 'Parlo-test' })
     reloadUserConfig = vi.fn().mockResolvedValue({})
     startReview = vi.fn().mockResolvedValue({ reviewId: 'review-1' })
@@ -386,6 +439,9 @@ describe('Codex chat backend approval bridge', () => {
     mockGlobalRuntime.client = null
     mockGlobalRuntime.processSignature = ''
     mockGlobalRuntime.applyCodexRuntimeOptions.mockClear()
+    mockActiveTurnControllers.register.mockClear()
+    mockActiveTurnControllers.clear.mockClear()
+    vi.mocked(applyLeaseAndEnsureProcess).mockClear()
     mockSessionState.instances.length = 0
     mockSessionState.constructorParams.length = 0
     mockSessionState.approvalRequest = {
@@ -478,6 +534,92 @@ describe('Codex chat backend approval bridge', () => {
       type: 'data-codex-event',
       data: expect.objectContaining({ type: 'approval_request' }),
     })
+  })
+
+  it('registers active-turn controller and prepares via applyLeaseAndEnsureProcess', async () => {
+    mockSessionState.serverEvents = [
+      {
+        type: 'turn_completed',
+        threadId: 'codex-thread-1',
+        turnId: 'turn-1',
+        turn: { id: 'turn-1', status: 'completed' },
+      },
+    ]
+    const stream = await sendCodexAppServerChatMessage({
+      threadId: 'thread-1',
+      messages,
+      provider,
+      model,
+    })
+    await collect(stream)
+
+    expect(applyLeaseAndEnsureProcess).toHaveBeenCalled()
+    expect(registerActiveTurnController).toHaveBeenCalledWith(
+      'thread-1',
+      expect.any(AbortController)
+    )
+    expect(clearActiveTurnController).toHaveBeenCalledWith('thread-1')
+    expect(invoke).toHaveBeenCalledWith(
+      'run_codex_cli_subcommand',
+      expect.objectContaining({
+        args: ['app-server', '--help'],
+      })
+    )
+  })
+
+  it('resolves codex-binary-path from provider settings over platform default', () => {
+    mockModelProviderState.providers = []
+    const custom = providerWithSettings({
+      codexBinaryPath: '/custom/bin/codex',
+    })
+    expect(resolveCodexBinaryPathForProvider(custom)).toBe('/custom/bin/codex')
+  })
+
+  it('clears Codex thread binding when modelProvider changes on the same Parlo thread', async () => {
+    mockSessionState.serverEvents = [
+      {
+        type: 'turn_completed',
+        threadId: 'codex-thread-1',
+        turnId: 'turn-1',
+        turn: { id: 'turn-1', status: 'completed' },
+      },
+    ]
+
+    // First turn binds via bare codex → Parlo-gateway
+    await collect(
+      await sendCodexAppServerChatMessage({
+        threadId: 'thread-1',
+        messages,
+        provider: providerWithSettings({ codexBinaryPath: '/bin/codex' }),
+        model: { id: 'gpt-5.5' },
+      })
+    )
+
+    // Second turn on same thread with ollama → different codexProviderId
+    const ollama: ModelProvider = {
+      active: true,
+      provider: 'ollama',
+      api_key: 'k',
+      base_url: 'http://127.0.0.1:11434/v1',
+      settings: [],
+      models: [{ id: 'mistral' }],
+    }
+    mockModelProviderState.providers = [
+      providerWithSettings({ codexBinaryPath: '/bin/codex' }),
+    ]
+    await collect(
+      await sendCodexAppServerChatMessage({
+        threadId: 'thread-1',
+        messages,
+        provider: ollama,
+        model: { id: 'mistral' },
+      })
+    )
+
+    // clearThreadBinding runs on the client used for the rebind turn
+    const rebindClient =
+      mockSessionState.instances[mockSessionState.instances.length - 1]
+    expect(rebindClient.clearThreadBinding).toHaveBeenCalledWith('thread-1')
   })
 
   it('shows useful details for legacy command approval requests', async () => {
