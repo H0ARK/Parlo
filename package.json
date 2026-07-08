@@ -64,7 +64,8 @@
     "build:extensions:linux": "cd extensions && yarn workspaces foreach -Apt --exclude @parlo-lab/mlx-extension run build:publish",
     "prepare": "husky",
     "parlo:debug:mcp:smoke": "node ./scripts/parlo-debug-mcp-smoke.mjs",
-    "codex:spike:multi-provider": "node ./scripts/codex/multi-provider-spike.mjs"
+    "codex:spike:multi-provider": "node ./scripts/codex/multi-provider-spike.mjs",
+    "codex:smoke:multi-provider": "node ./scripts/codex/multi-provider-smoke-matrix.mjs"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.7.0",
