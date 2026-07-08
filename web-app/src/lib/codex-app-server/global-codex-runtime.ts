@@ -2,6 +2,10 @@ import { invoke } from '@tauri-apps/api/core'
 import { CodexAppServerClient } from './api'
 import { TauriCodexProcessSpawner } from './tauri-process'
 import { getConfigLeaseRegistry } from './config-lease'
+import {
+  refreshLeaseDiagnostics,
+  useCodexRuntimeDiagnostics,
+} from '@/stores/codex-runtime-diagnostics-store'
 import type { CodexInitializeResult, CodexSessionOptions } from './types'
 
 export const GLOBAL_CODEX_APP_SERVER_SESSION_ID = 'Parlo-global-codex-app-server'
@@ -158,6 +162,7 @@ async function ensureGlobalCodexAppServerInternal(
     await globalRuntime.client.shutdownCodex()
     globalRuntime = null
     threadRuntimeSignatures.clear()
+    useCodexRuntimeDiagnostics.getState().recordRestart('env-change')
   }
 
   const client = new CodexAppServerClient({
@@ -175,6 +180,10 @@ async function ensureGlobalCodexAppServerInternal(
   }
 
   await initPromise
+  useCodexRuntimeDiagnostics.getState().setSnapshot({
+    lastProcessSignature: processSignature,
+  })
+  refreshLeaseDiagnostics(getConfigLeaseRegistry())
   return client
 }
 

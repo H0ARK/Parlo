@@ -4,8 +4,20 @@ vi.mock('../config-lease', () => ({
   getConfigLeaseRegistry: () => ({
     markActiveTurn: vi.fn(),
     release: vi.fn(),
+    list: () => [],
   }),
 }))
+
+vi.mock('@/stores/codex-runtime-diagnostics-store', () => ({
+  useCodexRuntimeDiagnostics: {
+    getState: () => ({
+      recordRestart: vi.fn(),
+      setSnapshot: vi.fn(),
+    }),
+  },
+  refreshLeaseDiagnostics: vi.fn(),
+}))
+
 
 const writeConfig = vi.fn(async () => {})
 
