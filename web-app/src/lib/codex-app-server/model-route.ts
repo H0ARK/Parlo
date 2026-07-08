@@ -256,14 +256,63 @@ export async function resolveCodexProviderApiKey(
   provider: ModelProvider
 ): Promise<string> {
   const keys = await providerRemoteAuthKeyChain(provider)
-  if (keys[0]) return keys[0]
-  return provider.api_key || settingValue(provider, 'api-key')
+  if (keys[0]?.trim()) return keys[0].trim()
+  const fromSettings =
+    provider.api_key?.trim() || settingValue(provider, 'api-key')
+  return fromSettings
+}
+
+/**
+ * Resolve remote auth for Codex projection. Distinguishes xAI SSO vs API key
+ * so we can fail with an actionable message when SSO is expected but missing.
+ */
+export async function resolveCodexRemoteAuth(provider: ModelProvider): Promise<{
+  token: string
+  source: 'api-key' | 'xai-oauth' | 'none'
+}> {
+  // Prefer full credentials helper when available (source tagging for SSO).
+  try {
+    const mod = await import('@/lib/provider-api-keys')
+    if (typeof mod.providerRemoteAuthCredentials === 'function') {
+      const credentials = await mod.providerRemoteAuthCredentials(provider)
+      if (credentials[0]?.key?.trim()) {
+        return {
+          token: credentials[0].key.trim(),
+          source: credentials[0].source,
+        }
+      }
+    } else if (typeof mod.providerRemoteAuthKeyChain === 'function') {
+      const keys = await mod.providerRemoteAuthKeyChain(provider)
+      if (keys[0]?.trim()) {
+        return {
+          token: keys[0].trim(),
+          source:
+            provider.provider === 'xai' ? 'xai-oauth' : 'api-key',
+        }
+      }
+    }
+  } catch {
+    // fall through to settings
+  }
+  const fromSettings =
+    provider.api_key?.trim() || settingValue(provider, 'api-key')
+  if (fromSettings) {
+    return { token: fromSettings, source: 'api-key' }
+  }
+  return { token: '', source: 'none' }
 }
 
 export function codexModelContextWindowForModel(
   modelId: string
 ): number | undefined {
-  if (modelId === 'grok-4.3') return 1_000_000
+  const bare = modelId.includes('/')
+    ? modelId.slice(modelId.indexOf('/') + 1)
+    : modelId
+  // Grok 4 family is advertised with large context; Codex uses this when it
+  // has no built-in model metadata (e.g. grok-4.5).
+  if (/^grok-4(?:\.|$)/i.test(bare) || /^grok-4-/i.test(bare)) {
+    return 1_000_000
+  }
   return undefined
 }
 
@@ -458,15 +507,19 @@ export function buildModelRoute(
           settingValue(provider, 'base-url') ||
           defaultBaseUrlForProvider(targetProvider)
 
-  let apiKey = overrides.apiKeyOverride
+  // Prefer async-resolved override (incl. xAI SSO access token). Empty string = missing.
+  let apiKey = overrides.apiKeyOverride?.trim() || undefined
   if (apiKey === undefined) {
     const authProvider = resolveCodexAuthProvider(
       targetProvider,
       provider,
       modelProviderState
     )
-    apiKey =
-      authProvider.api_key || settingValue(authProvider, 'api-key') || undefined
+    const syncKey =
+      authProvider.api_key?.trim() ||
+      settingValue(authProvider, 'api-key') ||
+      ''
+    apiKey = syncKey || undefined
   }
 
   const apiKeyEnvVar = apiKey
@@ -482,7 +535,7 @@ export function buildModelRoute(
     baseUrl,
     wireApi: gatewayWireApiForProvider(targetProvider),
     apiKeyEnvVar,
-    apiKey: apiKey || undefined,
+    apiKey,
     modelReasoningEffort:
       targetProvider === 'xai' && !xaiModelSupportsReasoningEffort(modelIdRaw)
         ? 'none'
@@ -491,6 +544,7 @@ export function buildModelRoute(
     requiresLocalEngine: false,
     useGateway: false,
     source: 'direct',
+    // When override is present we cannot know SSO vs key here; chat-backend marks SSO.
     authSource: apiKey ? 'api-key' : 'none',
     providerDisplayName: targetProvider,
   }

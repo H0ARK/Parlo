@@ -206,6 +206,25 @@ describe('model-route projection (product defaults)', () => {
     expect(options.configToml).toContain('model_context_window = 1000000')
   })
 
+  it('sets large context window for grok-4.5 when Codex has no built-in metadata', () => {
+    const xai: ModelProvider = {
+      active: true,
+      provider: 'xai',
+      api_key: 'xai-api-key',
+      base_url: 'https://api.x.ai/v1',
+      settings: [],
+      models: [],
+    }
+    const route = buildModelRoute(xai, { id: 'grok-4.5' })
+    expect(route.modelId).toBe('grok-4.5')
+    expect(route.modelContextWindow).toBe(1_000_000)
+    expect(route.apiKeyEnvVar).toBeTruthy()
+    const options = buildCodexSessionOptions('thread-1', xai, { id: 'grok-4.5' })
+    expect(options.configToml).toContain('model = "grok-4.5"')
+    expect(options.configToml).toContain('env_key = "PARLO_CODEX_PROVIDER_API_KEY"')
+    expect(options.configToml).toContain('model_context_window = 1000000')
+  })
+
   it('projects llamacpp as local-engine to local API base URL', () => {
     const llamacpp: ModelProvider = {
       active: true,

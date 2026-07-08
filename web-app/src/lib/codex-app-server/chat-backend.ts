@@ -23,7 +23,7 @@ import {
   resolveCodexStartupModel,
   resolveCodexTargetProvider,
   resolveCodexAuthProvider,
-  resolveCodexProviderApiKey,
+  resolveCodexRemoteAuth,
   resolveCodexWorkspaceDir,
   type BuildCodexSessionOptionsOverrides,
 } from './model-route'
@@ -148,12 +148,41 @@ export async function resolveCodexSessionOptions(
     provider,
     modelProviderState
   )
-  const apiKey =
-    overrides.apiKeyOverride ??
-    (await resolveCodexProviderApiKey(authProvider))
+
+  let apiKey = overrides.apiKeyOverride?.trim() || ''
+  let authSource: 'api-key' | 'xai-oauth' | 'none' = 'none'
+  if (!apiKey) {
+    const auth = await resolveCodexRemoteAuth(authProvider)
+    apiKey = auth.token
+    authSource = auth.source
+  } else {
+    authSource = 'api-key'
+  }
+
+  // Remote providers (incl. xAI SSO) must project a Bearer token into Codex env.
+  // Without env_key, Codex talks to the provider unauthenticated → generation fails.
+  const needsRemoteAuth =
+    !PARLO_HOSTED_LOCAL_PROVIDERS.has(targetProvider) &&
+    targetProvider !== 'ollama' // local ollama often needs no key
+  if (needsRemoteAuth && !apiKey) {
+    if (targetProvider === 'xai') {
+      throw new Error(
+        'xAI SuperGrok SSO is not available to the Codex runtime. ' +
+          'Sign in again from Settings → Providers → xAI (SSO), then retry. ' +
+          'Parlo must copy the SSO access token into the Codex process environment.'
+      )
+    }
+    throw new Error(
+      `No API credentials for provider "${targetProvider}". ` +
+        'Add an API key in Settings → Providers, then retry.'
+    )
+  }
+
+  void authSource
   return buildCodexSessionOptions(threadId, provider, model, {
     ...overrides,
-    apiKeyOverride: apiKey,
+    // Never pass empty string — treat as missing so ModelRoute does not skip env.
+    apiKeyOverride: apiKey || undefined,
     targetProvider,
     activeProfile,
   })
